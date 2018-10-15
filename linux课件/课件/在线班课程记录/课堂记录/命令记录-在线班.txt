@@ -1,0 +1,500 @@
+﻿1.mkdir   创建目录 make directory 
+  -p     创建多级 多层目录 
+2.ls      list 列表 显示目录中的内容  看看目录中都有啥 
+    -l(小写字母L)  显示详细的信息 
+    -d             ls会把目录当做文件来处理 
+	-a            显示所有文件包含隐藏文件 
+	-F            给不同类型的文件加上不同的标记   目录加上 /
+	
+	-r  逆序 倒叙排列
+	-t  按照文件或目录的修改时间进行排序
+	-h  以人类可读的方式显示大小 human-readable
+	-i  显示inode号码
+	
+	
+	
+	
+	
+	
+	[root@oldboyedu-39 ~]# ls -l /etc/hosts 
+-rw-r--r--. 2 root root 158 Jul 14 11:46 /etc/hosts
+[root@oldboyedu-39 ~]# ls -ld /etc/
+drwxr-xr-x. 78 root root 4096 Jul 15 05:12 /etc/
+[root@oldboyedu-39 ~]# 
+
+
+
+[root@oldboyedu-39 ~]# ls -l /tmp/
+total 12
+drwxr-xr-x. 3 root root 4096 Jul 14 20:42 a
+drwxr-xr-x. 2 root root 4096 Jul 14 18:23 data
+-rw-r--r--. 1 root root   46 Jul 14 18:19 oldboy.txt
+-rw-------. 1 root root    0 Jul 14 10:54 yum.log
+[root@oldboyedu-39 ~]# ls -ld /tmp/
+drwxrwxrwt. 5 root root 4096 Jul 15 05:06 /tmp/
+
+
+
+3.cd      change directory  切换目录  进入到某一个目录中 
+  cd -  进入到上一次所在的位置 
+  
+  
+4.pwd     显示你当前的位置 显示你当前的工作目录  灯塔 导航地图
+
+5.touch   摸    创建文件   修改文件的时间戳
+
+6.vi 
+
+第一个里程碑-使用vi打开oldboy.txt
+vi /data/oldboy.txt
+默认是命令模式。
+第二个里程碑-编辑-按i  ===>insert插入模式(编辑模式)  ====>然后输入文本
+I am studying linux.
+第三个里程碑-按esc键 我不想编辑了，退出编辑模式（插入模式），再次进入到命令模式
+
+第四个里程碑-保存并退出
+:wq
+w write 写入
+q quit  退出
+
+
+#只退出不保存
+:q      
+
+:q!   强制退出不保存 
+
+
+vi   windows  记事本 
+vim  windows  notepad++ emeditor word 
+
+
+vi/vim 快捷键 
+G    vim 快速到达文件的最后一行 
+o(小写字母O)    在当前行下 一行 创建一个新行 并且进入编辑模式 
+
+:set nu   显示行号
+:set nonu 取消显示行号
+
+
+
+
+
+
+7.echo  输出到屏幕上  把你写在echo 后面的内容 显示到屏幕上面 
+
+  -n   不显示每行结尾的回车
+  -e   支持转义字符系列   \n  
+  
+
+
+
+
+
+8.xargs 分组 
+  -n 2 分为2组 2列 
+  -i 让xargs也可以使用 {} 
+  find |xargs -i cp {} /tmp 
+9.cp 复制  copy  复制文件或目录  默认不能复制目录  
+  -a  -pdr 
+  -p  复制的时候保持属性不变  
+  -r  递归复制  复制目录及目录里面的内容 
+
+  -t 把 最前面的当做是 你的目标（目录） 
+##cp 	文件 文件 文件  筐（目录）
+##cp -t 筐（目录）  文件 文件  文件 
+
+
+
+#linux下面很多命令 一般没有办法直接处理 目录 
+#cp 需要使用 -r  复制目录
+#-r  递归, 复制目录及目录的子孙后代  
+
+10.mv  move 移动 搬家 
+11.find  查找文件 
+   find /data   -type f  -name "*.txt"
+   /data    在哪里查找这个文件 
+   find /oldboy  -maxdepth 1
+   -maxdepth  最大的深度 find命令最多在几层目录中进行查找 要放在所有参数前面
+   -type f  file 普通文件 
+         d  directory 目录
+   -name "*.txt"  以.txt结尾的文件
+   -mtime 根据修改时间找出指定范围内的文件 
+   -size  大小
+          G   M  k   
+          +100k   
+		  -1M 
+   ! 取反 非 排除
+   
+12. rm remove  删除文件或目录  默认不能删除目录  
+   -r  递归 删除目录  
+   -f  强制删除
+13.grep linux三剑客 老三  过滤 在文件中找东西
+   -v   排除  取反 
+grep -v "oldboy" oldboy.txt 
+   -A   显示grep命令找到的内容的 接下来的几行
+   
+   -o   显示grep执行过程  grep如何找到文件内容/文字     显示grep、egrep每次匹配到了什么
+
+14.head 显示文件的前几行  默认显示前10行 
+  -n 2  显示前两行  等于  -2 
+
+15.tail 显示文件的后几行  默认显示最后10行 
+  -n 2  显示文件的最后2行  等于 -2 
+  -f    显示文件的实时的更新  相当于 tailf 命令 
+
+
+16.sed linux三剑客老二 擅长取某一行  
+   p----print 显示 
+   -n   取消sed命令默认输出 
+   
+   sed -n '20,30p' ett.txt 
+   
+   查找替换
+   sed 's###g' 
+   s替换 
+   g---global 全局替换 
+
+[root@oldboyedu-39-nb ~]# echo aaaaaa|sed 's#a#b#g'
+bbbbbb
+[root@oldboyedu-39-nb ~]# echo aaaaaa|sed 's#a#b#'
+baaaaa
+
+   
+   -i   对文件内容进行修改 
+   
+   
+   
+
+17.awk linux三剑客老大 擅长取某一列 
+   awk '/找谁/' oldboy.txt 
+   !     取反
+   
+   NR----行号  
+   $1  $5  第几列 
+   $NF   最后一列
+   
+   -F  指定分隔符（指定菜刀）
+   -F "[, ]"
+
+[root@oldboyedu-39-nb ~]# awk -F "[, ]" '{print $3,$6}' /oldboy/oldboy.txt
+oldboy 31333741
+[root@oldboyedu-39-nb ~]# awk -F "[, ]" '{print $3,$NF}' /oldboy/oldboy.txt
+oldboy 31333741
+   
+   
+   
+   
+
+
+18.alias 设置别名 
+
+
+20.source 让我们配置生效  
+   /etc/profile    
+   /etc/sysconfig/i18n 
+   
+21.uname  显示系统信息 
+   -r  kernel   显示系统内核信息
+   -m  显示系统是32位还是64位
+   
+
+
+24.su   切换用户 switch user    
+
+25.whoami 显示你是谁
+   
+26.setenforce 设置selinux状态 
+   getenforce 查看selinux状态  
+
+27.chkconfig  管理开机自启动的
+   --level  指定运行级别 
+   
+
+
+
+28.df    查看磁盘空间的使用情况
+     -h  --human-readable 人类可读  以你能看得懂的形式显示磁盘的使用情况 
+29.hostname 修改主机名	 
+
+30.init  切换运行级别  
+
+31.runlevel  查看当前的运行级别
+   
+   
+32.man  男人  查询命令帮助    
+
+
+
+34.tree  以树的形状显示目录结构 
+   -L 显示几层目录
+   -d 只显示目录
+
+35.cat 显示文件内容  
+   -A  显示文件中所有的符号  每行的结尾以 $符号显示出来。
+   
+   -n  显示文件的内容 同时显示行号 
+
+cat >/oldboy/oldboy.txt <<EOF
+oldboy 
+alex
+EOF    
+   
+
+36.tar  创建 查看 解开压缩包
+z----gzip     xxx.tar.gz 
+
+j----bzip bzip2 xxx.tar.bz 
+
+c --create 
+t --list 
+x --extract 
+h 打包的时候 遇到软连接 打包软连接指向的源文件
+
+
+
+-C  解压到指定的目录 
+
+--exclude=xxxxx  创建压缩包的时候 排除
+
+
+#1.创建压缩包  
+tar zcf /tmp/oldboy.tar.gz   /oldboy 
+
+#2.查看压缩包中的内容
+tar tf /tmp/oldboy.tar.gz 
+
+#3.解压---解压到当前目录 
+tar xf  /tmp/oldboy.tar.gz 
+tar xf  /tmp/oldboy.tar.gz  -C /opt 
+
+#4.创建压缩包的时候 排除 
+tar zcf /tmp/etc-pai.tar.gz  /etc/  --exclude=etc/services
+
+37.cut  切  awk的阉割版  
+   -d 指定一把菜刀 一个分隔符 
+   -f1  显示第一列 
+   -f1,3 显示第一列和第三列
+   -f2-5 显示第二列到第五列  -f2,3,4,5  
+
+38.wc  统计文件信息 有多少个单词  有多少行 
+   -l（小写字母L）统计文件的行数 
+   
+39.ps process 显示正在运行的进程 
+ ps  -ef  
+ #查看sshd进程是否存在
+
+40.ss  显示系统的网络信息 
+   -lntup  显示系统中已经对外提供服务的端口  或服务名字  
+   ss -lntup |grep 22 
+41.file  查看文件的类型 
+42.lsof  显示出所有被打开的文件
+
+###显示某个文件被谁使用？
+[root@oldboyedu-39-nb ~]# lsof /var/log/secure             ####lsof |grep secure 
+COMMAND           SIZE/OFF               NAME
+rsyslogd             23103               /var/log/secure
+哪个软件/命令     这个文件的大小字节     文件名字
+
+
+###找出系统中 硬链接数为零，进程调用数不为零的文件（没有被彻底删除的文件）
+lsof |grep delete 
+
+43.tr  精简版的阉割版的 sed命令  
+  1对1的替换 通过输入重定向（<）读取文件 
+[root@oldboyedu-39-nb ~]# echo abc |tr "abc" "123"
+123
+[root@oldboyedu-39-nb ~]# echo abcba |tr "abc" "123"
+12321
+
+[root@oldboyedu-39-nb ~]# tr "a-z" "A-Z"  <oldboy.txt
+I AM OLDBOY TEACHER!
+I TEACH LINUX.
+
+I LIKE BADMINTON BALL ,BILLIARD BALL AND CHINESE CHESS!
+MY BLOG IS HTTP://OLDBOY.BLOG.51CTO.COM
+
+OUR SITE IS HTTP://WWW.ETIANTIAN.ORG
+
+MY QQ NUM IS 49000448.
+
+NOT 4900000448.
+MY GOD ,I AM NOT OLDBEY,BUT OLDBOY!
+
+44.date   显示/设置 系统时间 
+   +某个格式  以某种格式显示日期 
+    格式: +%F  2017-08-20   ====== +%Y-%m-%d 
+	      +%w  显示周几  0 周日  1-6 周一到周六
+		  +%T  时:分:秒     ====== +%H:%M:%S 
+	-d  按照你的描述显示日期
+    -d "1day"    1天之后   ==== +1day 
+    -d "-1day" 	 1天之前
+	
+	-s 修改系统的时间
+	
+[root@oldboyedu-39-nb ~]# date +%T
+12:31:54
+[root@oldboyedu-39-nb ~]# date +%H:%M:%s
+12:32:1501734744
+[root@oldboyedu-39-nb ~]# date +%H:%M:%S
+12:32:28
+
+45.ntpdate 自动根据网站同步时间 自动修改时间
+   pool.ntp.org 
+   ntp1.aliyun.com 
+   time.nist.gov
+19.which 显示命令的位置  绝对路径 根据PATH环境变量来查找命令的位置。
+
+46.whereis 找出命令的位置  命令相关帮助文档的位置
+
+
+47.locate 根据名字找到文件 根据一个列表（数据库）
+  
+48.shutdown  关机 重启 
+   -h  时间    关机   -h now   halt 
+   -r  时间    重启   -r now   reboot
+49.halt  关机 
+50.reboot重启 
+51.history  显示你用的命令   命令的历史记录
+  -d 数字 删除某一条用过的命令记录
+  -c  删除所有使用过的命令记录 
+
+
+52.chmod   修改权限 
+   -R   修改目录及子目录的权限 递归修改权限
+53.chown change own 修改文件或目录的所有者
+-R      修改目录及子目录的所有者 递归修改文件或目录的所有者
+  
+  chown  oldboy.oldboy oldboy.txt 
+ 
+22.useradd  添加用户 
+   -u   指定用户的uid
+   -s   指定用户使用的shell 命令解释器
+   /bin/bash 
+   /sbin/nologin 
+   -M   不创建用户的家目录
+   -g   指定用户属于的组  用户组 
+   
+23.passwd   设置密码 
+   --stdin  非交互式设置密码 
+
+54.userdel  删除用户 
+      
+   默认不会删除用户的家目录 和邮箱文件 
+   
+   -r  删除用户的家目录和邮箱 删除和用户有关的信息
+55.usermod  修改用户信息
+   -s   修改用户使用的shell
+   -g   修改用户属于的用户组   
+
+56.groupadd 添加用户组 
+   -g  指定gid   
+
+57.id 查看用户信息  用户是否存在
+
+33.w    查看系统的负载  谁远程登陆了你的系统 并且他们在干啥
+
+58.last 显示谁在哪里远程登录  登录了多久 
+
+59.lastlog 显示系统中所有用户最近一次的登录信息
+
+60.free 显示系统内存 swap 的使用情况 
+   -h 人类可读的形式显示 大小 
+   -m 以MB为单位显示大小 
+
+61.bc  计算器 
+  echo 3*3 |bc 
+  
+  awk 'BEGIN{print 1/3}'
+  
+62.fdisk   给小于2TB磁盘分区 mbr分区表
+
+
+64.partprobe  通知系统磁盘分区表变化了。
+
+
+65.mkfs  make filesystem   创建文件系统 格式化
+   -t   指定文件系统类型  
+   mkfs -t ext4  ===== mkfs.ext4 
+
+66.tune2fs 修改文件系统的信息 
+   -c  每挂载多少次进行一次磁盘检查  0表示关闭 
+   -i  每隔多少天进行一次磁盘检查    0表示关闭 
+   
+67.mount   挂载 把分区（要有文件系统）  挂载 目录（挂载点）
+[root@oldboyedu-39-nb ~]# df -h
+Filesystem      Size  Used Avail Use% Mounted on
+/dev/sda3       8.8G  1.8G  6.6G  22% /
+tmpfs           931M     0  931M   0% /dev/shm
+/dev/sda1       190M   40M  141M  22% /boot
+
+68.umount  卸载 
+
+69.fsck   磁盘检查 
+  
+70.dd     创建一个块  
+  dd  if=/dev/zero  of=/tmp/100m   bs=1M   count=100 
+
+71.mkswap 让某个文件 分区变为swap 
+
+72.swapon  让这个文件/分区 加入到swap中
+
+73.swapoff 让这个文件/分区 从swap中删除 
+  
+63.parted  给大于2TB磁盘分区 gpt分区表
+
+
+74.read   linux内置命令  从命令行读取内容放到变量中
+  read  oldboy 
+输入oldboyedu.com  
+  
+  oldboy=oldboyedu.com
+  
+  -p  给你个提示 
+  
+
+
+  
+ 
+linux 下面查询帮助的方法
+1.man 命令 
+2.在线帮助
+http://man.linuxde.net/
+
+3.man 配置文件的名字 
+man hosts 
+man fstab 
+4.help 内置命令
+   
+5.vim中查询帮助 
+:h[elp] G 
+:h[elp] :wq   
+  
+
+   
+linux快捷键
+1.tab键  自动补全路径 目录 名字   自动补全命令 
+pwd
+
+ls -l /data/oldboy.txt 
+
+2.ctrl + l(小写字母L)   清屏 
+3.ctrl + c              取消当前的操作 
+4.esc  + .(点)          使用上一个命令的 最后一个东西 
+5.ctrl + d              退出当前用户 
+
+
+特殊符号
+1.>>  把文字放到文件的结尾  追加到文件末尾 
+2.>
+3.2>
+4. * (星号)  表示所有 任意文字  
+5. .. (点点) 上一级目录  当前目录的上一级目录
+6. .(点)     当前目录 
+7. $()   相当于是 ``     命令替换    先运行里面的命令 把结果留下来（显示到屏幕）
+8. ~     自己的老家  当前用户的家目录
+
+
+
+正则表达式
+1.  ^  以....开头的行  ^d 以字母d开头的行 
+2.  |   或者  高级的正则表达式 egrep 

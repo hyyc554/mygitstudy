@@ -1,0 +1,428 @@
+﻿=============================================================================================
+# 老男孩教育：                                                                            #
+# www.oldboyedu.com                                                                       #
+# 邮件：miaokm@oldboyedu.com(189 1048 1057)                                               #
+# 地址：北京市昌平区顺沙路8号院汇德商厦4F                                                 #
+# 资源老师   手机电话：		    QQ号码        资源老师： 手机电话：		    QQ号码        #
+# 飞雪		 135 5261 2571		80042789      小雨		 186 0046 2391      390320151     #
+# 歪歪		 189 1171 8229		70271111      丹丹		 158 1059 0206      41117397      #
+# 冰冰		 150 1078 5220		41117483												  #
+=============================================================================================
+
+一、计算机/服务器组成
+
+内存 
+1.特点
+2.程序 进程 守护进程 
+
+查看sshd服务是否存在 
+ps -ef 
+
+sshd  22 
+
+硬盘容量
+
+
+二、linux发展过程
+操作系统组成 
+	外围的应用 
+	命令解释器 
+	内核 
+	
+
+蛋-人-人-人 
+
+GNU GPL 
+
+GNU 
+	GNU=GNU's not unix 
+	核心:bash, gawk,gcc,emacs 
+	GNU系统的内核还没开发出来 
+GPL 
+	GPL-通用公共许可 
+	1.所有软件可以自由传播,开源 
+	2.任何人可以随意修改开源的软件,但是修改之后必须发出来 
+
+三、	安装centos系统 
+
+#yum grouplist 
+#yum groupinstall "Development tools" "Base" -y
+
+###没有安装的工具 我们单独安装 
+#telnet lrzsz nc nmap dos2unix unix2dos  tree 
+#yum install telnet lrzsz nc nmap dos2unix unix2dos  tree -y 
+
+
+
+四、  安装系统 及配置网卡   
+                                       
+Name                         eth0__________
+Device                       eth0__________
+Use DHCP                     [ ]           
+Static IP                    10.0.0.200____
+Netmask                      255.255.255.0_
+Default gateway IP           10.0.0.2______
+Primary DNS Server           223.5.5.5_____
+Secondary DNS Server         223.6.6.6_____
+Peer DNS                     [*]           
+On boot                      [*]           
+Controlled by NetworkManager [*]           
+
+
+ cat /etc/sysconfig/network-scripts/ifcfg-eth0 
+
+ 五、虚拟机连接不上了 
+ 
+屌丝坐地铁之路 
+	看路是否通畅（ping)  
+	windows 本地shell
+	查看是否有人劫财劫色（selinux iptables)
+	
+	是否有人卖票（telnet) 
+	
+	课程回顾时候讲解:
+	
+	如何查看22端口是否启动 开启 
+	初级:  
+	1.telnet 10.0.0.200 22 (windows下操作)
+	2.ss/netstat 
+###显示这台linux机器 开启了 什么端口 或这对外提供了什么服务 
+[root@oldboyedu-39-nb ~]# ss -lntup|grep 22
+tcp    LISTEN     0      128                   :::22                   :::*      users:(("sshd",1508,4))
+tcp    LISTEN     0      128                    *:22                    *:*      users:(("sshd",1508,3))
+
+    
+	
+####sshd 对应的端口 
+[root@oldboyedu-39-nb ~]# ss -lntup |grep sshd
+tcp    LISTEN     0      128                   :::22                   :::*      users:(("sshd",1508,4))
+tcp    LISTEN     0      128                    *:22                    *:*      users:(("sshd",1508,3))
+
+六、第一关练习题	
+	
+#别名  net 显示eth0网卡配置文件 
+##1.显示网卡配置
+[root@oldboyedu-39-nb ~]# cat /etc/sysconfig/network-scripts/ifcfg-eth0 
+DEVICE=eth0
+HWADDR=00:0c:29:aa:0b:e9
+TYPE=Ethernet
+UUID=f7515424-a426-4e24-852a-8abc4cfc07f8
+ONBOOT=yes
+NM_CONTROLLED=yes
+BOOTPROTO=none
+IPADDR=10.0.0.200
+NETMASK=255.255.255.0
+GATEWAY=10.0.0.2
+USERCTL=no
+PEERDNS=yes
+IPV6INIT=no
+DNS1=223.5.5.5
+DNS2=223.6.6.6
+##2.别名
+[root@oldboyedu-39-nb ~]# alias cp
+alias cp='cp -i'
+[root@oldboyedu-39-nb ~]# alias cp rm
+alias cp='cp -i'
+alias rm=' echo do not use rm'
+[root@oldboyedu-39-nb ~]# alias net='cat /etc/sysconfig/network-scripts/ifcfg-eth0'
+#3.测试
+[root@oldboyedu-39-nb ~]# net 
+DEVICE=eth0
+HWADDR=00:0c:29:aa:0b:e9
+TYPE=Ethernet
+UUID=f7515424-a426-4e24-852a-8abc4cfc07f8
+ONBOOT=yes
+NM_CONTROLLED=yes
+BOOTPROTO=none
+IPADDR=10.0.0.200
+NETMASK=255.255.255.0
+GATEWAY=10.0.0.2
+USERCTL=no
+PEERDNS=yes
+IPV6INIT=no
+DNS1=223.5.5.5
+DNS2=223.6.6.6
+#4.永久
+#写入到 /etc/profile 
+#5.生效 并检查 
+
+#find命令 
+##找出/oldboy 目录下面 所有以 .txt结尾的 修改时间是7天之前的文件 。
+find /oldboy /etc /tmp 
+find /oldboy -type f  -name "*.txt"  -mtime +7
+
+##找出/oldboy 目录下面 所有以 .txt结尾的 修改时间是7天之前的文件 并且大小大于1M 
+
+find /oldboy -type f  -name "*.txt"  -mtime +7 -size +1M 
+
+####创建测试环境
+for n in {01..10};do  cat  /etc/services /etc/services >/oldboy/$n.txt ;done 
+
+##找出/oldboy 目录下面 所有以 .txt结尾的 并且大小大于1M文件 显示这些文件的详细信息 ls -l   
+[root@oldboyedu-39-nb ~]# ##找出/oldboy 目录下面 所有以 .txt结尾的 并且大小大于1M文件 显示这些文件的详细信息 ls -l   
+[root@oldboyedu-39-nb ~]# #1.
+[root@oldboyedu-39-nb ~]# find /oldboy -type f -name "*.txt" -size +1M 
+/oldboy/07.txt
+/oldboy/06.txt
+/oldboy/2.txt
+/oldboy/3.txt
+/oldboy/1.txt
+/oldboy/05.txt
+/oldboy/09.txt
+/oldboy/01.txt
+/oldboy/04.txt
+/oldboy/02.txt
+/oldboy/10.txt
+/oldboy/03.txt
+/oldboy/08.txt
+[root@oldboyedu-39-nb ~]# find /oldboy -type f -name "*.txt" -size +1M |xargs ls -l
+-rw-r--r-- 1 root root 1282040 May 20 08:19 /oldboy/01.txt
+-rw-r--r-- 1 root root 1282040 May 20 08:19 /oldboy/02.txt
+-rw-r--r-- 1 root root 1282040 May 20 08:19 /oldboy/03.txt
+-rw-r--r-- 1 root root 1282040 May 20 08:19 /oldboy/04.txt
+-rw-r--r-- 1 root root 1282040 May 20 08:19 /oldboy/05.txt
+-rw-r--r-- 1 root root 1282040 May 20 08:19 /oldboy/06.txt
+-rw-r--r-- 1 root root 1282040 May 20 08:19 /oldboy/07.txt
+-rw-r--r-- 1 root root 1282040 May 20 08:19 /oldboy/08.txt
+-rw-r--r-- 1 root root 1282040 May 20 08:19 /oldboy/09.txt
+-rw-r--r-- 1 root root 1282040 May 20 08:19 /oldboy/10.txt
+-rw-r--r-- 1 root root 1282040 May 20 07:55 /oldboy/1.txt
+-rw-r--r-- 1 root root 1282040 May 20 07:55 /oldboy/2.txt
+-rw-r--r-- 1 root root 1282040 May 20 07:55 /oldboy/3.txt
+[root@oldboyedu-39-nb ~]# #2.$()
+[root@oldboyedu-39-nb ~]# ls -l $(find /oldboy -type f -name "*.txt" -size +1M)
+-rw-r--r-- 1 root root 1282040 May 20 08:19 /oldboy/01.txt
+-rw-r--r-- 1 root root 1282040 May 20 08:19 /oldboy/02.txt
+-rw-r--r-- 1 root root 1282040 May 20 08:19 /oldboy/03.txt
+-rw-r--r-- 1 root root 1282040 May 20 08:19 /oldboy/04.txt
+-rw-r--r-- 1 root root 1282040 May 20 08:19 /oldboy/05.txt
+-rw-r--r-- 1 root root 1282040 May 20 08:19 /oldboy/06.txt
+-rw-r--r-- 1 root root 1282040 May 20 08:19 /oldboy/07.txt
+-rw-r--r-- 1 root root 1282040 May 20 08:19 /oldboy/08.txt
+-rw-r--r-- 1 root root 1282040 May 20 08:19 /oldboy/09.txt
+-rw-r--r-- 1 root root 1282040 May 20 08:19 /oldboy/10.txt
+-rw-r--r-- 1 root root 1282040 May 20 07:55 /oldboy/1.txt
+-rw-r--r-- 1 root root 1282040 May 20 07:55 /oldboy/2.txt
+-rw-r--r-- 1 root root 1282040 May 20 07:55 /oldboy/3.txt
+[root@oldboyedu-39-nb ~]# #3. -exec 
+[root@oldboyedu-39-nb ~]# find /oldboy -type f -name "*.txt" -size +1M -exec ls -l {} 
+find: missing argument to `-exec'
+[root@oldboyedu-39-nb ~]# find /oldboy -type f -name "*.txt" -size +1M -exec ls -l {} \;
+-rw-r--r-- 1 root root 1282040 May 20 08:19 /oldboy/07.txt
+-rw-r--r-- 1 root root 1282040 May 20 08:19 /oldboy/06.txt
+-rw-r--r-- 1 root root 1282040 May 20 07:55 /oldboy/2.txt
+-rw-r--r-- 1 root root 1282040 May 20 07:55 /oldboy/3.txt
+-rw-r--r-- 1 root root 1282040 May 20 07:55 /oldboy/1.txt
+-rw-r--r-- 1 root root 1282040 May 20 08:19 /oldboy/05.txt
+-rw-r--r-- 1 root root 1282040 May 20 08:19 /oldboy/09.txt
+-rw-r--r-- 1 root root 1282040 May 20 08:19 /oldboy/01.txt
+-rw-r--r-- 1 root root 1282040 May 20 08:19 /oldboy/04.txt
+-rw-r--r-- 1 root root 1282040 May 20 08:19 /oldboy/02.txt
+-rw-r--r-- 1 root root 1282040 May 20 08:19 /oldboy/10.txt
+-rw-r--r-- 1 root root 1282040 May 20 08:19 /oldboy/03.txt
+-rw-r--r-- 1 root root 1282040 May 20 08:19 /oldboy/08.txt
+
+
+
+
+
+##找出/oldboy 目录下面 所有以 .txt结尾的 并且大小大于1M文件 并把这些文件复制到/tmp下面 
+
+mkdir -p /tmp/{a..d}
+
+[root@oldboyedu-39-nb ~]# ##找出/oldboy 目录下面 所有以 .txt结尾的 并且大小大于1M文件 并把这些文件复制到/tmp下面 
+
+#1.$() 
+[root@oldboyedu-39-nb ~]# #cp 很多文件  /tmp 
+[root@oldboyedu-39-nb ~]# #cp find命令找到的文件  /tmp 
+[root@oldboyedu-39-nb ~]# cp `find /oldboy -type f -name "*.txt" -size +1M `  /tmp/a
+[root@oldboyedu-39-nb ~]# ls /tmp/a
+01.txt  02.txt  03.txt  04.txt  05.txt  06.txt  07.txt  08.txt  09.txt  10.txt  1.txt  2.txt  3.txt
+
+#2. |xargs
+[root@oldboyedu-39-nb ~]# 
+[root@oldboyedu-39-nb ~]# find /oldboy -type f -name "*.txt" -size +1M |xargs cp /tmp/b
+cp: target `/oldboy/08.txt' is not a directory
+[root@oldboyedu-39-nb ~]# #cp /tmp/b  文件  文件  文件 xxxxx 
+[root@oldboyedu-39-nb ~]# find /oldboy -type f -name "*.txt" -size +1M 
+/oldboy/07.txt
+/oldboy/06.txt
+/oldboy/2.txt
+/oldboy/3.txt
+/oldboy/1.txt
+/oldboy/05.txt
+/oldboy/09.txt
+/oldboy/01.txt
+/oldboy/04.txt
+/oldboy/02.txt
+/oldboy/10.txt
+/oldboy/03.txt
+/oldboy/08.txt
+[root@oldboyedu-39-nb ~]# find /oldboy -type f -name "*.txt" -size +1M |xargs cp -t /tmp/b
+[root@oldboyedu-39-nb ~]# ls /tmp/b
+01.txt  02.txt  03.txt  04.txt  05.txt  06.txt  07.txt  08.txt  09.txt  10.txt  1.txt  2.txt  3.txt
+
+##cp 	文件 文件 文件  筐（目录）
+##cp -t 筐（目录）  文件 文件  文件 
+
+
+
+
+#3.-exec
+[root@oldboyedu-39-nb ~]# find /oldboy -type f -name "*.txt" -size +1M -exec cp {} /tmp/c \;
+[root@oldboyedu-39-nb ~]# ls /tmp/c
+01.txt  02.txt  03.txt  04.txt  05.txt  06.txt  07.txt  08.txt  09.txt  10.txt  1.txt  2.txt  3.txt
+
+
+#4. xargs 与 {}
+[root@oldboyedu-39-nb ~]# find /oldboy -type f -name "*.txt" -size +1M |xargs cp {} /tmp/b
+cp: target `/oldboy/08.txt' is not a directory
+[root@oldboyedu-39-nb ~]# find /oldboy -type f -name "*.txt" -size +1M |xargs -i cp {} /tmp/d
+[root@oldboyedu-39-nb ~]# ls  /tmp/d
+01.txt  02.txt  03.txt  04.txt  05.txt  06.txt  07.txt  08.txt  09.txt  10.txt  1.txt  2.txt  3.txt
+
+
+
+###sed命令的疑惑 
+
+
+
+#####全局替换
+   查找替换
+   sed 's###g' 
+   s替换 
+   g---global 全局替换 
+
+[root@oldboyedu-39-nb ~]# echo aaaaaa|sed 's#a#b#g'
+bbbbbb
+[root@oldboyedu-39-nb ~]# echo aaaaaa|sed 's#a#b#'
+baaaaa
+
+
+
+#####-i.bak
+
+
+[root@oldboyedu-39-nb oldboy]# cat oldboy.txt 
+I am oldgirl,myqq is 31333741
+/root
+[root@oldboyedu-39-nb oldboy]# sed  's#oldgirl#bingbing#g' oldboy.txt 
+I am bingbing,myqq is 31333741
+/root
+[root@oldboyedu-39-nb oldboy]# sed -i.bak 's#oldgirl#bingbing#g' oldboy.txt 
+[root@oldboyedu-39-nb oldboy]# ##1.先把源文件备份 oldboy.txt.bak
+[root@oldboyedu-39-nb oldboy]# ##2.对 oldboy.txt文件的内容进行修改
+[root@oldboyedu-39-nb oldboy]# ls -l oldboy.txt*
+-rw-r--r-- 1 root root 37 May 20 09:03 oldboy.txt
+-rw-r--r-- 1 root root 36 May 20 09:03 oldboy.txt.bak
+[root@oldboyedu-39-nb oldboy]# cat oldboy.txt.bak 
+I am oldgirl,myqq is 31333741
+/root
+[root@oldboyedu-39-nb oldboy]# cat oldboy.txt
+I am bingbing,myqq is 31333741
+/root
+
+
+七、linux基础优化
+
+
+我要关闭正在运行的防火墙
+/etc/init.d/iptables stop 
+
+chkconfig iptables off 
+
+linux下面如何彻底关闭一个服务/软件
+
+显示中文乱码解决过程
+
+八、目录结构 
+1.一切从根开始
+2.linux下面的设备 磁盘分区 光盘 不挂载不能使用
+3.必须挂载才能使用 挂载相当于给光盘 磁盘分区 开了一个入口（目录 挂载点）
+/mnt 
+
+
+
+
+###修改主机名 
+[root@oldboyedu-39-nb oldboy]# hostname 
+oldboyedu-39-nb
+[root@oldboyedu-39-nb oldboy]# cat /et
+etc/     ett.txt  
+[root@oldboyedu-39-nb oldboy]# cat /etc/sysconfig/network
+NETWORKING=yes
+HOSTNAME=oldboyedu-39-nb
+[root@oldboyedu-39-nb oldboy]# echo "10.0.0.200     oldboyedu-39-nb" >>/etc/hosts
+[root@oldboyedu-39-nb oldboy]# ping oldboyedu-39-nb
+PING oldboyedu-39-nb (10.0.0.200) 56(84) bytes of data.
+64 bytes from oldboyedu-39-nb (10.0.0.200): icmp_seq=1 ttl=64 time=0.175 ms
+64 bytes from oldboyedu-39-nb (10.0.0.200): icmp_seq=2 ttl=64 time=0.046 ms
+64 bytes from oldboyedu-39-nb (10.0.0.200): icmp_seq=3 ttl=64 time=0.041 ms
+
+man hosts
+vi/vim快捷方式 
+	快速的达到文件的最后一行 G(shift+g) 
+	快速达到文件的第一行 gg 
+	在当前行下面插入一个空行并进入编辑模式 o(小写字母O) 
+	显示行号 :set nu 
+	取消显示行号 :set nonu 
+vim里面查询帮助的方法 
+	:h[elp] G #查询G的含义 
+	:h :wq #查询:wq的含义 
+
+
+老男孩教育每日一题－2017-05-15-说说你在vi/vim中常用的命令或快捷键
+http://lidao.blog.51cto.com/3388056/1925897	
+
+
+九、第二关练习题 
+
+linux无法上网如何解决 
+	1.ping www.baidu.com 
+	2.ping 223.5.5.5 
+	
+[root@oldboyedu-39-nb oldboy]# zip oldboy.zip oldboy.txt
+updating: oldboy.txt (stored 0%)
+[root@oldboyedu-39-nb oldboy]# ls -l oldboy.zip 
+-rw-r--r-- 1 root root 223 May 20 10:27 oldboy.zip
+
+ unzip oldboy.zip 
+
+[root@oldboyedu-39-nb tmp]# cat /oldboy/oldboy.txt
+I am oldboy,myqq is 31333741
+
+oldboy,31333741
+
+
+
+[root@oldboyedu-39-nb tmp]# cat /oldboy/oldboy.txt
+I am bingbing,myqq is 31333741
+[root@oldboyedu-39-nb tmp]# awk -F "[ ,]"  '{print $3,$NF}' /oldboy/oldboy.txt
+bingbing 31333741
+[root@oldboyedu-39-nb tmp]# awk -F "[ ,]"  '{print $3"$1$2$3$4"$NF}' /oldboy/oldboy.txt
+bingbing$1$2$3$431333741
+[root@oldboyedu-39-nb tmp]# awk -F "[ ,]"  '{print $3" $1$2$3$4 "$NF}' /oldboy/oldboy.txt
+bingbing $1$2$3$4 31333741
+[root@oldboyedu-39-nb tmp]# awk -F "[ ,]"  '{print $3","$NF}' /oldboy/oldboy.txt
+bingbing,31333741
+
+
+ 
+ 
+回顾 扩展 
+1.find -size 
+2.find +  cp/mv
+3.屌丝坐地铁之路-如何查看22端口是否开启 
+4.vim 
+5.tar  zip 
+6.看看 之前的考试题练习题 
+
+预习：
+1.linux文件属性
+2.ls -lhi /etc/hosts 中每一列的含义
+
+
+
+ 
+ 
+ 

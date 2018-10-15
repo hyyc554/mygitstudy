@@ -1,0 +1,628 @@
+﻿=============================================================================================
+# 老男孩教育：                                                                            #
+# www.oldboyedu.com                                                                       #
+# 邮件：miaokm@oldboyedu.com(189 1048 1057)                                               #
+# 地址：北京市昌平区顺沙路8号院汇德商厦4F                                                 #
+# 资源老师   手机电话：		    QQ号码        资源老师： 手机电话：		    QQ号码        #
+# 飞雪		 135 5261 2571		80042789      小雨		 186 0046 2391      390320151     #
+# 歪歪		 189 1171 8229		70271111      丹丹		 158 1059 0206      41117397      #
+# 冰冰		 150 1078 5220		41117483												  #
+=============================================================================================
+
+linux通配符-回顾特殊符号
+
+通配符-----用来匹配 查找文件 文件名
+通配符是用来匹配/查找文件名
+
+找出/oldboy 以 .txt结尾的文件
+find /oldboy -type f -name "*.txt"
+
+{}
+
+mkdir /oldboy/20170118
+cd /oldboy/20170118
+touch stu{00..10}.txt oldboy{00..10}.log
+touch oldboy.txt stu.txt
+
+
+* 所有 任何文本 
+#找出当前目录下  以stu开头的文件
+
+
+[root@oldboyedu-39-nb 20170118]# ls stu*
+stu00.txt  stu02.txt  stu04.txt  stu06.txt  stu08.txt  stu10.txt
+stu01.txt  stu03.txt  stu05.txt  stu07.txt  stu09.txt  stu.txt
+
+[root@oldboyedu-39-nb 20170118]# find -type f -name "*.txt"
+./stu10.txt
+./stu09.txt
+./stu07.txt
+./stu03.txt
+./stu08.txt
+./stu04.txt
+./oldboy.txt
+./stu00.txt
+./stu02.txt
+./stu.txt
+./stu01.txt
+./stu06.txt
+./stu05.txt
+
+######当前目录下 以stu开头 并且以.txt结尾的文件
+
+find -type f  -name "stu*.txt"
+
+
+ls stu*.txt
+
+
+江路强
+[root@oldboyedu-39-nb 20170118]# find  -type f -name "stu*" -a -name "*.txt"
+./stu10.txt
+./stu09.txt
+./stu07.txt
+./stu03.txt
+./stu08.txt
+./stu04.txt
+./stu00.txt
+./stu02.txt
+./stu.txt
+./stu01.txt
+./stu06.txt
+./stu05.txt
+[root@oldboyedu-39-nb 20170118]# find  -type f -name "stu*"  -name "*.txt"
+./stu10.txt
+./stu09.txt
+./stu07.txt
+./stu03.txt
+./stu08.txt
+./stu04.txt
+./stu00.txt
+./stu02.txt
+./stu.txt
+./stu01.txt
+./stu06.txt
+./stu05.txt
+
+
+
+####找出当前目录下面  文件名中包含（只要有就行）oldboy的文件 ---模糊
+awk-oldboy 
+oldboy.txt 
+lidao-oldboy.txt 
+
+
+find -type f -name "oldboy"
+find -type f -name "*oldboy*"
+
+[root@oldboyedu-39-nb 20170118]# find -type f -name "*oldboy*"
+./oldboy03.log
+./oldboy06.log
+./oldboy10.log
+./oldboy02.log
+./oldboy00.log
+./oldboy01.log
+./oldboy.txt
+./oldboy07.log
+./oldboy05.log
+./oldboy08.log
+./oldboy04.log
+./oldboy09.log
+./oldboy
+
+
+* 所有  通配符符号----查找文件
+以 stu开头的文件
+以 .txt结尾的文件 
+文件中包含oldboy
+
+
+
+
+{}   生成序列 
+
+[root@oldboyedu-39-nb 20170118]# echo {a..z}
+a b c d e f g h i j k l m n o p q r s t u v w x y z
+[root@oldboyedu-39-nb 20170118]# echo {1..9}
+1 2 3 4 5 6 7 8 9
+[root@oldboyedu-39-nb 20170118]# echo { 1..9}
+{ 1..9}
+[root@oldboyedu-39-nb 20170118]# echo {1..9}
+1 2 3 4 5 6 7 8 9
+[root@oldboyedu-39-nb 20170118]# 
+[root@oldboyedu-39-nb 20170118]# #stu1 stu2 stu3 ....stu10
+[root@oldboyedu-39-nb 20170118]# echo stu{1..10}
+stu1 stu2 stu3 stu4 stu5 stu6 stu7 stu8 stu9 stu10
+[root@oldboyedu-39-nb 20170118]# echo stu{1..10}.txt
+stu1.txt stu2.txt stu3.txt stu4.txt stu5.txt stu6.txt stu7.txt stu8.txt stu9.txt stu10.txt
+
+
+[root@oldboyedu-39-nb 20170118]# ##1 5 100
+[root@oldboyedu-39-nb 20170118]# echo  {1,5,100}
+1 5 100
+[root@oldboyedu-39-nb 20170118]# echo  {1..5}
+1 2 3 4 5
+[root@oldboyedu-39-nb 20170118]# echo  {1,2,3,4,5}
+1 2 3 4 5
+
+####通过 {} 备份一个文件 
+[root@oldboyedu-39-nb 20170118]# echo  A{B,C}
+AB AC
+[root@oldboyedu-39-nb 20170118]# echo  A{,C}
+A AC
+[root@oldboyedu-39-nb 20170118]# echo  oldboy.txt{,.bak}
+oldboy.txt oldboy.txt.bak
+[root@oldboyedu-39-nb 20170118]# pwd
+/oldboy/20170118
+[root@oldboyedu-39-nb 20170118]# cp /oldboy/20170118/oldboy.txt{,.bak}
+[root@oldboyedu-39-nb 20170118]# ls -l oldboy.txt*
+-rw-r--r-- 1 root root 0 May 20 18:43 oldboy.txt
+-rw-r--r-- 1 root root 0 May 20 19:27 oldboy.txt.bak
+
+
+
+[root@oldboyedu-39-nb 20170118]# echo {1..10}
+1 2 3 4 5 6 7 8 9 10
+[root@oldboyedu-39-nb 20170118]# echo {1..10..2}
+1 3 5 7 9
+[root@oldboyedu-39-nb 20170118]# echo {a..z..2}
+a c e g i k m o q s u w y
+
+{a..z..2} 从a开始到z结束每次增加2
+{1..10..2}  
+
+
+
+
+特殊符号
+
+ &&    并且  前一个命令执行成功之后在执行后面的命令
+ ifdown eth0 && ifup eth0    前一个命令执行成功之后在执行后面的命令 
+ 重启某一块网卡的时候 
+ 你是男生 	  && 你喜欢美女 
+ 你是高富帅   && 你喜欢女生 
+ 你不是高富帅 &&  是个女的就行 
+
+ >>   [标准输出]追加重定向	把内容追加到文件的最后一行
+ >    重定向   危险  先把文件的内容清空 把内容追加到文件的最后一行
+ /    根 /etc/hosts 路径分割符号
+ $    $LANG取出变量里面的内容
+      awk里面 表示显示某一列
+	  普通用户的命令提示符
+ .    当前目录
+      .bashrc  .bash_profile  隐藏的文件或目录    ls -a 
+ ..   当前目录的上一级目录
+ ~    当前用户的家目录 
+ |    管道
+      或者 （正则表达式 egrep）
+ #    注释   解释说明        
+      root用户的命令提示符
+	  
+
+
+再战单引号，双引号,不加引号的区别
+1、单引号-所见即所得，吃啥吐啥
+2、双引号-会对特殊符号进行解析（运行），$  ``  $()    
+3、不加引号-双引号类似，但是支持通配符
+
+ 
+[root@oldboyedu-39-nb ~]# #1.单引号
+[root@oldboyedu-39-nb ~]# echo '$LANG $(which mkdir)  {a..z}'
+$LANG $(which mkdir)  {a..z}
+[root@oldboyedu-39-nb ~]# #2.双引号
+[root@oldboyedu-39-nb ~]# echo "$LANG $(which mkdir)  {a..z}"
+en_US.UTF-8 /bin/mkdir  {a..z}
+[root@oldboyedu-39-nb ~]# 
+[root@oldboyedu-39-nb ~]# #3.不加引号
+[root@oldboyedu-39-nb ~]# echo $LANG $(which mkdir)  {a..z}
+en_US.UTF-8 /bin/mkdir a b c d e f g h i j k l m n o p q r s t u v w x y z
+
+
+
+
+
+
+linux正则表达式
+
+过滤 在文件中找东西 
+grep "oldboy" oldboy.txt 
+
+oldboy oldboy后面有连续的数字
+oldboy1 
+oldboy123
+oldboy114
+oldboy12312312
+
+
+正则表达式(regular expression)
+1.使用简单的符号  ^ $ . * + .......表示字母 文本 
+2.省事  提高我们的效率
+ 
+egrep "oldboy[0-9]+"  oldboy.txt 
+
+简单说：
+?	为处理大量文本|字符串而定义的一套规则和方法。
+?	以行为单位出来,一次处理一行。
+
+
+特点：
+1.在文件中找东西，处理的是文本 文字
+2.高级货--三剑客 grep sed awk 
+
+
+正则表达式与通配符的区别
+通配符是用来找文件，linux下面大部分命令都可以用  ls *.txt   rm *.txt   cp *.txt /tmp 
+正则表达式 用了找文本 文字（文件内容）  常用的地方linux三剑客 grep sed awk 
+
+
+正则表达式使用注意事项
+1.正则表达式是按照行来处理
+2.grep/egrep 给grep、egrep找到的内容加上颜色 
+cat >>/etc/profile<<EOF
+alias egrep='egrep --color=auto'
+alias grep='grep --color=auto'
+EOF
+source  /etc/profile 
+
+
+正则表达式学习
+基础正则表达式 
+^  $ . * [] [^]     
+扩展正则表达式
++ | ? {} ()
+
+
+
+
+基础正则表达式 
+^  $ . * [] [^]   
+
+准备测试环境 
+I am oldboy teacher!
+I teach linux.
+
+I like badminton ball ,billiard ball and chinese chess!
+my blog is http://oldboy.blog.51cto.com
+our site is http://www.etiantian.org
+my qq num is 49000448.
+
+not 4900000448.
+my god ,i am not oldbey,but OLDBOY!
+
+####
+^      以。。。。。开头的行
+^oldboy  
+^m 
+
+####
+$      以xxxxxx结尾 
+以m结尾的行 
+[root@oldboyedu-39-nb ~]# cat -A oldboy.txt
+I am oldboy teacher!$
+I teach linux.$
+$
+I like badminton ball ,billiard ball and chinese chess!$
+my blog is http://oldboy.blog.51cto.com$
+$
+our site is http://www.etiantian.org$
+$
+my qq num is 49000448.$
+$
+not 4900000448.$
+my god ,i am not oldbey,but OLDBOY!$
+[root@oldboyedu-39-nb ~]# grep "m$" oldboy.txt
+my blog is http://oldboy.blog.51cto.com
+
+
+####
+^$ 空行
+
+
+空行 这一行里面啥也没有 没有任何的符号  空格
+[root@oldboyedu-39-nb ~]# grep " "  oldboy.txt
+I am oldboy teacher!
+I teach linux.
+I like badminton ball ,billiard ball and chinese chess!
+my blog is http://oldboy.blog.51cto.com
+our site is http://www.etiantian.org
+my qq num is 49000448.
+not 4900000448.
+my god ,i am not oldbey,but OLDBOY!
+
+###取出oldboy.txt里面的空行 并显示行号 
+[root@oldboyedu-39-nb ~]# cat -An oldboy.txt
+     1	I am oldboy teacher!$
+     2	I teach linux.$
+     3	$
+     4	I like badminton ball ,billiard ball and chinese chess!$
+     5	my blog is http://oldboy.blog.51cto.com$
+     6	$
+     7	our site is http://www.etiantian.org$
+     8	$
+     9	my qq num is 49000448.$
+    10	$
+    11	not 4900000448.$
+    12	my god ,i am not oldbey,but OLDBOY!$
+
+[root@oldboyedu-39-nb ~]# grep -n "^$" oldboy.txt
+3:
+6:
+8:
+10:
+
+####
+.  代表且只能代表任意"一个"字符/文本/符号（不匹配空行）
+
+[root@oldboyedu-39-nb ~]# grep "."  oldboy.txt
+I am oldboy teacher!
+I teach linux.
+I like badminton ball ,billiard ball and chinese chess!
+my blog is http://oldboy.blog.51cto.com
+our site is http://www.etiantian.org
+my qq num is 49000448.
+not 4900000448.
+my god ,i am not oldbey,but OLDBOY!
+[root@oldboyedu-39-nb ~]# grep -o "."  oldboy.txt
+I
+ 
+a
+m
+ 
+o
+l
+d
+b
+o
+y
+
+####找出 oldboy.txt中 以点结尾的行
+
+[root@oldboyedu-39-nb ~]# grep ".$" oldboy.txt
+I am oldboy teacher!
+I teach linux.
+I like badminton ball ,billiard ball and chinese chess!
+my blog is http://oldboy.blog.51cto.com
+our site is http://www.etiantian.org
+my qq num is 49000448.
+not 4900000448.
+my god ,i am not oldbey,but OLDBOY!
+[root@oldboyedu-39-nb ~]# grep "\.$" oldboy.txt
+I teach linux.
+my qq num is 49000448.
+not 4900000448.
+
+####
+\  撬棍   转义字符  让有特殊含义的字符脱掉马甲，现出原形
+   去掉特殊含义  脱掉马甲
+   
+   grep "\.$" oldboy.txt
+
+
+
+####
+*  前一个字符连续出现了0次或多次
+连续出现0次 就是啥也没有
+
+0
+00000000000000000000000000
+00000000000000000000000000000000000000000
+
+
+
+[root@oldboyedu-39-nb ~]# grep "0*" oldboy.txt
+I am oldboy teacher!
+I teach linux.
+
+I like badminton ball ,billiard ball and chinese chess!
+my blog is http://oldboy.blog.51cto.com
+
+our site is http://www.etiantian.org
+
+my qq num is 49000448.
+
+not 4900000448.
+my god ,i am not oldbey,but OLDBOY!
+
+###*表示连续出现0次的问题（了解）
+[root@oldboyedu-39-nb ~]# #连续出现0次 就是啥也没有 
+[root@oldboyedu-39-nb ~]# #"0*"   连续出现0次的时候 相当于什么都没有 就是 ""
+[root@oldboyedu-39-nb ~]# #会把整个文件都显示出来
+[root@oldboyedu-39-nb ~]# grep "" oldboy.txt
+I am oldboy teacher!
+I teach linux.
+
+I like badminton ball ,billiard ball and chinese chess!
+my blog is http://oldboy.blog.51cto.com
+
+our site is http://www.etiantian.org
+
+my qq num is 49000448.
+
+not 4900000448.
+my god ,i am not oldbey,but OLDBOY!
+
+
+[root@oldboyedu-39-nb ~]# grep -o "0*" oldboy.txt
+000
+00000
+
+
+####
+.*    所有 任何东西    
+ 
+用一个grep怎么找出以m开头并且以m结尾的行             ###======= stu*.txt  所有以stu开头以.txt结尾的文件
+[root@oldboyedu-39-nb ~]# grep "^m.*m$" oldboy.txt
+my blog is http://oldboy.blog.51cto.com
+
+
+[root@oldboyedu-39-nb ~]#  grep  "m.*m" oldboy.txt
+my blog is http://oldboy.blog.51cto.com
+my qq num is 49000448.
+my god ,i am not oldbey,but OLDBOY!
+
+
+####
+正则表达式贪婪性-----.*   * +  {} 
+[root@oldboyedu-39-nb ~]# grep "^.*o" oldboy.txt
+I am oldboy teacher!
+I like badminton ball ,billiard ball and chinese chess!
+my blog is http://oldboy.blog.51cto.com
+our site is http://www.etiantian.org
+not 4900000448.
+my god ,i am not oldbey,but OLDBOY!
+
+####贪婪  有多少钱拿到多少钱 能吃多少 吃多少 能匹配多少匹配多少
+####表示所有的时候 .* 
+##正则表达式的贪婪性
+
+
+
+####
+[]  筐  整体  
+[abc]   一次就找出 abc中的任何一个  a或b或c   
+[root@oldboyedu-39-nb ~]# grep "[abc]"  oldboy.txt
+I am oldboy teacher!
+I teach linux.
+I like badminton ball ,billiard ball and chinese chess!
+my blog is http://oldboy.blog.51cto.com
+our site is http://www.etiantian.org
+my god ,i am not oldbey,but OLDBOY!
+[root@oldboyedu-39-nb ~]# grep -o "[abc]"  oldboy.txt
+a
+b
+a
+c
+a
+c
+b
+a
+b
+a
+b
+a
+b
+a
+a
+c
+c
+b
+b
+b
+c
+c
+a
+a
+a
+b
+b
+[root@oldboyedu-39-nb ~]# grep  "[abcdefghijklmnopqrstuvwxyz]"  oldboy.txt
+I am oldboy teacher!
+I teach linux.
+I like badminton ball ,billiard ball and chinese chess!
+my blog is http://oldboy.blog.51cto.com
+our site is http://www.etiantian.org
+my qq num is 49000448.
+not 4900000448.
+my god ,i am not oldbey,but OLDBOY!
+[root@oldboyedu-39-nb ~]# grep  "[a-z]"  oldboy.txt
+I am oldboy teacher!
+I teach linux.
+I like badminton ball ,billiard ball and chinese chess!
+my blog is http://oldboy.blog.51cto.com
+our site is http://www.etiantian.org
+my qq num is 49000448.
+not 4900000448.
+my god ,i am not oldbey,but OLDBOY!
+[root@oldboyedu-39-nb ~]# grep  "[A-Z]"  oldboy.txt
+I am oldboy teacher!
+I teach linux.
+I like badminton ball ,billiard ball and chinese chess!
+my god ,i am not oldbey,but OLDBOY!
+[root@oldboyedu-39-nb ~]# grep  "[0-9]"  oldboy.txt
+my blog is http://oldboy.blog.51cto.com
+my qq num is 49000448.
+not 4900000448.
+
+
+####找出文件中的大小写字母和数字？
+
+[root@oldboyedu-39-nb ~]# ####找出文件中的大小写字母和数字？
+[root@oldboyedu-39-nb ~]# grep "[a-zA-Z0-9]" oldboy.txt
+I am oldboy teacher!
+I teach linux.
+I like badminton ball ,billiard ball and chinese chess!
+my blog is http://oldboy.blog.51cto.com
+our site is http://www.etiantian.org
+my qq num is 49000448.
+not 4900000448.
+my god ,i am not oldbey,but OLDBOY!
+
+
+[root@oldboyedu-39-nb ~]# grep "[a,b]" oldboy.txt
+I am oldboy teacher!
+I teach linux.
+I like badminton ball ,billiard ball and chinese chess!
+my blog is http://oldboy.blog.51cto.com
+our site is http://www.etiantian.org
+my god ,i am not oldbey,but OLDBOY!
+
+
+####
+[^abc] 排除a 或排除b 或排除c 
+   
+[root@oldboyedu-39-nb ~]# grep "[abc]" oldboy.txt
+I am oldboy teacher!
+I teach linux.
+I like badminton ball ,billiard ball and chinese chess!
+my blog is http://oldboy.blog.51cto.com
+our site is http://www.etiantian.org
+my god ,i am not oldbey,but OLDBOY!
+
+[root@oldboyedu-39-nb ~]# grep "[^abc]" oldboy.txt
+I am oldboy teacher!
+I teach linux.
+I like badminton ball ,billiard ball and chinese chess!
+my blog is http://oldboy.blog.51cto.com
+our site is http://www.etiantian.org
+my qq num is 49000448.
+not 4900000448.
+my god ,i am not oldbey,but OLDBOY!
+
+
+
+[root@oldboyedu-39-nb ~]# ##以不是m或n开头的行
+[root@oldboyedu-39-nb ~]# grep "^[mn]" oldboy.txt
+my blog is http://oldboy.blog.51cto.com
+my qq num is 49000448.
+not 4900000448.
+my god ,i am not oldbey,but OLDBOY!
+[root@oldboyedu-39-nb ~]# grep "^[^mn]" oldboy.txt
+I am oldboy teacher!
+I teach linux.
+I like badminton ball ,billiard ball and chinese chess!
+our site is http://www.etiantian.org
+
+
+-v     [^abc]
+-v  排除某几行 
+[^abc]  排除a或b或c
+
+
+基础正则表达式
+^ $ .*  [abc]   [^abc]
+
+预习
+扩展正则表达式
++ | () ? {}
+
+第三关练习题-练习正则
+1.取出ip地址 
+2.取权限
+
+
+
+
+
+ 
+
+

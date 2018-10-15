@@ -1,0 +1,881 @@
+﻿=============================================================================================
+# 老男孩教育：                                                                            #
+# www.oldboyedu.com                                                                       #
+# 邮件：miaokm@oldboyedu.com(189 1048 1057)                                               #
+# 地址：北京市昌平区顺沙路8号院汇德商厦4F                                                 #
+# 资源老师   手机电话：		    QQ号码        资源老师： 手机电话：		    QQ号码        #
+# 飞雪		 135 5261 2571		80042789      小雨		 186 0046 2391      390320151     #
+# 歪歪		 189 1171 8229		70271111      丹丹		 158 1059 0206      41117397      #
+# 冰冰		 150 1078 5220		41117483												  #
+=============================================================================================
+
+1.招聘的时候为何 大部分公司都要 本科 本科与专科区别？
+
+1.人太多了
+2.态度素质
+3.本科学生 ----遇到问题了    想办法解决 
+4.专科学生-----             大事化小事  小事化了   避免 
+
+态度素质
+
+
+
+
+
+2.成功入职 3-6个月的试用期 在试用期中 你的能力技术，怎么样在短时间内获得老大的认可 快速的转正？
+能力技术
+
+态度素质
+
+3.
+
+态度素质
+
+1.把公司当做自己开的
+2.下班的时候，所有的灯 空调  
+3.最早到公司，最晚走   早来晚走 
+4.警告 报警  晚上处理完成后，总结发给老大 发给同事
+
+目标：
+1.获得工作
+2.快速转正 
+
+方法：
+1.表现出自己的态度素质 
+2.持续的
+
+
+
+老大 HR
+相信你做的事情是真的 来自于潜意识 
+
+1.如何学习linux---张开嘴 勤动手 
+2.如何提问-结交高手   专业提问 问题解决总结 
+3.态度素质 
+
+
+
+
+sed命令
+1.查询 
+
+2.删除 
+3.追加  a-
+4.替换 
+
+pattern 模式空间 
+
+
+
+shell编程 
+1.看懂简单的脚本即可 
+2.变量,循环,判断
+3.shell基础 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+sed  增加 修改 查找 删除  增删改查
+
+
+
+Sed命令介绍及语法格式
+
+Sed命令执行流程
+
+#查 
+Sed单行查询
+Sed多行查询（地址范围）
+Sed过滤功能
+
+#增
+Sed单行增加
+Sed多行增加
+Sed增加案例
+
+#删
+Sed删除功能及案例
+
+#改
+Sed文本替换
+Sed变量替换
+Sed反向引用
+Sed替换案例
+Sed执行多条语句
+获取文件行号
+
+
+
+#1. sed语法格式
+
+sed [选项] [sed指令] [输入文件]
+
+#2. sed命令执行流程
+
+
+#3. 创建测试文件
+cat>person.txt<<EOF
+101,oldboy,CEO
+102,zhangyao,CTO
+103,Alex,COO
+104,yy,CFO
+105,feixue,CIO
+EOF
+
+EOF ==>end of file
+
+#4. 查询单行文本 显示某一行 
+
+##p  sed指定，打印模式空间内容
+##-n sed选项，取消默认输出
+
+[root@oldboyedu38-nb ~]# sed '1p' person.txt 
+101,oldboy,CEO
+101,oldboy,CEO
+102,zhangyao,CTO
+103,Alex,COO
+104,yy,CFO
+105,feixue,CIO
+[root@oldboyedu38-nb ~]# sed -n '1p' person.txt 
+101,oldboy,CEO
+[root@oldboyedu38-nb ~]# sed -n '3p' person.txt 
+103,Alex,COO
+
+[root@oldboyedu-39-nb ~]# sed -n '2p' person.txt
+102,zhangyao,CTO
+[root@oldboyedu-39-nb ~]# sed -n '1p' person.txt
+101,oldboy,CEO
+[root@oldboyedu-39-nb ~]# ##显示文件的最后一行 
+[root@oldboyedu-39-nb ~]# sed -n '$p' person.txt
+105,feixue,CIO
+
+
+
+#5.查询连续多行文本 显示连续的多行，从哪里来到哪里去 '1,4p'
+
+指定p前面没有地址范围，那么默认匹配所有行
+
+###数字地址范围--推荐   行号
+# 2,4  显示第2行到第4行的内容，包含第2行和第4行
+
+[root@oldboyedu38-nb ~]# sed -n '2,4p' person.txt 
+102,zhangyao,CTO
+103,Alex,COO
+104,yy,CFO
+
+
+[root@oldboyedu-39-nb ~]# sed -n '1,4p' person.txt 
+101,oldboy,CEO
+102,zhangyao,CTO
+103,Alex,COO
+104,yy,CFO
+
+
+
+###正则地址范围-模糊，容易找多了
+[root@oldboyedu38-nb ~]# sed -n '/oldboy/p' person.txt 
+101,oldboy,CEO
+[root@oldboyedu38-nb ~]# sed -n '/o.*y/p' person.txt 
+101,oldboy,CEO
+[root@oldboyedu38-nb ~]# sed -n '/o.*y/,/105/p' person.txt 
+101,oldboy,CEO
+102,zhangyao,CTO
+103,Alex,COO
+104,yy,CFO
+105,feixue,CIO
+
+
+
+###显示这个文件的第1行到第4行 
+[root@oldboyedu-39-nb ~]# sed -n '1,4p' person.txt 
+101,oldboy,CEO
+102,zhangyao,CTO
+103,Alex,COO
+104,yy,CFO
+[root@oldboyedu-39-nb ~]# ##从包含101的这一行 显示到 包含104的这一行 
+[root@oldboyedu-39-nb ~]# sed -n '/101/,/104/p' person.txt 
+101,oldboy,CEO
+102,zhangyao,CTO
+103,Alex,COO
+104,yy,CFO
+
+
+
+
+##6. 过滤多个字符串
+-r  sed选项，支持扩展正则表达式（|、()）
+
+默认情况，sed只支持基本正则表达式。
+
+[root@oldboyedu38-nb ~]# sed -n '/oldboy/p' person.txt 
+101,oldboy,CEO
+[root@oldboyedu38-nb ~]# egrep 'oldboy|yy' person.txt   ==egrep ==grep -E
+101,oldboy,CEO
+104,yy,CFO
+[root@oldboyedu38-nb ~]# sed -rn '/oldboy|yy/p' person.txt 
+101,oldboy,CEO
+104,yy,CFO
+
+sed里面的正则字符左右必须有“/”。/oldboy/
+
+###显示出文件中包含oldboy或 yy的行 
+[root@oldboyedu-39-nb ~]# egrep "oldboy|yy" person.txt 
+101,oldboy,CEO
+104,yy,CFO
+[root@oldboyedu-39-nb ~]# sed -n '/oldboy/p' person.txt 
+101,oldboy,CEO
+[root@oldboyedu-39-nb ~]# sed -n '/oldboy|yy/p' person.txt 
+[root@oldboyedu-39-nb ~]# sed -nr '/oldboy|yy/p' person.txt 
+101,oldboy,CEO
+104,yy,CFO
+
+重点：
+sed 查询单行文本
+查询多行文本  使用数字地址范围  sed -n '2,4p' person.txt 
+
+
+#7. 查询指定多行
+使用分号
+[root@oldboyedu38-nb ~]# sed -n '2p;4p' person.txt 
+102,zhangyao,CTO
+104,yy,CFO
+[root@oldboyedu38-nb ~]# sed -n '2p;4p;10p;30p' person.txt 
+
+[root@oldboyedu-39-nb ~]# sed -n '1p;4p;5p' person.txt 
+101,oldboy,CEO
+104,yy,CFO
+105,feixue,CIO
+
+
+
+#8.增加单行文本
+我想向 person.txt 文件中追加 2行 
+106,lidao,UFO
+107,bingbing,CEO 
+
+##方法1-cat
+cat >>person.txt<<EOF 
+106,lidao,UFO
+107,bingbing,CEO 
+EOF
+
+##方法2-echo 
+echo "106,lidao,UFO"      >>person.txt 
+echo "107,bingbing,CEO "  >>person.txt 
+
+echo  "106,lidao,UFO回车107,bingbing,CEO"
+echo  "106,lidao,UFO\n107,bingbing,CEO"
+echo -e "106,lidao,UFO\n107,bingbing,CEO"
+
+##方法3-sed命令 
+####第一个里程碑-在第2行后面加入一个新行 内容是 oldboyedu.com 
+[root@oldboyedu-39-nb ~]# cat person.txt 
+101,oldboy,CEO
+102,zhangyao,CTO
+103,Alex,COO
+104,yy,CFO
+105,feixue,CIO
+[root@oldboyedu-39-nb ~]# sed '2a oldboyedu.com' person.txt 
+101,oldboy,CEO
+102,zhangyao,CTO
+oldboyedu.com
+103,Alex,COO
+104,yy,CFO
+105,feixue,CIO
+[root@oldboyedu-39-nb ~]# sed '2i oldboyedu.com' person.txt 
+101,oldboy,CEO
+oldboyedu.com
+102,zhangyao,CTO
+103,Alex,COO
+104,yy,CFO
+105,feixue,CIO
+
+a-======append 追加 
+i=======insert 插入 
+
+####第二个里程碑-最后一行后面追加1行内容 
+#106,lidao,UFO
+[root@oldboyedu-39-nb ~]# #106,lidao,UFO
+[root@oldboyedu-39-nb ~]# sed -n '$p' person.txt 
+105,feixue,CIO
+[root@oldboyedu-39-nb ~]# sed '$a 106,lidao,UFO' person.txt 
+101,oldboy,CEO
+102,zhangyao,CTO
+103,Alex,COO
+104,yy,CFO
+105,feixue,CIO
+106,lidao,UFO
+
+
+####第三个里程碑-最后一行后面追加2行内容 
+#106,lidao,UFO
+#107,bingbing,CEO 
+[root@oldboyedu-39-nb ~]# sed '$a 106,lidao,UFO\n107,bingbing,CEO' person.txt 
+101,oldboy,CEO
+102,zhangyao,CTO
+103,Alex,COO
+104,yy,CFO
+105,feixue,CIO
+106,lidao,UFO
+107,bingbing,CEO
+
+
+
+
+
+
+
+a 追加append，在指定行后添加一行或多行文本
+i 插入insert，在指定行前添加一行或多行文本
+
+[root@oldboyedu38-nb ~]# sed '2a 106,xiaoyu,CXO' person.txt 
+101,oldboy,CEO
+102,zhangyao,CTO
+106,xiaoyu,CXO
+103,Alex,COO
+104,yy,CFO
+105,feixue,CIO
+[root@oldboyedu38-nb ~]# sed '2i 106,xiaoyu,CXO' person.txt 
+101,oldboy,CEO
+106,xiaoyu,CXO
+102,zhangyao,CTO
+103,Alex,COO
+104,yy,CFO
+105,feixue,CIO
+
+
+
+
+#9. 删除文件内容
+d sed指令，删除文本内容
+$ 代表文件的最后一行
+
+###删除第一行
+[root@oldboyedu-39-nb ~]# sed '1d' person.txt 
+102,zhangyao,CTO
+103,Alex,COO
+104,yy,CFO
+105,feixue,CIO
+[root@oldboyedu-39-nb ~]# #显示文件内容但是不包含 oldboy 
+####方法1 
+[root@oldboyedu-39-nb ~]# grep -v "oldboy" person.txt
+102,zhangyao,CTO
+103,Alex,COO
+104,yy,CFO
+105,feixue,CIO
+
+####方法2
+[root@oldboyedu-39-nb ~]# sed '/oldboy/d' person.txt 
+102,zhangyao,CTO
+103,Alex,COO
+104,yy,CFO
+105,feixue,CIO
+
+####方法3 
+[root@oldboyedu-39-nb ~]# awk '/oldboy/' person.txt
+101,oldboy,CEO
+[root@oldboyedu-39-nb ~]# awk '!/oldboy/' person.txt
+102,zhangyao,CTO
+103,Alex,COO
+104,yy,CFO
+105,feixue,CIO
+
+####方法4 
+[root@oldboyedu-39-nb ~]# sed -n '1!p' person.txt 
+102,zhangyao,CTO
+103,Alex,COO
+104,yy,CFO
+105,feixue,CIO
+[root@oldboyedu-39-nb ~]# sed -n '1,3!p' person.txt 
+104,yy,CFO
+105,feixue,CIO
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+#1.文本替换
+
+'s###g'
+'s@@@g'
+
+s### 替换，只会替换每一行的第一个内容
+
+[root@oldboyedu-39-nb ~]# cat person.txt 
+101,oldboy,CEO
+102,zhangyao,CTO
+103,Alex,COO
+104,yy,CFO
+105,feixue,CIO
+[root@oldboyedu-39-nb ~]# sed 's#[0-9]#oldboy#' person.txt 
+oldboy01,oldboy,CEO
+oldboy02,zhangyao,CTO
+oldboy03,Alex,COO
+oldboy04,yy,CFO
+oldboy05,feixue,CIO
+[root@oldboyedu-39-nb ~]# sed 's#[0-9]#oldboy#g' person.txt 
+oldboyoldboyoldboy,oldboy,CEO
+oldboyoldboyoldboy,zhangyao,CTO
+oldboyoldboyoldboy,Alex,COO
+oldboyoldboyoldboy,yy,CFO
+oldboyoldboyoldboy,feixue,CIO
+
+
+s 单独使用→将每一行中第一处匹配的字符串进行替换
+g 每一行进行全部替换→sed指令s的替换标志之一(全局替换)
+
+
+
+
+###-i自动备份功能，先备份，再修改文件内容。
+###-i参数要放在sed所有参数最后面。
+
+
+[root@oldboyedu-39-nb ~]# cat person.txt 
+oldboyoldboyoldboy,oldboy,CEO
+102,zhangyao,CTO
+103,Alex,COO
+104,yy,CFO
+105,feixue,CIO
+[root@oldboyedu-39-nb ~]# sed -r 's#(oldboy)+#101#' person.txt 
+101,oldboy,CEO
+102,zhangyao,CTO
+103,Alex,COO
+104,yy,CFO
+105,feixue,CIO
+[root@oldboyedu-39-nb ~]# sed -ir.bak 's#(oldboy)+#101#' person.txt 
+[root@oldboyedu-39-nb ~]# cat person.txt
+oldboyoldboyoldboy,oldboy,CEO
+102,zhangyao,CTO
+103,Alex,COO
+104,yy,CFO
+105,feixue,CIO
+[root@oldboyedu-39-nb ~]# ls -l person.txt*
+-rw-r--r-- 1 root root 86 Aug 16 12:05 person.txt
+-rw-r--r-- 1 root root 86 Aug 16 12:03 person.txtr.bak
+
+
+[root@oldboyedu-39-nb ~]# sed -ri.bak 's#(oldboy)+#101#' person.txt 
+[root@oldboyedu-39-nb ~]# cat person.txt
+101,oldboy,CEO
+102,zhangyao,CTO
+103,Alex,COO
+104,yy,CFO
+105,feixue,CIO
+[root@oldboyedu-39-nb ~]# ls -l person.txt*
+-rw-r--r-- 1 root root 71 Aug 16 12:06 person.txt
+-rw-r--r-- 1 root root 86 Aug 16 12:05 person.txt.bak
+
+
+sed命令修改文件内容的过程。
+[root@oldboyedu-39-nb ~]# cat person.txt
+101,oldboy,CEO
+102,zhangyao,CTO
+103,Alex,COO
+104,yy,CFO
+105,feixue,CIO
+[root@oldboyedu-39-nb ~]# ls -li person.txt
+405241 -rw-r--r-- 1 root root 71 Aug 16 12:06 person.txt
+[root@oldboyedu-39-nb ~]# sed  's#101#666#g' person.txt
+666,oldboy,CEO
+102,zhangyao,CTO
+103,Alex,COO
+104,yy,CFO
+105,feixue,CIO
+[root@oldboyedu-39-nb ~]# sed  -i.ori 's#101#666#g' person.txt
+
+sed -i.bak 修改文件的内容的时候
+1.先把原来的文件移动、改名  person.txt.bak 
+2.把你修改后的东西 生成新的文件 person.txt 
+inotify
+
+
+
+
+ 
+
+
+
+
+###12.变量替换 在sed命令中如何使用变量
+
+主要考察单引号、双引号的区别
+
+[root@oldboyedu38-nb ~]# x=1
+[root@oldboyedu38-nb ~]# y=2
+[root@oldboyedu38-nb ~]# sed 's#$x#$y#g' num.txt 
+1 1 1 1 1
+1 1 1 1 1
+1 1 1 1 1
+1 1 1 1 1
+[root@oldboyedu38-nb ~]# sed "s#$x#$y#g" num.txt 
+2 2 2 2 2
+2 2 2 2 2
+2 2 2 2 2
+2 2 2 2 2
+
+[root@oldboyedu-39-nb ~]# a=oldboy
+[root@oldboyedu-39-nb ~]# echo $a
+oldboy
+[root@oldboyedu-39-nb ~]# sed 's#$a#oldgirl#g' person.txt
+666,oldboy,CEO
+102,zhangyao,CTO
+103,Alex,COO
+104,yy,CFO
+105,feixue,CIO
+[root@oldboyedu-39-nb ~]# sed "s#$a#oldgirl#g" person.txt
+[root@oldboyedu-39-nb ~]# sed "s#$a#oldgirl#g" person.txt
+666,oldgirl,CEO
+102,zhangyao,CTO
+103,Alex,COO
+104,yy,CFO
+105,feixue,CIO
+###单引号 双引号 不加引号的区别
+[root@oldboyedu-39-nb ~]# echo '$LANG `pwd` {1..5}'
+$LANG `pwd` {1..5}
+[root@oldboyedu-39-nb ~]# echo "$LANG `pwd` {1..5}"
+en_US.UTF-8 /root {1..5}
+[root@oldboyedu-39-nb ~]# echo $LANG `pwd` {1..5}
+en_US.UTF-8 /root 1 2 3 4 5
+
+
+
+
+ 
+ 
+
+###13. 反向引用
+先保护起来，然后再使用
+[root@oldboyedu-39-nb ~]# echo 123456 
+123456
+想要的结果：
+<1><2><3><4><5><6>
+
+[root@oldboyedu-39-nb ~]# echo 123456
+123456
+[root@oldboyedu-39-nb ~]# echo 123456|sed -r 's#([0-9])#<\1>#g'
+<1><2><3><4><5><6>
+[root@oldboyedu-39-nb ~]# 
+[root@oldboyedu-39-nb ~]# echo 123456|sed  's#[0-9]#<&>#g'
+<1><2><3><4><5><6>
+[root@oldboyedu-39-nb ~]# ###sed命令中 &表示前面正则表达式找到的内容 
+[root@oldboyedu-39-nb ~]# 
+[root@oldboyedu-39-nb ~]# 
+[root@oldboyedu-39-nb ~]# echo 123456|sed  's#[0-9]#<&>#'
+<1>23456
+
+
+()  扩展正则表达式  在sed中作用，能够记忆它包含的一段正则表达式，并可以通过\1 \2 \3 ... \9 调取出来
+
+sed -r  '()'
+
+
+
+##14. 企业案例：系统开机启动项优化
+除了下面5个服务以外都关闭
+crond    sshd      network rsyslog  sysstat 
+定时任务 远程连接  网络    系统日志 系统工具 
+
+
+
+##第一个里程碑-想要的结果
+chkconfig 服务名字  off 
+这种形式 
+
+chkconfig abrt-ccpp      	off
+chkconfig abrtd          	off
+chkconfig acpid          	off
+
+##第二个里程碑-先排除crond rsyslog network sshd sysstat 
+[root@oldboyedu-39-nb ~]# chkconfig |egrep "sshd|crond|rsyslog|network|sysstat"
+crond          	0:off	1:off	2:on	3:on	4:on	5:on	6:off
+network        	0:off	1:off	2:on	3:on	4:on	5:on	6:off
+rsyslog        	0:off	1:off	2:on	3:on	4:on	5:on	6:off
+sshd           	0:off	1:off	2:on	3:on	4:on	5:on	6:off
+sysstat        	0:off	1:on	2:on	3:on	4:on	5:on	6:off
+[root@oldboyedu-39-nb ~]# chkconfig |egrep -v "sshd|crond|rsyslog|network|sysstat"
+abrt-ccpp      	0:off	1:off	2:off	3:on	4:off	5:on	6:off
+abrtd          	0:off	1:off	2:off	3:on	4:off	5:on	6:off
+省略省略省略省略省略省略省略
+quota_nld      	0:off	1:off	2:off	3:off	4:off	5:off	6:off
+rdisc          	0:off	1:off	2:off	3:off	4:off	5:off	6:off
+rdma           	0:off	1:on	2:on	3:on	4:on	5:on	6:off
+restorecond    	0:off	1:off	2:off	3:off	4:off	5:off	6:off
+rngd           	0:off	1:off	2:off	3:off	4:off	5:off	6:off
+saslauthd      	0:off	1:off	2:off	3:off	4:off	5:off	6:off
+smartd         	0:off	1:off	2:off	3:off	4:off	5:off	6:off
+svnserve       	0:off	1:off	2:off	3:off	4:off	5:off	6:off
+udev-post      	0:off	1:on	2:on	3:on	4:on	5:on	6:off
+
+
+
+##第三个里程碑-取出服务名字
+[root@oldboyedu-39-nb ~]# chkconfig |egrep -v "sshd|crond|rsyslog|network|sysstat"|sed -r 's#(^.*)0.*#\1#g'
+abrt-ccpp      	
+abrtd          	
+acpid          	
+atd            	
+auditd         	
+blk-availability	
+cpuspeed       	
+haldaemon      	
+ip6tables      	
+iptables       	
+irqbalance     	
+省略省略省略省略省略	
+restorecond    	
+rngd           	
+saslauthd      	
+smartd         	
+svnserve       	
+udev-post      	
+
+##第四个里程碑-拼接出 chkconfig 服务名字 off 样子 
+[root@oldboyedu-39-nb ~]# chkconfig |egrep -v "sshd|crond|rsyslog|network|sysstat"|sed -r 's#(^.*)0.*#chkconfig \1 off#g' 
+chkconfig abrt-ccpp      	 off
+chkconfig abrtd          	 off
+chkconfig acpid          	 off
+chkconfig atd            	 off
+chkconfig auditd         	 off
+chkconfig blk-availability	 off
+chkconfig cpuspeed       	 off
+省略省略省略省略
+chkconfig rdma           	 off
+chkconfig restorecond    	 off
+chkconfig rngd           	 off
+chkconfig saslauthd      	 off
+chkconfig smartd         	 off
+chkconfig svnserve       	 off
+chkconfig udev-post      	 off
+
+##第五个里程碑-有了命令的形式样子，有人来运行 执行 
+[root@oldboyedu-39-nb ~]# echo ls
+ls
+[root@oldboyedu-39-nb ~]# echo ls|bash
+access-2017-05-20.log  anaconda-ks.cfg	     hosts		 num.txt		person.txt	wang.txt
+access-2017-05-21.log  anaconda-screenshots  install.log	 oldboy-2017-08-03.log	person.txt.ori
+access-2017-05-22.log  a.txt		     install.log.syslog  oldboy.txt-hard	q.txt
+access-2017-08-03.log  b.txt		     lista.txt		 –p			services
+a.log		       data		     listb.txt		 passwd.txt		test.txt
+[root@oldboyedu-39-nb ~]# echo pwd|bash
+/root
+
+[root@oldboyedu-39-nb ~]# chkconfig |egrep -v "sshd|crond|rsyslog|network|sysstat"|sed -r 's#(^.*)0.*#chkconfig \1 off#g'|bash
+[root@oldboyedu-39-nb ~]# chkconfig |grep 3:on
+crond          	0:off	1:off	2:on	3:on	4:on	5:on	6:off
+network        	0:off	1:off	2:on	3:on	4:on	5:on	6:off
+rsyslog        	0:off	1:off	2:on	3:on	4:on	5:on	6:off
+sshd           	0:off	1:off	2:on	3:on	4:on	5:on	6:off
+sysstat        	0:off	1:on	2:on	3:on	4:on	5:on	6:off
+
+###排除的方法
+chkconfig |sed -r '/sshd|rsyslog|crond|network|sysstat/d'
+chkconfig |sed -rn '/sshd|rsyslog|crond|network|sysstat/!p'
+
+###拼接 
+chkconfig |sed -rn '/sshd|rsyslog|crond|network|sysstat/!p'|sed -r 's#(.*)0.*#\1#gp'
+
+chkconfig |sed -rn '/sshd|rsyslog|crond|network|sysstat/!p'
+                    对于包含sshd或rsyslog或crond或 network或sysstat的行 不处理 不进行替换 sg
+					//                                                     !      s###g 
+
+##方法2 					
+[root@oldboyedu-39-nb ~]# chkconfig |sed -rn '/sshd|rsyslog|crond|network|sysstat/!s#(.*)0.*#\1#gp'
+abrt-ccpp      	
+abrtd          	
+acpid          	
+atd            	
+auditd         	
+省略
+saslauthd      	
+smartd         	
+svnserve       	
+udev-post      	
+
+
+[root@oldboyedu-39-nb ~]# sed -n '1p;5p;$p' person.txt
+666,oldboy,CEO
+105,feixue,CIO
+105,feixue,CIO
+
+chkconfig|sed -r '/sshd|rsyslog|crond|network|sysstab/d;s#(.*)0.*#\1#g'
+
+
+
+
+
+
+总结：
+掌握sed选项
+  -n
+  -r
+  -i
+
+掌握sed指令
+  p
+  a
+  i
+  d
+  s     ==》g
+
+
+
+  
+1.批量添加用户并设置随机密码 
+2.优化linux开机启动项目 
+  
+  
+  
+  
+  
+  
+  书写一个脚本
+  1./server/scripts
+  2.vim /server/scripts/show.sh]
+#!/bin/bash
+
+##这个脚本默认使用的命令解释器是 /bin/bash
+  3.运行脚本 
+[root@oldboyedu-39-nb ~]# sh /server/scripts/show.sh 
+eth0      Link encap:Ethernet  HWaddr 00:0C:29:AA:0B:E9  
+          inet addr:10.0.0.200  Bcast:10.0.0.255  Mask:255.255.255.0
+          inet6 addr: fe80::20c:29ff:feaa:be9/64 Scope:Link
+          UP BROADCAST RUNNING MULTICAST  MTU:1500  Metric:1
+          RX packets:14477 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:11221 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:1000 
+          RX bytes:1427654 (1.3 MiB)  TX bytes:1446228 (1.3 MiB)
+
+lo        Link encap:Local Loopback  
+          inet addr:127.0.0.1  Mask:255.0.0.0
+          inet6 addr: ::1/128 Scope:Host
+          UP LOOPBACK RUNNING  MTU:65536  Metric:1
+          RX packets:0 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:0 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:0 
+          RX bytes:0 (0.0 b)  TX bytes:0 (0.0 b)
+
+[root@oldboyedu-39-nb ~]# show.sh
+-bash: show.sh: command not found
+[root@oldboyedu-39-nb ~]# #PATH
+[root@oldboyedu-39-nb ~]# /server/scripts/show.sh
+-bash: /server/scripts/show.sh: Permission denied
+[root@oldboyedu-39-nb ~]# ls -l /server/scripts/show.sh
+-rw-r--r-- 1 root root 22 Aug 17 11:02 /server/scripts/show.sh
+[root@oldboyedu-39-nb ~]# chmod +x /server/scripts/show.sh
+[root@oldboyedu-39-nb ~]# ls -l /server/scripts/show.sh
+-rwxr-xr-x 1 root root 22 Aug 17 11:02 /server/scripts/show.sh
+[root@oldboyedu-39-nb ~]# /server/scripts/show.sh
+eth0      Link encap:Ethernet  HWaddr 00:0C:29:AA:0B:E9  
+          inet addr:10.0.0.200  Bcast:10.0.0.255  Mask:255.255.255.0
+          inet6 addr: fe80::20c:29ff:feaa:be9/64 Scope:Link
+          UP BROADCAST RUNNING MULTICAST  MTU:1500  Metric:1
+          RX packets:14602 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:11315 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:1000 
+          RX bytes:1439357 (1.3 MiB)  TX bytes:1458056 (1.3 MiB)
+
+lo        Link encap:Local Loopback  
+          inet addr:127.0.0.1  Mask:255.0.0.0
+          inet6 addr: ::1/128 Scope:Host
+          UP LOOPBACK RUNNING  MTU:65536  Metric:1
+          RX packets:0 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:0 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:0 
+          RX bytes:0 (0.0 b)  TX bytes:0 (0.0 b)
+  
+  
+  
+  
+  
+##什么是变量 ？
+lidao=1
+
+###秘籍
+藏经阁里面的武功秘籍  书籍的名字 新版葵花宝典  ==== 变量名字 lidao 
+					  查看 书籍  新版葵花宝典  ==== 查看变量里面的内容  $lidao 
+                      向书籍 加入新的内容      ==== 向变量中放入内容    lidao=12       
+[root@oldboyedu-39-nb scripts]# lidao=lidao.blog.51cto.com
+[root@oldboyedu-39-nb scripts]# echo $lidao
+lidao.blog.51cto.com
+ 
+  
+###方程式   未知数
+x=1 
+x+y=10 
+
+y等于多少？
+
+
+###变量分类-环境变量 
+  OLDBOY=blog.oldboyedu.com
+export OLDBOY=blog.oldboyedu.com
+  
+  /etc/profile 
+ 
+
+
+#####自定义环境变量 
+  建议所有环境变量名均为大写 
+  必须用export命令定义 
+  	export OLDBOY=1 
+  永久生效 
+  	/etc/profile 
+  与用户环境变量有关的文件 目录 
+  	全局环境变量配置文件 
+  		/etc/profile、/etc/bashrc、/etc/profile.d/(用户登录到系统 会运行这个目录下面的脚本) 
+  	用户环境变量配置文件 
+  		~/.bash_profile、~/.bashrc
+ 
+
+#####局部变量 普通变量
+
+[root@oldboyedu-39-nb ~]# 
+[root@oldboyedu-39-nb ~]# week=10
+[root@oldboyedu-39-nb ~]# echo $week
+10
+[root@oldboyedu-39-nb ~]# echo $weekday
+
+[root@oldboyedu-39-nb ~]# echo ${week}day
+10day
+ 
+  
+总结 
+1.sed 查找  删除    替换    
+            不删除  不替换 
+2.精简linux开机自启动服务
+3.shell-什么是变量 
+4.分类-环境变量（全局）
+5.如何创造一个环境变量
+6.普通变量-$  ${}   金庸新著
+
+预习：
+1.特殊变量  $1  $n   $# $? 
+2.循环，判断 
+3.awk
+
+  
+  

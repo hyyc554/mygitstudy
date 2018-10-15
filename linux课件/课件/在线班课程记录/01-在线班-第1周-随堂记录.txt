@@ -1,0 +1,1271 @@
+####################################
+###在线班-随堂记录-第1周############
+####################################
+
+
+
+笔记本-台式机
+1.CPU
+2.内存
+3.硬盘
+4.电源
+5.显示器
+6.鼠标键盘
+
+服务器
+1.稳定
+2.方便拆卸-模块化
+
+运维职责：运行和维护服务器
+1.数据不能丢---大片不能没
+2.保证网站7*24小时运行--一直要运行
+jd.com  taobao.com 
+3.用户体验要好----打开网站速度
+
+机架式服务器
+
+
+服务器核心之电源
+双电源 AB路
+联通-电信
+
+服务器核心之CPU-计算
+central Processing Unit
+服务器的尺寸-U 2U
+多个物理cpu
+CPU的个数---几路
+2个物理CPU===2路/双路
+
+1cpu有4个核心 
+
+查询服务器的配置-官网查询
+购买：销售
+
+服务器核心之内存
+作用:CPU(大脑)与硬盘(胃硬盘) 内存 
+特点:临时存放数据的地方，断电之后内存中的信息消失
+
+程序 进程 守护进程
+程序          片             存放在硬盘上面
+进程          看片           运行起来的程序
+守护进程/服务 持续看片住院   一直运行的进程
+
+
+如何提高用户体验：
+
+高并发--同一时间段访问网站的人数
+核心：让用户的数据尽量放入到内存中
+
+中小企业：
+
+直接写入到磁盘中
+读取 从内存中读取内容
+
+上课的时候:   保持一个输入
+练习-讨论 :   保持一个输出-说
+
+找工作--面试/笔试-让面试官相信你会了。
+
+
+高并发写入
+
+缺点：
+如何让你数据不丢
+
+1.两个电源 AB路
+2.UPS-不间断供电系统（蓄电池） 30分钟  1一个小时
+3.柴油发电机+油罐
+4.与附近的加油站签订一些 紧急供油协议
+
+buffer cache 
+
+buffer--观看视频的时候 转圈 数据放在你的内存 存放这些数据的空间buffer区域 缓冲区
+        buffering
+
+cache   提高观看速度  主要是用来给用户读取 在内存中的区域cache   缓存区		
+
+写buffer 读cache
+写缓冲   读缓存
+
+
+服务器核心之磁盘 
+接口：磁盘与服务器连接方式  接口种类
+      水壶的壶嘴
+sata:家用  服务器对于速度要求不高 
+sas :服务器标配 	  
+
+转速：rpm  每分钟转多少圈
+      5.4K  7.2K  10K 15K 
+
+1s=1000ms=1000000us=1000000000ns
+	  
+	  
+	  尽量让用户的数据往内存中存放。
+	  缓存无处不在。
+	  
+服务器核心之阵列卡（raid卡）
+1个非常大的文件10000G 1000G	  
+#1.买个一10000G (10T)硬盘
+#2.买20个1000G的硬盘
+	  
+统一管理硬盘	  
+你可以获得更高的容量;变得更加安全;速度更高	  
+	  
+服务器核心之光驱 
+700M cd 
+4.7G dvd
+
+可以通过U盘安装。	  
+批量安装系统kickstart cobbler
+	  
+服务器核心之远程控制卡	  
+	  
+	  
+物理服务器	
+  
+云服务器-按需分配
+阿里云(淘宝 天猫) aws(亚马逊)
+
+第2章
+什么是操作系统
+人与计算机硬件直接的中介
+
+组成？
+蛋-人-人-人
+
+unix诞生
+unix 贝尔实验室
+
+人-谭教授 谭宁邦
+minix mini unix 
+主要用于教学
+
+人-斯托曼 stallman
+我要开发出一个系统：自由 开源 替代你unix
+公司：自由软件基金会 FSF
+项目：GNU
+守则：GPL
+
+人-托瓦兹
+91 开发出了linux内核。
+
+
+
+
+
+自由软件
+不是免费软件
+推荐所有人可以自由使用 自由传播
+
+项目：GNU 发明出一个替代unix系统。
+GNU=GNU is not unix.
+
+gnu.org
+优秀软件：gawk,bash,gcc,emacs
+
+规则：GPL 通用公共许可
+1.所有人可以自由传播开源的软件
+2.虽有人可以任意修改开源软件，但是必须把修改后的内容发出来。
+
+
+RedHat 红帽()
+Red Hat linux 9.0 之后 收费 保持自由 免费下载
+Red Hat Enterprise Linux === RHEL 6.9
+
+CentOS 做到与红帽一模一样
+1.去掉红帽中的收费软件
+2.去掉红帽里面的logo
+
+RedHat红帽与CentOS什么区别？
+
+Fedora===>RedHat====>CentOS
+
+
+CentOS 5.x
+
+CentOS 6.x 50% 6.9 
+
+CentOS 7.x 50% 7.2
+
+centos 6.9  centos 7.  最新版
+https://wiki.centos.org/Download
+
+http://mirrors.aliyun.com/
+http://mirrors.aliyun.com/centos/6.9/isos/x86_64/
+
+CentOS-6.9-x86_64-LiveDVD.iso  
+##体验版-写入到光盘中，刻录到U盘中。                     
+！！！！CentOS-6.9-x86_64-bin-DVD1.iso ##真的安装包   √                
+CentOS-6.9-x86_64-bin-DVD2.iso                    
+CentOS-6.9-x86_64-minimal.iso  ##最小化安装包  
+
+！！！！CentOS-6.9-x86_64-bin-DVD1to2.torrent ##种子 只选择DVD1即可。
+
+##下载CentOS旧版本
+http://vault.centos.org/ 
+
+刚开学的几周-稳定你的环境
+准备好环境
+
+06-【32位系统低配-必备】VMware-8.0
+05-【必备】vmware12-5A02H-AU243-TZJ49-GTC7K-3C61N
+09-【必备】远程连接工具-Xshell5
+
+#vmware出问题
+可以使用vmware软件的修复功能
+
+#创建一个虚拟机-----百脑汇-中关村-购买一台电脑
+
+#如何安装虚拟机系统
+##从光驱
+##从文件中（镜像文件-压缩包）
+##稍后选择
+
+##虚拟机的名字和位置
+
+###d:\vmware\在线班-模板机01
+###d:\vmware\在线班-模板机02
+###d:\vmware\在线班-模板机03
+
+
+运行虚拟机软件的时候 右键单击 --选择以管理员权限运行
+
+vmware运行了一个64为centos 系统。
+需要 虚拟化vt-x.
+去重启计算机笔记本（开机的时候(黑屏 + logo) F2 F1  F12 F10 enter
+
+vmware相关windows服务没有运行
+1)windows + r 
+2)输入services.msc
+3)VMware 开头的5个正在运行/已启动 自动
+
+
+
+
+主机名：
+
+
+
+    /boot 200M 引导系统启动 
+    swap  如果内存<8G swap是内存的1.5倍  如果内存>=8G  swap是8G  
+
+    交换分区  临时作为内存使用 防止内存不够用导致系统故障
+    /     剩余多少给多少  根分区    linux一切从根开始
+
+    4G 以后虚拟机要给512M的内存  768
+
+
+#你要选择什么样的方式安装系统
+##desktop 自己使用
+##minimal 最小化 
+
+
+配置虚拟机网络
+1.在办公室控制和使用服务器（机房）
+2.远程连接
+
+###配置虚拟机网络
+#vmware软件 编辑->虚拟网络编辑器
+
+
+
+#Linux里面的网络的配置
+##1.setup命令进行设置
+
+##2.网络的配置生效
+#重启网卡（eth0)
+ifdown eth0 #关闭网卡
+ifup eth0   #开启网卡
+
+ifconfig    #显示/查看网卡信息-ip地址
+
+
+#远程连接linux 
+##远程连接工具-Xshell/SecureCRT/Putty
+#商业版本（收费）
+#家庭/学校（免费）
+
+###对xshell软件进行优化
+awk
+sed 
+ls 
+pwd
+
+#屌丝去洗浴中心之路（远程连接排错过程）
+###预备姿势
+#ip地址 
+服务器的位置
+
+公网ip地址----------全世界任何一个地方都可以通过这个ip地址访问你的服务器、网站
+
+私网ip地址（内网 局域网）--只有你当前环境的人
+192.168.0.???
+10.0.0.???
+
+#端口号码
+洗浴中心服务  搓澡 按摩 推拿 拔罐 刮痧 特殊服务（特叔）
+暗号          21    25  80    443  23  22
+暗号是用来区分不同的服务
+端口是用来区分下面不同的服务
+
+
+
+远程连接服务---sshd----22
+
+核心：弄清楚ip地址和端口号码
+
+
+
+
+
+
+#了解：vmware网络方式NAT-桥接-仅主机模式（host only)
+##角色：
+###1.电脑PC-----皇帝 
+###2.虚拟机-----贫民百姓
+贫民百姓只关注谁给我分配房子（IP）
+
+###NAT模式
+###1.电脑PC-----皇帝 
+###2.NAT--------宰相
+###3.虚拟机-----贫民百姓
+贫民百姓的房子是宰相分配的。与皇帝无关。
+虚拟机的ip是NAT分配的，电脑环境无论怎么变化 都不会影响虚拟机。
+
+好处:在家 在学校 在公司 连接虚拟机都可以使用相同的ip地址
+
+###桥接
+###1.电脑PC-----皇帝 
+###1.虚拟机-----贫民百姓
+
+只要更换了环境 电脑和虚拟机的ip地址 都会变化。
+
+###仅主机模式
+###1.电脑PC-----皇帝 
+###2.虚拟机-----贫民百姓
+
+虚拟机贫民百姓被控制了，无法与外界联系，无法上网。
+
+
+
+
+远程连接排错-屌丝去洗浴中心之路(windows)
+1.查看道路是否通畅
+ping 服务器ip地址
+ping 10.0.0.200 
+2.是否有人打劫
+3.查看是否提供服务
+
+
+1.查看道路是否通畅
+ping 服务器ip地址
+ping 10.0.0.200 
+
+[e:\~]$ ping 10.0.0.200
+
+正在 Ping 10.0.0.200 具有 32 字节的数据:
+来自 10.0.0.200 的回复: 字节=32 时间<1ms TTL=64
+来自 10.0.0.200 的回复: 字节=32 时间<1ms TTL=64
+来自 10.0.0.200 的回复: 字节=32 时间<1ms TTL=64
+来自 10.0.0.200 的回复: 字节=32 时间<1ms TTL=64
+
+10.0.0.200 的 Ping 统计信息:
+    数据包: 已发送 = 4，已接收 = 4，丢失 = 0 (0% 丢失)，
+往返行程的估计时间(以毫秒为单位):
+    最短 = 0ms，最长 = 0ms，平均 = 0ms
+
+[e:\~]$ ping 10.0.0.202
+
+正在 Ping 10.0.0.202 具有 32 字节的数据:
+来自 10.0.0.1 的回复: 无法访问目标主机。
+连接失败
+连接超时
+
+10.0.0.202 的 Ping 统计信息:
+    数据包: 已发送 = 4，已接收 = 4，丢失 = 0 (0% 丢失)，
+
+3.查看是否提供服务
+telnet 服务器ip地址 22
+[e:\~]$ telnet 10.0.0.200 22
+
+
+Connecting to 10.0.0.200:22...
+Connection established.
+To escape to local shell, press Ctrl+Alt+].
+SSH-2.0-OpenSSH_5.3
+
+Protocol mismatch.
+
+Connection closed by foreign host.
+
+Disconnected from remote host(10.0.0.200:22) at 15:47:46.
+
+Type `help' to learn how to use Xshell prompt.
+[e:\~]$ telnet 10.0.0.200 25
+
+
+Connecting to 10.0.0.200:25...
+Could not connect to '10.0.0.200' (port 25): Connection failed.
+
+Type `help' to learn how to use Xshell prompt.
+
+
+复习-学习了什么内容
+lidao996
+
+
+1.3 linux下面进行分区的几种方法？
+
+通用方法
+/boot    引导分区 200M      
+swap     交换分区 内存的1.5倍（内存小于8G)  大于8G 给8G
+/        根分区   剩下多少给多少
+
+数据非常重要
+/boot 
+swap 
+/        50-200G
+/data    剩下多少给多少 
+
+不知道数据是否重要
+/boot 
+swap 
+/        50-200G
+剩余的空间 不分配留着。
+
+
+
+1.vmware服务是否允许
+win+r 
+services.msc
+2.虚拟网络编辑器
+
+空格和tab键
+
+
+
+
+[root@oldboyedu-01 ~]# #创建目录 make directory mkdir
+[root@oldboyedu-01 ~]# mkdir /data
+[root@oldboyedu-01 ~]# #查看目录里面的内容
+[root@oldboyedu-01 ~]# ls /data
+[root@oldboyedu-01 ~]# 
+[root@oldboyedu-01 ~]# #查看目录里面的详细信息 
+[root@oldboyedu-01 ~]# ls -l /data
+total 0
+[root@oldboyedu-01 ~]# ls -l /tmp
+total 0
+-rw-------. 1 root root 0 Sep 18 15:40 yum.log
+
+[root@oldboyedu-01 ~]# #进入到某一个目录 
+[root@oldboyedu-01 ~]# cd /data
+[root@oldboyedu-01 data]# 
+[root@oldboyedu-01 data]# #我在哪里？定位
+[root@oldboyedu-01 data]# pwd
+/data
+
+绝对路径，相对路径
+绝对路径  从根开始的路径 -精确定位
+        /data 
+		/etc/hosts
+		
+相对路径  不从根开始的路径
+           迷路
+
+#导航
+pwd
+
+
+[root@oldboyedu-01 data]# touch  /data/oldboy.txt
+[root@oldboyedu-01 data]# ls -l /data/
+total 0
+-rw-r--r--. 1 root root 0 Sep 19 11:50 oldboy.txt
+[root@oldboyedu-01 data]# ls /data/
+oldboy.txt
+
+
+###第3题 
+
+vi---记事本
+
+##第一个里程碑-打开文件
+vi /data/oldboy.txt
+
+##第二个里程碑-进入编辑模式并增加内容
+按i,进入到编辑模式（插入）
+
+书写内容
+##第三个里程碑-退出编辑模式
+esc 退出编辑模式
+
+##第四个里程碑-保持并退出
+:wq #保持并退出
+
+##第五个里程碑-查看文件的内容
+[root@oldboyedu-01 data]# cat /data/oldboy.txt 
+I am studying linux.
+
+:wq   保持并退出
+:q    退出
+:q!   强制退出不保存
+:wq!  强制退出并保存
+
+
+vi---记事本
+vim--notepad++ emeditor word wps 
+
+##方法2 
+[root@oldboyedu-01 ~]# echo hello oldboylinux
+hello oldboylinux
+[root@oldboyedu-01 ~]# echo hello oldboylinux >>/data/oldboy.txt 
+[root@oldboyedu-01 ~]# cat /data/oldboy.txt 
+I am studying linux.
+hello oldboylinux
+[root@oldboyedu-01 ~]# #漏斗-----重定向符号
+[root@oldboyedu-01 ~]# #>>-------追加重定向 把内容放在文件的最后一行
+[root@oldboyedu-01 ~]# echo hello oldboylinux >>/data/oldboy.txt 
+[root@oldboyedu-01 ~]# cat /data/oldboy.txt 
+I am studying linux.
+hello oldboylinux
+hello oldboylinux
+
+
+##方法3-想向这个文件中放入多行
+cat >>/data/oldboy.txt<<EOF
+I
+am 
+studying 
+linux 
+EOF
+
+end of file
+
+
+
+##漏斗家族  重定向符号 
+
+#>   1>    标准输出重定向  先把文件的内容清空   把内容放在文件的最后一行
+#>>  1>>   追加重定向      把内容放在文件的最后一行
+
+1 标准输出 执行正确的内容才会通过漏斗 
+
+#2>        标准错误重定向 
+#2>>       错误追加重定向
+
+
+[root@oldboyedu-01 ~]# eho hello 2>>/data/oldboy.txt 
+[root@oldboyedu-01 ~]# cat /data/oldboy.txt 
+hello oldboy
+错误
+-bash: eho: command not found
+[root@oldboyedu-01 ~]# eho hello 2>>/data/oldboy.txt 
+[root@oldboyedu-01 ~]# cat /data/oldboy.txt 
+hello oldboy
+错误
+-bash: eho: command not found
+-bash: eho: command not found
+
+
+eho hello >>/data/oldboy.txt  2>>/data/oldboy.txt 
+eho hello >>/data/oldboy.txt  2>&1
+                              把错误的信息放入到对的信息中 对的错误在一起
+
+
+<     输入重定向
+echo 1 2 3 4 5 >/data/num.txt 
+[root@oldboyedu-01 ~]# cat /data/num.txt 
+1 2 3 4 5
+[root@oldboyedu-01 ~]# xargs -n2 </data/num.txt 
+1 2
+3 4
+5
+
+
+<<    追加输入重定向
+cat >>/data/oldboy.txt<<EOF
+I
+am 
+studying 
+linux 
+EOF
+
+###3.4 把oldboy.txt拷贝(复制)到/tmp下。
+
+#copy ----cp
+[root@oldboyedu-01 ~]# cp /data/oldboy.txt /tmp/
+[root@oldboyedu-01 ~]# ls -l /tmp/
+total 4
+-rw-r--r--. 1 root root 140 Sep 20 01:29 oldboy.txt
+-rw-------. 1 root root   0 Sep 18 15:40 yum.log
+
+#操作前备份 操作后检查
+[root@oldboyedu-01 ~]# cp /data/oldboy.txt /data/oldboy.txt.bak
+[root@oldboyedu-01 ~]# ls -l /data/oldboy.txt
+-rw-r--r--. 1 root root 140 Sep 20 01:12 /data/oldboy.txt
+[root@oldboyedu-01 ~]# ls -l /data/
+total 12
+-rw-r--r--. 1 root root  10 Sep 20 01:15 num.txt
+-rw-r--r--. 1 root root 140 Sep 20 01:12 oldboy.txt
+-rw-r--r--. 1 root root 140 Sep 20 01:31 oldboy.txt.bak
+
+[root@oldboyedu-01 ~]# cp /data/   /tmp/
+cp: omitting directory `/data/'
+
+[root@oldboyedu-01 ~]# cp -r /data/ /tmp/
+[root@oldboyedu-01 ~]# ls -l /tmp/
+total 8
+drwxr-xr-x. 2 root root 4096 Sep 20 01:35 data
+-rw-r--r--. 1 root root  140 Sep 20 01:29 oldboy.txt
+-rw-------. 1 root root    0 Sep 18 15:40 yum.log
+
+1.排版哥
+2.ppt哥
+3.三剑客 三哥
+4.演讲哥
+5.画图哥
+
+
+###3.5 把 /data 移动到 /root目录下面
+#移动----搬家---move-mv
+[root@oldboyedu-01 ~]# mv /data/ /root/
+[root@oldboyedu-01 ~]# ls -l /root/
+total 40
+-rw-------. 1 root root  1052 Sep 18 15:44 anaconda-ks.cfg
+drwxr-xr-x. 2 root root  4096 Sep 20 01:31 data
+-rw-r--r--. 1 root root 21736 Sep 18 15:44 install.log
+-rw-r--r--. 1 root root  5890 Sep 18 15:43 install.log.syslog
+ 
+[root@oldboyedu-01 ~]# ls -l /data 
+ls: cannot access /data: No such file or directory
+
+
+vmware 给你虚拟机拍摄快照
+
+###3.6 进入/root目录下的data目录，删除oldboy.txt文件
+
+[root@oldboyedu-01 tmp]# rm data/
+rm: cannot remove `data/': Is a directory
+[root@oldboyedu-01 tmp]# rm -r data
+rm: descend into directory `data'? y
+rm: remove regular file `data/oldboy.txt'? n
+rm: remove regular file `data/.oldboy.txt.swp'? n
+rm: remove regular file `data/num.txt'? n
+rm: remove regular file `data/oldboy.txt.bak'? n
+rm: remove directory `data'? n
+[root@oldboyedu-01 tmp]# rm -rf data/
+[root@oldboyedu-01 tmp]# ls -l
+total 4
+-rw-r--r--. 1 root root 140 Sep 20 01:29 oldboy.txt
+-rw-------. 1 root root   0 Sep 18 15:40 yum.log
+
+##find命令
+[root@oldboyedu-01 tmp]# find /root/ -type f -name "oldboy.txt"
+/root/data/oldboy.txt
+[root@oldboyedu-01 tmp]# #find /root/ -type f -name "oldboy.txt"
+[root@oldboyedu-01 tmp]# #find 在哪里找 找什么类型的  找什么名字
+
+-type  找什么类型的 
+       f file 文件 
+	   d directory 目录 
+
+##管道 |
+
+
+[root@oldboyedu-01 tmp]# find /root/ -type f -name "oldboy.txt"
+/root/data/oldboy.txt
+[root@oldboyedu-01 tmp]# 
+[root@oldboyedu-01 tmp]# 
+[root@oldboyedu-01 tmp]# find /root/ -type f -name "oldboy.txt"|xargs ls -l
+-rw-r--r--. 1 root root 0 Sep 20 02:27 /root/data/oldboy.txt
+
+
+找出以.txt结尾的文件 
+[root@oldboyedu-01 tmp]# find /root/  -type f  -name "*.txt"
+/root/data/oldboy.txt
+/root/data/num.txt
+
+
+
+
+###3.7 接第6题，退出到上一级目录删除data目录。（原来在/root/data）
+[root@oldboyedu-01 ~]# cd /root/data/
+[root@oldboyedu-01 data]# pwd
+/root/data
+[root@oldboyedu-01 data]# cd ..
+[root@oldboyedu-01 ~]# pwd
+/root
+[root@oldboyedu-01 ~]# #进入当前目录的上一级目录 
+[root@oldboyedu-01 ~]# cd ..
+[root@oldboyedu-01 /]# cd ../../../
+
+[root@oldboyedu-01 ~]# rm data/  -fr 
+[root@oldboyedu-01 ~]# ls data 
+ls: cannot access data: No such file or directory
+
+
+
+
+
+
+
+
+###3.8 已知文件test.txt内容
+oldboy
+test
+lidao
+请给出输出test.txt文件内容时，不包含oldboy字符串的命令。
+
+
+创建测试文件:
+mkdir /data
+cat >/data/test.txt<<EOF
+test
+liyao
+oldboy
+EOF
+
+#方法1-grep
+[root@oldboyedu-01 ~]# cd /data/
+[root@oldboyedu-01 data]# cat test.txt 
+test
+liyao
+oldboy
+[root@oldboyedu-01 data]# #过滤 在文件中找到你想要的内容
+[root@oldboyedu-01 data]# grep   "oldboy"      test.txt 
+oldboy
+[root@oldboyedu-01 data]# grep   "ol"      test.txt 
+oldboy
+[root@oldboyedu-01 data]# #排除
+[root@oldboyedu-01 data]# grep -v   "oldboy"      test.txt 
+test
+liyao
+
+#方法2-head
+[root@oldboyedu-01 data]# head test.txt 
+test
+liyao
+oldboy
+[root@oldboyedu-01 data]# head -n2 test.txt 
+test
+liyao
+[root@oldboyedu-01 data]# head -2 test.txt 
+test
+liyao
+
+[root@oldboyedu-01 data]# tail test.txt 
+test
+liyao
+oldboy
+[root@oldboyedu-01 data]# tail -2 test.txt 
+liyao
+oldboy
+[root@oldboyedu-01 data]# tail -1 test.txt 
+oldboy
+
+#方法3-awk 
+[root@oldboyedu-01 data]# awk '/oldboy/' test.txt 
+oldboy
+[root@oldboyedu-01 data]# grep "oldboy" test.txt 
+oldboy
+[root@oldboyedu-01 data]# grep -v "oldboy" test.txt 
+test
+liyao
+[root@oldboyedu-01 data]# awk '!/oldboy/' test.txt 
+test
+liyao
+[root@oldboyedu-01 data]# #awk中 !表示取反 非 
+
+#方法4-sed 
+[root@oldboyedu-01 data]# sed '/oldboy/d' test.txt 
+test
+liyao
+
+小结：
+1.grep 过滤 ******
+2.head tail ******
+3.sed awk 了解
+
+
+##3.9 请用一条命令完成创建目录/oldboy/test，即创建/oldboy目录及/oldboy/test
+
+[root@oldboyedu-01 data]# mkdir /oldboy/test
+mkdir: cannot create directory `/oldboy/test': No such file or directory
+
+
+
+No such file or directory错误排查过程
+1.ls 命令一层一层查看 
+2.查看每一层目录/文件是否存在
+
+
+[root@oldboyedu-01 data]# mkdir -p /oldboy/test 
+[root@oldboyedu-01 data]# ls /oldboy/
+test
+[root@oldboyedu-01 data]# ls -l /oldboy/
+total 4
+drwxr-xr-x. 2 root root 4096 Sep 25 10:28 test
+
+
+
+
+
+
+##3.10 已知/tmp下已经存在test.txt文件，如何执行命令才能把/mnt/test.txt拷贝到/tmp下覆盖掉/tmp/test.txt，而让系统不提示是否覆盖（root权限下）。
+
+
+[root@oldboyedu-01 data]# cp /mnt/test.txt  /tmp/
+cp: overwrite `/tmp/test.txt'? ^C
+#方法1 撬棍
+[root@oldboyedu-01 data]# \cp /mnt/test.txt  /tmp/
+
+#方法2 使用命令的绝对路径 全路径
+
+[root@oldboyedu-01 data]# which cp
+alias cp='cp -i'
+	/bin/cp
+[root@oldboyedu-01 data]# which mkdir 
+/bin/mkdir
+
+[root@oldboyedu-01 data]# ls -l /bin/cp 
+-rwxr-xr-x. 1 root root 122896 Mar 23  2017 /bin/cp
+[root@oldboyedu-01 data]# /bin/cp /mnt/test.txt /tmp/
+
+#提示你是否覆盖？   是否删除?
+
+#为何我们执行cp的时候就相当于cp -i 
+#为何我们执行rm的时候就相当于rm -i 
+
+###linux别名
+##小名 昵称 爱称 外号
+
+##目标
+###1.防止运行危险命令******
+###2.省事 简化命令
+
+##如何设置一个别名 
+
+###第一个里程碑-查看系统中的别名
+
+[root@oldboyedu-01 data]# alias rm cp mv
+alias rm='rm -i'
+alias cp='cp -i'
+alias mv='mv -i'
+###第二个里程碑-模仿
+#执行rm命令的时候提示 do not use rm 
+root@oldboyedu-01 data]# echo do not use rm
+do not use rm
+[root@oldboyedu-01 data]# alias rm='echo do not use rm'
+[root@oldboyedu-01 data]# alias rm
+alias rm='echo do not use rm'
+[root@oldboyedu-01 data]# rm /tmp/test.txt 
+do not use rm /tmp/test.txt
+[root@oldboyedu-01 data]# rm -f /tmp/test.txt 
+do not use rm -f /tmp/test.txt
+[root@oldboyedu-01 data]# rm -fr /tmp/test.txt 
+do not use rm -fr /tmp/test.txt
+###第三个里程碑-永久生效
+#/etc/profile
+#vim 快捷键
+##移动光标到文件的最后一行                             G
+##移动光标到文件的  第一行                             gg
+##在光标所在位置的下一行插入一个空行 并进入编辑模式    o(小写字母)
+[root@oldboyedu-01 ~]# tail -1 /etc/profile
+alias rm='echo do not use rm'
+
+[root@oldboyedu-01 ~]# source /etc/profile
+[root@oldboyedu-01 ~]# alias rm
+alias rm='echo do not use rm'
+
+###第四个里程碑-填坑
+编辑 /root/.bashrc
+把 alias rm='rm -i'这一行前面加上一个注释#
+
+小结：
+1.配置别名
+2.临时取消别名 cp rm 
+
+
+
+##3.11 只查看ett.txt文件（共100行）内第20到第30行的内容
+
+seq 100 >/oldboy/ett.txt
+
+###方法1-sed
+[root@oldboyedu-01 ~]# #sed 默认输出 sed命令会把文件的内容 默认都显示出来
+[root@oldboyedu-01 ~]# sed -n '20p' /oldboy/ett.txt 
+20
+[root@oldboyedu-01 ~]# sed -n '20,30p' /oldboy/ett.txt 
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+
+###方法2-head + tail 
+[root@oldboyedu-01 ~]# head -30 /oldboy/ett.txt |tail -11
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+
+
+
+###方法3-awk 
+[root@oldboyedu-01 ~]# awk 'NR==20' /oldboy/ett.txt 
+20
+#NR表示行号
+#== 表示等于
+[root@oldboyedu-01 ~]# awk 'NR==20,NR==30' /oldboy/ett.txt 
+[root@oldboyedu-01 ~]# sed -n '20,30p' /oldboy/ett.txt 
+
+###方法4-grep
+[root@oldboyedu-01 ~]# grep "20" /oldboy/ett.txt 
+20
+[root@oldboyedu-01 ~]# #文件的内容 ====等于这一行的行号
+[root@oldboyedu-01 ~]# grep -A10 "20" /oldboy/ett.txt 
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+
+
+
+小结：
+1.取出文件中的某一行，或者连续的几行
+2.sed,head+tail 
+3.awk-了解
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+##3.12 把/oldboy目录及其子目录下所有以扩展名 .sh结尾的文件中，文件包含oldboy的字符串全部替换为oldgirl 
+创建测试环境:
+mkdir -p /oldboy/test
+cd /oldboy
+echo "oldboy">test/del.sh
+echo "oldboy">test.sh
+echo "oldboy">t.sh
+touch oldboy.txt
+touch alex.txt
+
+#第一个里程碑-找出你要的文件
+[root@oldboyedu-01 oldboy]# find /oldboy/ -type f 
+/oldboy/t.sh
+/oldboy/oldboy.txt
+/oldboy/test.sh
+/oldboy/test/del.sh
+/oldboy/ett.txt
+/oldboy/alex.txt
+[root@oldboyedu-01 oldboy]# find /oldboy/ -type f -name "*.sh"
+/oldboy/t.sh
+/oldboy/test.sh
+/oldboy/test/del.sh
+
+#第二个里程碑-oldboy替换为oldgirl 处理一个文件
+[root@oldboyedu-01 oldboy]# cat /oldboy/t.sh 
+oldboy
+[root@oldboyedu-01 oldboy]# #sed 's#找谁#替换为什么#g'   /oldboy/t.sh 
+[root@oldboyedu-01 oldboy]# #替换
+[root@oldboyedu-01 oldboy]# sed  's#oldboy#oldgirl#g'   /oldboy/t.sh 
+oldgirl
+[root@oldboyedu-01 oldboy]# cat /oldboy/t.sh 
+oldboy
+[root@oldboyedu-01 oldboy]# #sed修改文件的内容
+[root@oldboyedu-01 oldboy]# sed -i 's#oldboy#oldgirl#g'   /oldboy/t.sh  
+[root@oldboyedu-01 oldboy]# cat /oldboy/t.sh 
+oldgirl
+
+#第三个里程碑-把find命令找到的文件交给sed命令处理
+[root@oldboyedu-01 oldboy]# find /oldboy/ -type f -name "*.sh"
+/oldboy/t.sh
+/oldboy/test.sh
+/oldboy/test/del.sh
+[root@oldboyedu-01 oldboy]# find /oldboy/ -type f -name "*.sh"|xargs ls -l
+-rw-r--r--. 1 root root 7 Sep 25 11:59 /oldboy/test/del.sh
+-rw-r--r--. 1 root root 7 Sep 25 11:59 /oldboy/test.sh
+-rw-r--r--. 1 root root 8 Sep 25 12:08 /oldboy/t.sh
+[root@oldboyedu-01 oldboy]# find /oldboy/ -type f -name "*.sh"|xargs sed 's#oldboy#oldgirl#g'
+oldgirl
+oldgirl
+oldgirl
+[root@oldboyedu-01 oldboy]# find /oldboy/ -type f -name "*.sh"|xargs sed 's#oldboy#oldgirl#g' -i
+[root@oldboyedu-01 oldboy]# find /oldboy/ -type f -name "*.sh"|xargs cat 
+oldgirl
+oldgirl
+oldgirl
+
+小结：
+1.find 与|xargs 
+2.ls -l rm sed 
+3.sed名进行替换 修改文件内容
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+第一关练习题-命令与征服
+1.一大波命令
+2.三剑客 grep sed使用
+3.别名
+4.find命令查找出文件 与 其他命令配合
+
+#####第5章
+###添加用户
+######linux用户分类
+1.root 用户 linux皇帝 
+
+2.普通用户  贫民百姓 
+
+
+[root@oldboyedu-01 oldboy]# useradd   oldboy
+[root@oldboyedu-01 oldboy]# id  oldboy
+uid=500(oldboy) gid=500(oldboy) groups=500(oldboy)
+[root@oldboyedu-01 oldboy]# id lilaoshi
+id: lilaoshi: No such user
+[root@oldboyedu-01 oldboy]# passwd    oldboy
+Changing password for user oldboy.
+New password: 
+BAD PASSWORD: it is too simplistic/systematic
+BAD PASSWORD: is too simple
+Retype new password: 
+passwd: all authentication tokens updated successfully.
+
+ #切换用户
+[root@oldboyedu-01 oldboy]# whoami 
+root
+[root@oldboyedu-01 oldboy]# su  -  oldboy
+[oldboy@oldboyedu-01 ~]$ whoami 
+oldboy
+
+
+
+#切换回root
+[oldboy@oldboyedu-01 ~]$ su - root
+Password: 
+#退出当前用户 注销
+[oldboy@oldboyedu-01 ~]$ #ctrl + d 
+[oldboy@oldboyedu-01 ~]$ logout
+
+课后题目:
+#su 与su -区别
+
+
+#面试题:你的系统什么版本的？
+[root@oldboyedu-01 ~]# cat /etc/redhat-release 
+CentOS release 6.9 (Final)
+[root@oldboyedu-01 ~]# uname -r
+2.6.32-696.el6.x86_64
+[root@oldboyedu-01 ~]# uname -m
+x86_64
+
+
+
+
+
+
+
+
+
+
+
+
+#PS1是什么鬼？
+
+               变量名字      -------藏经阁武功秘籍------葵花宝典
+echo $PS1      查看变量的内容-------      阅读秘籍------手书
+PS1=新的内容向 变量中放入内容-----    写心得体会------书名字=欲练此功，必先自宫;
+																	 若不自宫,也能成功.
+#PS1 系统环境变量
+##一般都是大写的，在系统中任何的地方都可以使用。
+
+[root@oldboyedu-01 ~]# echo $PS1
+[\u@\h \W]\$
+[root@oldboyedu-01 ~]# #\u=====当前用户名 whoami
+[root@oldboyedu-01 ~]# #\h     当前主机名 hostname 
+[root@oldboyedu-01 ~]# #\W     当前的位置 pwd
+[root@oldboyedu-01 ~]# PS1='[\u@\h \W \t]\$'
+
+
+###SElinux关闭 
+
+#####临时关闭-重启服务器失效
+[root@oldboyedu-01 ~]# #查询selinux状态
+[root@oldboyedu-01 ~]# getenforce 
+Enforcing
+[root@oldboyedu-01 ~]# #enforcing   selinux正在运行
+[root@oldboyedu-01 ~]# #permissive  selinux临时关闭 还是提示警告
+[root@oldboyedu-01 ~]# #disabled    selinux彻底关闭
+[root@oldboyedu-01 ~]# setenforce 
+usage:  setenforce [ Enforcing | Permissive | 1 | 0 ]
+[root@oldboyedu-01 ~]# setenforce 0
+[root@oldboyedu-01 ~]# getenforce 
+Permissive
+[root@oldboyedu-01 ~]# 
+
+
+
+#####永久关闭-重启服务器生效
+ vim /etc/selinux/config
+
+[root@oldboyedu-01 ~]# grep "=disabled" /etc/selinux/config 
+SELINUX=disabled
+[root@oldboyedu-01 ~]# grep "disabled" /etc/selinux/config 
+#     disabled - No SELinux policy is loaded.
+SELINUX=disabled
+
+小结：
+1.临时关闭-setenforce 
+2.永久关闭-修改配置文件
+
+
+##关闭Iptables
+####服务器对外使用，有外网，开启防火墙
+####服务器内网，            关闭
+
+#######关闭防火墙 
+
+#####临时关闭 
+#查询防火墙是否在运行 
+/etc/init.d/iptables  status
+
+[root@oldboyedu-01 ~]# /etc/init.d/iptables  stop
+iptables: Setting chains to policy ACCEPT: filter          [  OK  ]
+iptables: Flushing firewall rules:                         [  OK  ]
+iptables: Unloading modules:                               [  OK  ]
+[root@oldboyedu-01 ~]# /etc/init.d/iptables  stop
+[root@oldboyedu-01 ~]# /etc/init.d/iptables  status 
+iptables: Firewall is not running.
+
+
+
+#####永久关闭
+
+开机自动启动
+#让iptables在开机的时候 不自动启动
+chkconfig 
+
+
+[root@oldboyedu-01 ~]# chkconfig |grep ipt
+iptables       	0:off	1:off	2:on	3:on	4:on	5:on	6:off
+[root@oldboyedu-01 ~]# chkconfig iptables off
+[root@oldboyedu-01 ~]# chkconfig |grep ipt
+iptables       	0:off	1:off	2:off	3:off	4:off	5:off	6:off
+
+
+小结：
+1.临时关闭 xxxx stop 
+2.永久   chkconfig  xx  off 
+
+
+##显示中文乱码
+
+####1.什么是字符集？
+######表示字符 文字的方法
+UTF-8      万国码 系统默认的字符集
+GBK GB2312 
+
+
+####2.如何查看系统的字符集
+
+[root@oldboyedu-01 ~]# echo $LANG
+en_US.UTF-8
+[root@oldboyedu-01 ~]# #语言.字符集
+
+
+####3.如何修改字符集-临时
+[root@oldboyedu-01 ~]# export   LANG=zh_CN.UTF-8
+[root@oldboyedu-01 ~]# echo $LANG
+zh_CN.UTF-8
+
+####4.如何修改字符集-永久
+[root@oldboyedu-01 ~]# cat /etc/sysconfig/i18n 
+LANG="en_US.UTF-8"
+SYSFONT="latarcyrheb-sun16"
+
+####5.生效 
+[root@oldboyedu-01 ~]# source  /etc/sysconfig/i18n 
+[root@oldboyedu-01 ~]# echo $LANG
+en_US.UTF-8
+
+#####1.查看中文乱码的原因******
+####1)linux使用的字符集
+####2)远程连接工具使用的字符集
+####1) 与 2) 不同 就会导致乱码 
+
+#####2.排查
+####1)linux使用的字符集
+####2)远程连接工具使用的字符集
+
+#####3.解决 
+####方法1 修改远程连接工具字符集 
+####方法2 修改linux系统的字符集
+####1.如何修改字符集-临时
+####2.如何修改字符集-永久
+####3.生效 
+
+
+
+
+
+
+
+
+
+
+
+
+

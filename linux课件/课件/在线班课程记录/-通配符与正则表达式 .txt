@@ -1,0 +1,1145 @@
+ 
+1.sed 查找替换 显示某一行或某几行
+##替换
+sed 's###g'            oldboy.txt
+sed 's@@@g'            oldboy.txt
+
+sed -i 's###g'         oldboy.txt
+sed -i.bak 's###g'         oldboy.txt
+#先把oldboy.txt进行备份 备份的名字oldboy.txt.bak
+#然后对oldboy.txt文件的内容进行修改
+#对单独一个文件
+
+
+##精确查找 
+ sed -n  '行号p'  oldboy.txt
+ sed -n  '10p'  oldboy.txt
+ sed -n  '1,10p'  oldboy.txt
+
+ #显示这个文件的第10行到最后一行
+ sed -n '10,最后一行p' oldboy.txt
+ sed -n '10,$p' oldboy.txt
+
+##模糊查找 类似 grep "oldboy" oldboy.txt 
+  sed -n '/oldboy/p' oldboy.txt 
+
+2.配置别名-rm 
+3.find命令系列 找文件 
+  find与rm 、sed 
+  find与cp mv 
+通过shell编程的方法写出:把/oldboy目录下面 所有大于10M 并且修改时间是30天以前的 并且.log结尾的文件 复制到/tmp 
+
+find /oldboy -type f -size +10M -mtime +30 -name "*.log"
+
+
+find /oldboy -type f -size +10M -mtime +30 -name "*.log"|xargs cp -t  /tmp 
+cp $(find /oldboy -type f -size +10M -mtime +30 -name "*.log")  /tmp
+
+4.远程连接服务器失败拍错过程 屌丝去洗浴中心之路 
+1)路是否畅通 ping 
+[e:\~]$ tracert -d www.baidu.com
+
+通过最多 30 个跃点跟踪
+到 www.a.shifen.com [111.13.100.91] 的路由:
+
+  1    <1 毫秒   <1 毫秒   <1 毫秒 192.168.20.254 
+  2     *        9 ms    11 ms  122.71.240.1 
+  3     *       18 ms     *     222.35.254.253 
+  4     5 ms     5 ms     6 ms  61.233.9.213 
+  5     5 ms     4 ms     3 ms  61.237.112.66 
+  6     4 ms     8 ms     5 ms  221.183.15.101 
+  7     *        *        *     请求超时。
+  8    20 ms     *        *     221.183.38.82 
+  9    19 ms    10 ms    11 ms  111.13.0.174 
+ 10    30 ms     *       32 ms  111.13.188.105 
+ 11    39 ms    33 ms    32 ms  111.13.108.26 
+ 12     *        *        *     请求超时。
+ 13     *        *        *     请求超时。
+ 14    31 ms    28 ms    22 ms  111.13.100.91 
+
+跟踪完成。
+2.是否有人打劫 
+iptables selinux 
+no route to host 
+
+3.查看是否有人提供服务(22端口是否开启)
+
+1)telnet(单独安装)
+2)ss      -lntup |grep 22 
+  netstat -lntup |grep 22
+  
+3)nmap  (单独安装)
+  nmap -p22       10.0.0.200 
+  nmap -p1-1024   10.0.0.200
+  nmap -p445   10.0.0.0/24 192.168.20.0/24 
+
+4)nc    (单独安装)
+  nc 10.0.0.200 22
+
+5)检查sshd进程 是否在运行 
+
+ps -ef |grep sshd 
+
+
+yum install tree nmap nc lrzsz -y
+
+
+
+
+
+5.linux无法上网如何解决
+
+1)ping www.baidu.com  
+2)ping 223.5.5.5      #是否是DNS的问题
+3)ping 网关（整个大楼的出口）
+route -n 
+
+
+
+6.打包压缩的命令
+tar zip gzip 
+
+tar 
+   创建压缩包 
+   tar zcf 
+   
+   查看 
+   tar tf
+   tar tvf
+   
+   解压
+   tar xf
+   
+   解压到制定位置 
+   tar xf oldboy.tar.gz -C /tmp 
+
+zip(zip压缩格式是linux与windows默认)
+   zip /tmp/etc.zip   /etc/
+
+   zip -r  /tmp/etc.zip   /etc/
+   
+unzip 
+
+
+gzip 
+
+    [root@oldboyedu41-nb ~]# gzip  install.log
+    [root@oldboyedu41-nb ~]# ll install*
+    -rw-r--r--  1 root root 5346 Sep  3 11:11 install.log.gz
+    -rw-r--r--. 1 root root 5890 Sep  3 11:10 install.log.syslog
+    [root@oldboyedu41-nb ~]# gzip -d install.log.gz 
+    [root@oldboyedu41-nb ~]# ll install*
+    -rw-r--r--  1 root root 21736 Sep  3 11:11 install.log
+    -rw-r--r--. 1 root root  5890 Sep  3 11:10 install.log.syslog
+
+
+#tar zcf /tmp/etc-2017-09-24.tar.gz  /etc/
+#tar zcf /tmp/etc-时间是date +%F命令的结果.tar.gz  /etc/
+#tar zcf /tmp/etc-`date +%F`.tar.gz  /etc/
+
+tar zcf /tmp/etc-`date +%F`.tar.gz  /etc/
+ls
+etc-2017-09-24.tar.gz
+
+6.no space left on device  磁盘空间不足 
+1）block满了 500G 200*3G 
+ df -h  #
+ du -sh  /*     |grep G 
+ du -sh  /usr/* |grep G 
+
+2）inode满了 导致磁盘满了 
+查找系统中目录的大小比较大的 
+
+一般inode满了因为 定时任务
+
+3）block满了 文件没有被彻底删除  硬链接数为0，进程调用数不为零
+   lsof |grep delete 
+   重启对应的服务
+   
+ 
+正则表达式与通配符
+
+1.特殊符号 
+
+' 所见即所得 吃啥吐啥
+
+" 和单引号类似,特殊符号会被解析 运行 $ $() `` !
+
+` 反引号 === $() 先运行里面的命令 把显示到屏幕上的内容留下
+
+
+# 表示注释 
+  root用户命令提示符
+$ 取变量里面的内容 
+  普通用户的命令提示符 
+  sed -n '$p' oldboy.txt 
+  awk  $1 $2  $NF 取某一列
+  NR----number of record(行号)  
+! 使用运行历史命令 
+[root@oldboyedu41-nb ~]# echo 'We love Dr.TAN!'
+We love Dr.TAN!
+[root@oldboyedu41-nb ~]# history |grep awk 
+  find awk表示取反 非
+  
+*  所有,通配符
+ 
+&& 前一个命令运行成功，再运行后面的命令
+   ifdown eth0 && ifup eth0 
+   
+   
+|| 前一个命令运行失败，再运行后面的命令
+
+|  管道
+
+?  任意一个字符 通配符
+
+\  转义符号 临时取消别名
+
+
+2.通配符 
+用来匹配文件名
+ls -l *.txt *.log 
+
+* 所有 任何东西
+  找出以 *.txt *.log 
+  
+  找出/oldboy 目录中 文件名中包含oldboy的文件 
+  mkdir -p /oldboy 
+  touch /oldboy/oldboy{01..10}.txt /oldboy/stu-oldboy{01..10}.txt  oldboy oldboy.txt 
+  
+  
+  find /oldboy/ -type f  -name *oldboy*
+
+  
+{} 生成序列 
+ #生成序列
+      echo {a..z}
+      echo {1..10}
+      echo {01..10}
+      echo {001..10}
+      echo {01..10}
+      echo {01..100}
+
+ #指定每次变化多少
+      [root@oldboyedu41-nb oldboy]# echo {01..10..2}
+      01 03 05 07 09
+      [root@oldboyedu41-nb oldboy]# echo {a..z..2}
+      a c e g i k m o q s u w y
+
+      
+      
+      [root@oldboyedu41-nb oldboy]# echo stu{01,05,10}
+      stu01 stu05 stu10
+
+ #通过{}对某个文件进行备份 
+      [root@oldboyedu41-nb oldboy]# echo A{B,C}
+      AB AC
+      [root@oldboyedu41-nb oldboy]# echo A{,C}
+      A AC
+      [root@oldboyedu41-nb oldboy]# 
+      [root@oldboyedu41-nb oldboy]# echo oldboy.txt{,C}
+      oldboy.txt oldboy.txtC
+      [root@oldboyedu41-nb oldboy]# echo oldboy.txt{,.bak}
+      oldboy.txt oldboy.txt.bak
+      [root@oldboyedu41-nb oldboy]# touch oldboy.txt
+      [root@oldboyedu41-nb oldboy]# cp oldboy.txt{,.bak}
+      [root@oldboyedu41-nb oldboy]# #cp oldboy.txt{,.bak}
+      [root@oldboyedu41-nb oldboy]# #cp oldboy.txt oldboy.txt.bak
+      [root@oldboyedu41-nb oldboy]# echo oldboy.txt{,.bak}
+      oldboy.txt oldboy.txt.bak
+
+3.正则表达式
+    1)什么是正则
+      cat test.txt 
+      
+      oldboy 230xxxxxxxxxxxxxxxxxxx
+      oldboy01 
+      oldboy43.txt
+      oldboy-lidao.txt 
+      oldboybaby 
+      oldbabay 
+    
+    #1.找出文件中包含数字的行
+    
+    grep "0" test.txt 
+    
+    
+    通过一种符合表示不同的数字 字母 ====== 正则表达式（特殊符号 ^ $ + . * 表示各种不同的字符）
+    
+    ^ 以....开头 
+    
+    2)使用正则的时候注意事项
+      1# 正则表达式高级货色 linux三剑客 grep sed awk 
+      2# 正则表达式匹配按照行为单位的
+      grep "^oldboy" oldboy.txt 
+      3# 使用的时候注意 使用英文符号，    禁止使用中文符号
+      4# grep/egrep 加上一个别名
+      
+      cat >>/etc/profile<<EOF
+      alias grep='grep --color=auto'
+      alias egrep='egrep --color=auto'
+      EOF
+      source /etc/profile
+      
+      [root@oldboyedu41-nb oldboy]# alias grep egrep 
+      alias grep='grep --color=auto'
+      alias egrep='egrep --color=auto'
+
+    3)正则表达式与通配符区别 
+      1# 正则表达式高级货色 查找文件内容 文字符号 grep sed awk 三剑客支持  python java 
+      2# 通配符             查找文件名字 大部分linux命令都可以使用 通配符 *.txt  *.log 
+      
+    4)正则表达式分类
+      正则 
+      1# 基础正则  ^  $  .  *  []   basic    regular expression  BRE 
+      2# 扩展正则  +  |  () {} ?    extended regular expression  ERE 
+
+      
+    5)准备环境 
+oldboy.txt     
+01  I am oldboy teacher!
+02  I teach linux.
+03  
+04  I like badminton ball ,billiard ball and chinese chess!
+05  my blog is http://oldboy.blog.51cto.com
+06  our site is http://www.etiantian.org
+07  my qq num is 49000448.
+08  
+09  not 4900000448.
+10  my god ,i am not oldbey,but OLDBOY!
+
+[root@oldboyedu41-nb oldboy]# cat -n oldboy.txt
+     1	I am oldboy teacher!
+     2	I teach linux.
+     3	
+     4	I like badminton ball ,billiard ball and chinese chess!
+     5	my blog is http://oldboy.blog.51cto.com 
+     6	our site is http://www.etiantian.org 
+     7	my qq num is 49000448.
+     8	
+     9	not 4900000448.
+    10	my god ,i am not oldbey,but OLDBOY!
+
+    6)基础正则 
+    1# ^  表示以....开头的行 
+[root@oldboyedu41-nb oldboy]# grep "^m" oldboy.txt
+my blog is http://oldboy.blog.51cto.com 
+my qq num is 49000448.
+my god ,i am not oldbey,but OLDBOY!
+
+    2# $  以....结尾的行 
+[root@oldboyedu41-nb oldboy]# cat -A oldboy.txt
+I am oldboy teacher!$
+I teach linux.$
+$
+I like badminton ball ,billiard ball and chinese chess!$
+my blog is http://oldboy.blog.51cto.com$
+our site is http://www.etiantian.org$
+my qq num is 49000448.$
+$
+not 4900000448.$
+my god ,i am not oldbey,but OLDBOY!$
+[root@oldboyedu41-nb oldboy]# grep "m$" oldboy.txt
+my blog is http://oldboy.blog.51cto.com
+     
+    3# 空行 ^$ 这一行中没有任何符号 
+[root@oldboyedu41-nb oldboy]# grep -n "^$" oldboy.txt
+3:
+8:
+[root@oldboyedu41-nb oldboy]# cat -n oldboy.txt
+     1	I am oldboy teacher!
+     2	I teach linux.
+     3	
+     4	I like badminton ball ,billiard ball and chinese chess!
+     5	my blog is http://oldboy.blog.51cto.com
+     6	our site is http://www.etiantian.org
+     7	my qq num is 49000448.
+     8	
+     9	not 4900000448.
+    10	my god ,i am not oldbey,but OLDBOY!
+
+    #排除空行 
+[root@oldboyedu41-nb oldboy]# grep -v "^$" oldboy.txt
+I am oldboy teacher!
+I teach linux.
+I like badminton ball ,billiard ball and chinese chess!
+my blog is http://oldboy.blog.51cto.com
+our site is http://www.etiantian.org
+my qq num is 49000448.
+not 4900000448.
+my god ,i am not oldbey,but OLDBOY!
+    
+    4# .(点)  任意一个字符 不匹配空行 
+ [root@oldboyedu41-nb oldboy]# #grep -o  "."  oldboy.txt
+[root@oldboyedu41-nb oldboy]# #-o grep命令每次 匹配到了什么
+[root@oldboyedu41-nb oldboy]# 
+[root@oldboyedu41-nb oldboy]# grep -o  "."  oldboy.txt
+     
+
+
+    
+      
+    5#  \  转义字符 脱掉马甲 打回原形 
+#找出文件中oldboy.txt 以.结尾的行  
+[root@oldboyedu41-nb oldboy]# grep "\.$" oldboy.txt
+I teach linux.
+my qq num is 49000448.
+not 4900000448.    
+    
+    \n  回车换行   
+      
+#^ $  ^$  . 
+#grep -o 显示grep命令每次找到的内容       
+    
+    
+    6#  * 前一个字符连续出现0次或1次以上  >=0 
+    
+[root@oldboyedu41-nb oldboy]# grep "0" oldboy.txt
+my qq num is 49000448.
+not 4900000448.
+[root@oldboyedu41-nb oldboy]# grep -o "0" oldboy.txt
+0
+0
+0
+0
+0
+0
+0
+0
+[root@oldboyedu41-nb oldboy]# grep -on "0" oldboy.txt
+7:0
+7:0
+7:0
+9:0
+9:0
+9:0
+9:0
+9:0
+   
+    
+[root@oldboyedu41-nb oldboy]# grep "0*" oldboy.txt
+I am oldboy teacher!
+I teach linux.
+
+I like badminton ball ,billiard ball and chinese chess!
+my blog is http://oldboy.blog.51cto.com
+our site is http://www.etiantian.org
+my qq num is 49000448.
+
+not 4900000448.
+my god ,i am not oldbey,but OLDBOY!
+[root@oldboyedu41-nb oldboy]# grep -o "0*" oldboy.txt
+000
+00000
+
+连续出现 
+0 
+0000  
+000000    
+    
+    #正则中表示连续出现或所有的时候 ----- 贪婪性
+    
+    
+    
+    
+    
+    
+    
+    
+    #"0*" 为何会把整个文件的内容显示出来 
+    # 0连续出现了1次以上  000 00000  0000000 
+    # 0连续出现了0次   会把整个文件的内容都显示出来 "0*"  ==== ""
+    grep ""  oldboy.txt
+     I am oldboy teacher!
+     I teach linux.
+    
+    I like badminton ball ,billiard ball and chinese chess!
+    my blog is http://oldboy.blog.51cto.com
+    our site is http://www.etiantian.org
+    my qq num is 49000448.
+    
+    not 4900000448.
+    my god ,i am not oldbey,but OLDBOY!
+  
+    
+    7# .* 所有 任何东西 
+[root@oldboyedu41-nb oldboy]# grep -n "^.*o" oldboy.txt
+1:I am oldboy teacher!
+4:I like badminton ball ,billiard ball and chinese chess!
+5:my blog is http://oldboy.blog.51cto.com
+6:our site is http://www.etiantian.org
+9:not 4900000448.
+10:my god ,i am not oldbey,but OLDBOY!
+[root@oldboyedu41-nb oldboy]# #    #正则中表示连续出现或所有的时候 ----- 贪婪性
+[root@oldboyedu41-nb oldboy]#      #有多少匹配多少 有多少吃多少
+
+
+
+        #我要找以m开头的行 并且 以m结尾的行
+[root@oldboyedu41-nb oldboy]# ##我要找以m开头的行 并且 以m结尾的行
+[root@oldboyedu41-nb oldboy]# grep "^m" oldboy.txt
+my blog is http://oldboy.blog.51cto.com
+my qq num is 49000448.
+my god ,i am not oldbey,but OLDBOY!
+[root@oldboyedu41-nb oldboy]# grep "^m$" oldboy.txt
+[root@oldboyedu41-nb oldboy]# #grep "^m什么都可以m$" oldboy.txt
+[root@oldboyedu41-nb oldboy]# grep "^m什么都可以m$" oldboy.txt
+[root@oldboyedu41-nb oldboy]# grep "^m.*m$" oldboy.txt
+my blog is http://oldboy.blog.51cto.com
+
+    8# []  [abc] 表示一个整体相当于是一个符号 表示包含a或者b或者c的行 
+    
+           grep "[abc]"         oldboy.txt 
+           grep "[a-z]"         oldboy.txt 
+           grep "[A-Z]"         oldboy.txt 
+           grep "[a-zA-Z]"      oldboy.txt 
+           grep "[0-9]"         oldboy.txt 
+           grep "[a-zA-Z0-9]"   oldboy.txt 
+        
+练习3:以 m或n或o开头的 并且以  m或g 结尾的行
+
+[root@oldboyedu41-nb oldboy]# grep "^[mno]" oldboy.txt
+my blog is http://oldboy.blog.51cto.com
+our site is http://www.etiantian.org
+my qq num is 49000448.
+not 4900000448.
+my god ,i am not oldbey,but OLDBOY!
+[root@oldboyedu41-nb oldboy]# grep "^[mno].*[mg]$" oldboy.txt
+my blog is http://oldboy.blog.51cto.com
+our site is http://www.etiantian.org
+    
+    
+[root@oldboyedu-41-01 tmp]# grep "[a-Z]" oldboy.txt 
+请问李导这样找大小写字母行么？    
+
+    
+[root@Centos6p9m1 oldboy]# grep "^[m|n|o].*[m|g]$" oldboy.txt
+[root@Centos6p9m1 oldboy]# grep "^[m,n,o].*[m,g]$" oldboy.txt
+[root@oldboyedu41-nb oldboy]# #在正则中括号中 特殊符号(正则表达式符号) 一般都没有特殊含义
+[root@oldboyedu41-nb oldboy]# #grep "\.$"
+[root@oldboyedu41-nb oldboy]# #grep "[.]$"
+
+
+-  表示非特殊符号  在这里怎么是从a到z啦？
+
+
+
+
+    
+
+
+    
+
+    
+    9# [^]  [^abc] 表示一个整体相当于是一个符号 表示包含a或者b或者c的行 
+                   第一个位置 排除 
+                   
+[root@oldboyedu41-nb oldboy]# grep "[xlc]" oldboy.txt
+I am oldboy teacher!
+I teach linux.
+I like badminton ball ,billiard ball and chinese chess!
+my blog is http://oldboy.blog.51cto.com
+my god ,i am not oldbey,but OLDBOY!
+[root@oldboyedu41-nb oldboy]# grep "[^xlc]" oldboy.txt
+I am oldboy teacher!
+I teach linux.
+I like badminton ball ,billiard ball and chinese chess!
+my blog is http://oldboy.blog.51cto.com
+our site is http://www.etiantian.org
+my qq num is 49000448.
+not 4900000448.
+my god ,i am not oldbey,but OLDBOY!
+    
+
+    
+[root@Gloria ~]# grep "[^m^n^o].*[m$g$]" oldboy.txt   
+
+
+[^m^n^o]=== 排除m或^或n或o 
+
+
+
+[root@oldboyedu oldboy]# grep "[^m-m$]" oldboy.txt   
+    
+    7)基础正则表达式小结：
+      1#.^  $  ^$  .*  [abc]  
+      2#.grep  grep -o 
+
+    8)扩展正则ERE 
+      1# +  前一个字符连续出现1次或多次 >=1 
+[root@oldboyedu41-nb oldboy]# grep "0+" oldboy.txt
+[root@oldboyedu41-nb oldboy]# egrep "0+" oldboy.txt
+my qq num is 49000448.
+not 4900000448.
+[root@oldboyedu41-nb oldboy]# #egrep === grep -E 
+[root@oldboyedu41-nb oldboy]# egrep "0+" oldboy.txt -o
+000
+00000
+[root@oldboyedu41-nb oldboy]# #取出文件中连续出现的小写字母？
+[root@oldboyedu41-nb oldboy]# egrep '[a-z]+' oldboy.txt
+I am oldboy teacher!
+I teach linux.
+I like badminton ball ,billiard ball and chinese chess!
+my blog is http://oldboy.blog.51cto.com
+our site is http://www.etiantian.org
+my qq num is 49000448.
+not 4900000448.
+my god ,i am not oldbey,but OLDBOY!
+-----oooo
+[root@oldboyedu41-nb oldboy]# egrep '[a-z]+' oldboy.txt -o
+
+#连续出现 000000  00000  abcd 
+[root@oldboyedu41-nb oldboy]# egrep "[0-9]" oldboy.txt
+my blog is http://oldboy.blog.51cto.com
+my qq num is 49000448.
+not 4900000448.
+[root@oldboyedu41-nb oldboy]# egrep "[0-9]" oldboy.txt -o
+5
+1
+4
+9
+0
+0
+0
+4
+4
+8
+4
+9
+0
+0
+0
+0
+0
+4
+4
+8
+[root@oldboyedu41-nb oldboy]# 
+[root@oldboyedu41-nb oldboy]# egrep "[0-9]+" oldboy.txt 
+my blog is http://oldboy.blog.51cto.com
+my qq num is 49000448.
+not 4900000448.
+[root@oldboyedu41-nb oldboy]# egrep "[0-9]+" oldboy.txt  -o
+51
+49000448
+4900000448
+[root@oldboyedu41-nb oldboy]# #+ 连续出现的东西 一次性取出来 变为一个整体
+
+    2# | 表示 或者
+[root@oldboyedu41-nb oldboy]# egrep 'a|b|c' oldboy.txt
+I am oldboy teacher!
+I teach linux.
+I like badminton ball ,billiard ball and chinese chess!
+my blog is http://oldboy.blog.51cto.com
+our site is http://www.etiantian.org
+my god ,i am not oldbey,but OLDBOY!
+[root@oldboyedu41-nb oldboy]# egrep "[abc]" oldboy.txt
+I am oldboy teacher!
+I teach linux.
+I like badminton ball ,billiard ball and chinese chess!
+my blog is http://oldboy.blog.51cto.com
+our site is http://www.etiantian.org
+my god ,i am not oldbey,but OLDBOY!
+[root@oldboyedu41-nb oldboy]# 
+[root@oldboyedu41-nb oldboy]# egrep "oldboy|oldbey" oldboy.txt
+I am oldboy teacher!
+my blog is http://oldboy.blog.51cto.com
+my god ,i am not oldbey,but OLDBOY!
+
+    3# () 括号里面的内容相当于是一个整体  先乘除后加减 先算括号里面的内容 
+          反向引用（sed）
+[root@oldboyedu41-nb oldboy]# egrep "oldboy|oldbey" oldboy.txt
+I am oldboy teacher!
+my blog is http://oldboy.blog.51cto.com
+my god ,i am not oldbey,but OLDBOY!
+[root@oldboyedu41-nb oldboy]# egrep "oldbo|ey" oldboy.txt
+I am oldboy teacher!
+my blog is http://oldboy.blog.51cto.com
+my god ,i am not oldbey,but OLDBOY!
+[root@oldboyedu41-nb oldboy]# egrep "oldb(o|e)y" oldboy.txt
+I am oldboy teacher!
+my blog is http://oldboy.blog.51cto.com
+my god ,i am not oldbey,but OLDBOY!
+
+###反向引用（sed） 先保护再使用
+
+
+
+[root@oldboyedu41-nb oldboy]# echo 123456
+123456
+[root@oldboyedu41-nb oldboy]# echo 123456
+123456
+[root@oldboyedu41-nb oldboy]# echo 123456|sed 's#.*##g'
+
+[root@oldboyedu41-nb oldboy]# echo 123456|sed 's#.*#a#g'
+a
+[root@oldboyedu41-nb oldboy]# #<123456>
+[root@oldboyedu41-nb oldboy]# echo 123456|sed -r 's#(.*)#\1#g'
+123456
+[root@oldboyedu41-nb oldboy]# echo 123456|sed -r 's#(.*)#<\1>#g'
+<123456>
+
+
+[root@oldboyedu41-nb oldboy]# echo 123456|sed -r 's#(.*)#\1#g'
+123456
+[root@oldboyedu41-nb oldboy]# echo 123456|sed -r 's#(.*)#@@@\1@@@@#g'
+@@@123456@@@@
+[root@oldboyedu41-nb oldboy]# echo 123456|sed -r 's#(.*)#<\1>#g'
+<123456>
+[root@oldboyedu41-nb oldboy]# 
+[root@oldboyedu41-nb oldboy]# echo 123456|sed -r 's#..(.)...#\1#g'
+3
+[root@oldboyedu41-nb oldboy]# echo 123456|sed -r 's#..(.)...#\2#g'
+sed: -e expression #1, char 15: invalid reference \2 on `s' command's RHS
+[root@oldboyedu41-nb oldboy]# echo 123456|sed -r 's#(.).(.)...#\2#g'
+3
+
+echo 123456 |sed -r 's#(1)(5)#+\1+3\23#g'
+
+[root@instance-kapw2maf ~]# echo 123456 |sed 's#(.)(.)(.)#<\2>#g' -r
+<2><5>
+
+    4# a{n,m} 0{n,m}  前一个字符连续出现了最少n次，最多出现了m次
+    
+    *  >=0 
+    +  >=1 
+
+[root@oldboyedu41-nb oldboy]# egrep '0{1,3}' oldboy.txt
+my qq num is 49000448.
+not 4900000448.
+[root@oldboyedu41-nb oldboy]# egrep '0{1,3}' oldboy.txt -o
+000
+000
+00
+[root@oldboyedu41-nb oldboy]# egrep '0{1,3}' oldboy.txt -on
+7:000
+9:000
+9:00
+[root@oldboyedu41-nb oldboy]# egrep '0{1,3}' oldboy.txt 
+[root@oldboyedu41-nb oldboy]# egrep '0{2,4}' oldboy.txt 
+my qq num is 49000448.
+not 4900000448.
+[root@oldboyedu41-nb oldboy]# egrep '0{2,4}' oldboy.txt  -o
+000
+0000
+[root@oldboyedu41-nb oldboy]# egrep '0{2,4}' oldboy.txt  -on
+7:000
+9:0000
+
+#找出文件中连续出现5次到6次的字母
+[root@oldboyedu41-nb oldboy]# egrep   '[a-z]{5,6}' oldboy.txt
+I am oldboy teacher!
+I teach linux.
+I like badminton ball ,billiard ball and chinese chess!
+my blog is http://oldboy.blog.51cto.com
+our site is http://www.etiantian.org
+my god ,i am not oldbey,but OLDBOY!
+[root@oldboyedu41-nb oldboy]# egrep  -w '[a-z]{5,6}' oldboy.txt
+I am oldboy teacher!
+I teach linux.
+I like badminton ball ,billiard ball and chinese chess!
+my blog is http://oldboy.blog.51cto.com
+my god ,i am not oldbey,but OLDBOY!
+[root@oldboyedu41-nb oldboy]# 
+[root@oldboyedu41-nb oldboy]# egrep  -wo '[a-z]{5,6}' oldboy.txt
+oldboy
+teach
+linux
+chess
+oldboy
+oldbey
+[root@oldboyedu41-nb oldboy]# egrep  -won '[a-z]{5,6}' oldboy.txt
+1:oldboy
+2:teach
+2:linux
+4:chess
+5:oldboy
+10:oldbey
+[root@oldboyedu41-nb oldboy]# egrep  -woni '[a-z]{5,6}' oldboy.txt
+1:oldboy
+2:teach
+2:linux
+4:chess
+5:oldboy
+10:oldbey
+10:OLDBOY
+
+#-w grep按照单词进行匹配 
+
+grep oldboy test.txt 
+oldboy 
+oldboybaby 
+testoldboy
+helloldboy  
+
+grep -w oldboy test.txt 
+oldboy
+
+
+[root@oldboyedu oldboy]# egrep '[a-z]+ {1,5}' oldboy.txt -o
+
+  
+
+#找出文件中的QQ号码  
+[root@oldboyedu41-nb oldboy]# ##找出文件中的QQ号码
+[root@oldboyedu41-nb oldboy]# egrep "[0-9]" oldboy.txt
+my blog is http://oldboy.blog.51cto.com
+my qq num is 49000448.
+not 4900000448.
+[root@oldboyedu41-nb oldboy]# egrep "[0-9]{5,}" oldboy.txt
+my qq num is 49000448.
+not 4900000448.
+[root@oldboyedu41-nb oldboy]# egrep "[0-9]{5,}" oldboy.txt -o
+49000448
+4900000448
+
+
+
+#-i 不区分大小写  1 壹 aA 
+#-w 按照单词 进行匹配
+#-n 显示行号
+#-o 显示grep执行过程  grep正则每次匹配到的内容显示出来
+
+
+[root@oldboyedu41-nb oldboy]# egrep  '[0-9]{5}' oldboy.txt
+my qq num is 49000448.
+not 4900000448.
+[root@oldboyedu41-nb oldboy]# egrep  '[0-9]{5}' oldboy.txt -o
+49000
+49000
+00448
+[root@oldboyedu41-nb oldboy]# 
+
+{}小结:
+1.a{n,m}  前一个字符连续出现了最少n次，最多出现了m次  >=n   <=m 
+2.a{n,}   前一个字符连续出现了最少n次                 >=n 
+3.a{n}    前一个字符连续出现了n次                     ==n 
+     
+     
+     
+     
+     
+     5# ?  前一个字符连续出现了0次或1次
+
+[root@oldboyedu41-nb oldboy]# egrep "go?d" a.log 
+gd	
+god
+     
+[root@oldboyedu41-nb oldboy]# egrep "go*d" a.log 
+good
+gd	
+god
+goood
+
+     
+     
+     9) 正则表达式总结 
+     连续出现(重复) 
+            *        >=0 
+            +        >=1 
+            ?        0 1 
+            {n,m}    >=n  <=m 
+     其他 
+            .        任意一个字符
+            [abc]       一个整体 相当于是一个字符 
+                     [a-z] [0-9] [A-Z]
+            [^abc]   排除       
+            |        或者
+            ()       后向引用  反向引用  先保护再使用
+            ^
+            $
+     10) 基础正则与扩展正则区别:
+         支持基础正则            基础+扩展
+         grep                    egrep   
+         sed                     sed -r 
+         awk                     awk 
+         
+4 练习题
+     
+    1)  删除掉文件中的空行
+cat >/tmp/blank.txt<<EOF
+welcome to oldboy linux.
+
+welcome to join us.
+ 
+have fun.
+ lidao.oldboyedu.com
+
+Dr.Tan 
+EOF
+
+    2)  取出eth0网卡的ip地址
+    3)  取出文件的数字权限 644 或 0644 
+[root@oldboyedu41-nb oldboy]# stat /etc/hosts 
+  File: `/etc/hosts'
+  Size: 181       	Blocks: 8          IO Block: 4096   regular file
+Device: 803h/2051d	Inode: 260126      Links: 2
+Access: (0644/-rw-r--r--)  Uid: (    0/    root)   Gid: (    0/    root)
+Access: 2017-09-24 00:03:04.019681888 +0800
+Modify: 2017-09-10 20:18:34.077204333 +0800
+Change: 2017-09-10 20:18:34.096205176 +0800
+ 
+     
+    1)  删除掉文件中的空行
+cat >/tmp/blank.txt<<EOF
+welcome to oldboy linux.
+
+welcome to join us.
+ 
+have fun.
+ lidao.oldboyedu.com
+
+Dr.Tan 
+EOF
+
+ #grep排除   
+ grep -v  "^$"      blank.txt 
+ egrep -v "^$|^ +$" blank.txt
+ egrep -v "^ *$"    blank.txt 
+ 
+ ^ *$
+ *表示0次的时候 就是 ^$
+ *表示1次以上的时候就是 ^多个空格$
+ 
+ 
+ #sed删除 
+ sed '找谁干啥' file 
+ sed '/^ *$/d' blank.txt     
+ 
+ #awk排除 取反
+ awk '/^ *$/' blank.txt
+ awk '!/^ *$/' blank.txt
+ 
+    2)  取出eth0网卡的ip地址
+      1#awk 3个管道
+[root@oldboyedu41-nb oldboy]# ifconfig eth0 |awk 'NR==2'
+          inet addr:10.0.0.200  Bcast:10.0.0.255  Mask:255.255.255.0
+[root@oldboyedu41-nb oldboy]# ifconfig eth0 |awk 'NR==2'|cut -d " " -f12
+addr:10.0.0.200
+[root@oldboyedu41-nb oldboy]# ifconfig eth0 |awk 'NR==2'|awk '{print $2}'
+addr:10.0.0.200
+[root@oldboyedu41-nb oldboy]# ifconfig eth0 |awk 'NR==2'|awk '{print $2}'|awk -F: '{print $2}'
+10.0.0.200
+
+      2#awk 2个管道
+[root@oldboyedu41-nb oldboy]# ifconfig eth0 |awk 'NR==2'
+          inet addr:10.0.0.200  Bcast:10.0.0.255  Mask:255.255.255.0
+[root@oldboyedu41-nb oldboy]# ifconfig eth0 |awk 'NR==2'|awk -F "addr:" '{print $2}'
+10.0.0.200  Bcast:10.0.0.255  Mask:255.255.255.0
+[root@oldboyedu41-nb oldboy]# ifconfig eth0 |awk 'NR==2'|awk -F "addr:|Bcast" '{print $2}'
+10.0.0.200 
+ 
+[root@oldboyedu41-nb oldboy]# ifconfig eth0 |awk 'NR==2'|awk -F "addr:|  Bcast" '{print $2}'
+10.0.0.200
+
+      3#awk 1个管道
+[root@oldboyedu41-nb oldboy]# ifconfig eth0|awk 'NR==2{print $2}'
+addr:10.0.0.200
+[root@oldboyedu41-nb oldboy]# #sed '找谁干啥'
+[root@oldboyedu41-nb oldboy]# #awk '找谁{干啥}'
+[root@oldboyedu41-nb oldboy]# #找谁===条件
+[root@oldboyedu41-nb oldboy]# ifconfig eth0|awk 'NR==2{print $2}'
+addr:10.0.0.200
+      
+[root@oldboyedu41-nb oldboy]# ifconfig eth0 |awk -F "addr:|  Bcast" 'NR==2{print $2}'
+10.0.0.200
+
+      4#awk 1个管道
+[root@oldboyedu41-nb oldboy]# ifconfig eth0 |awk -F "[: ]+" 'NR==2{print $4}'
+10.0.0.200
+
+[root@oldboyedu41-nb oldboy]# echo '#####1@@@@@@2'
+#####1@@@@@@2
+[root@oldboyedu41-nb oldboy]# echo '#####1@@@@@@2'|egrep "[#@]"
+#####1@@@@@@2
+[root@oldboyedu41-nb oldboy]# echo '#####1@@@@@@2'|egrep "[#@]" -o 
+#
+#
+#
+#
+#
+@
+@
+@
+@
+@
+@
+[root@oldboyedu41-nb oldboy]# echo '#####1@@@@@@2'|egrep "[#@]" 
+[root@oldboyedu41-nb oldboy]# echo '#####1@@@@@@2'|egrep "[#@]" 
+#####1@@@@@@2
+[root@oldboyedu41-nb oldboy]# echo '#####1@@@@@@2'|egrep "[#@]+" 
+#####1@@@@@@2
+[root@oldboyedu41-nb oldboy]# echo '#####1@@@@@@2'|egrep "[#@]+" -o
+#####
+@@@@@@
+[root@oldboyedu41-nb oldboy]# echo '#####1@@@@@@2'|awk -F "[@#]+" '{print $2}'
+1
+
+    5# grep 正则
+[root@oldboyedu41-nb oldboy]# ifconfig eth0 |egrep "[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+" 
+          inet addr:10.0.0.200  Bcast:10.0.0.255  Mask:255.255.255.0
+[root@oldboyedu41-nb oldboy]# ifconfig eth0 |egrep "[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+"  -o
+10.0.0.200
+10.0.0.255
+255.255.255.0
+[root@oldboyedu41-nb oldboy]# ifconfig eth0 |egrep "[0-9]+\.{3}[0-9]+"  
+[root@oldboyedu41-nb oldboy]# ifconfig eth0 |egrep "[0-9]+\.{3}[0-9]+"  
+[root@oldboyedu41-nb oldboy]# ifconfig eth0 |egrep "([0-9]+\.){3}[0-9]+"  
+          inet addr:10.0.0.200  Bcast:10.0.0.255  Mask:255.255.255.0
+[root@oldboyedu41-nb oldboy]# ifconfig eth0 |egrep "([0-9]+\.){3}[0-9]+"  -o
+10.0.0.200
+10.0.0.255
+255.255.255.0
+
+ifconfig eth0 |egrep "([0-9]+\.?){4}"
+
+
+
+
+ 3)  取出文件的数字权限 644 或 0644 
+[root@oldboyedu41-nb oldboy]# stat /etc/hosts |awk -F "[(/]" 'NR==4{print $2 }'
+0644
+
+总结:
+通配符与特殊符号 
+	通配符号-找文件名 
+		{}
+		*
+	特殊符号
+		&&
+		>>	
+		> 
+		/
+		$
+		.
+		..
+		~
+		|
+		#
+		! 
+		&& 
+		|| 
+	单引号，双引号，不加引号区别 
+		echo '$LANG $(hostname) {1..5}' 
+		' ' 单引号:所见即所得,吃啥吐啥 
+		" " 双引号:具有特殊含义的符号 linux对特殊符号进行了解析 执行 
+		不加引号:与使用双引号的时候相同，支持通配符 
+		` ` 反引号 $():运行里面的命令，把命令显示出来的东西留下了 
+2.正则根据题目 
+   排除文件空行
+   取出网卡ip地址 grep awk sed(后向引用)
+   取出权限       grep awk sed(后向引用)
+   
+3.第三关练习题
+4.linux权限
+permission denied
+
+
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+     
+     
+
+
+
+
+
+
+
+
+
+
+北京-翟建明 
+[root@jim-2 oldboy]# egrep '[0-9]+{5}' oldboy.txt -o
+49000448
+4900000448
+北京-李隆 
+[root@Centos6p9m1 oldboy]# grep -i "[0-9]+{5,}" oldboy.txt -n
+7:my qq num is 49000448.
+9:not 4900000448.
+北京-王东 
+[root@wd oldboy]# egrep '[0-9]+{5,11}' oldboy.txt -o
+49000448
+4900000448 
+    
+    
+    
+    
+    
+    
+[root@oldboyedu oldboy]# grep "[^m-m$]" oldboy.txt
+  
+    
+    
+    
+    
+  grep -n "^m*" && "m$" oldboy.txt    
+    &&  前一个命令运行成功，再运行后面的命令   
+    
+    
+    
+    
+    
+    
+    
+    
+
+
+
+
+
+
+
+
+
+
+用来在文件中过滤文字 在文件中查找内容
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ 
+ 
+ 
+ 
+ 
+ 
+什么是正则，什么是统配，这两个概念老是乱
+
+ 
+ 
+班长-刘博学  
+^ 这个符号 很常用？？？
+
+黑龙江-路伟东  
+非的意思
+黑龙江-路伟东  
+取反
+
+
+ 
+ 
+   
+

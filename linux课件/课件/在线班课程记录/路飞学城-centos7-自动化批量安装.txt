@@ -1,0 +1,471 @@
+在线班课程-第6周
+李老师-easy
+微信:lidao996
+QQ号码:918391635
+
+
+
+
+https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/
+https://access.redhat.com/documentation/zh-cn/red_hat_enterprise_linux/7/html-single/installation_guide/#sect-kickstart-commands
+
+python -c 'import crypt; print(crypt.crypt("123456"))'
+
+
+
+default 文件内容#
+
+default ks
+prompt 0
+
+label ks
+  kernel vmlinuz
+  append initrd=initrd.img inst.ks=http://172.16.1.201/ks_config/CentOS-7-ks.cfg ksdevice=eth1 net.ifnames=0 biosdevname=0
+
+  
+
+
+curl -o /etc/yum.repos.d/CentOS-Base.repo http://mirrors.aliyun.com/repo/Centos-7.repo
+curl -o /etc/yum.repos.d/epel.repo http://mirrors.aliyun.com/repo/epel-7.repo
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+[root@oldboyedu01-nb ~]# cat /server/scripts/ip.sh
+#!/bin/bash
+# desc:     show ip address
+# author:   li
+# time:     20171111
+# version:  v1.0
+
+/sbin/ifconfig eth0 |awk -F "[ :]+" 'NR==2{print $4}'
+[root@oldboyedu01-nb ~]# file /server/scripts/ip.sh
+/server/scripts/ip.sh: Bourne-Again shell script text executable
+
+[root@oldboyedu01-nb scripts]# sh /server/scripts/ip.sh 
+10.0.0.200
+
+
+
+变量
+x + y = 10 已经x=9, y未知数
+y变量 
+
+[root@oldboyedu01-nb ~]# x=1
+[root@oldboyedu01-nb ~]# echo $x
+1
+
+ [root@oldboyedu01-nb ~]# week=10
+[root@oldboyedu01-nb ~]# echo 10day
+10day
+[root@oldboyedu01-nb ~]# echo $weekday
+
+[root@oldboyedu01-nb ~]# #金庸 新作
+[root@oldboyedu01-nb ~]# #金庸新 作
+[root@oldboyedu01-nb ~]# echo ${week}day
+10day
+[root@oldboyedu01-nb ~]# echo $week  ${week}
+10 10
+
+普通变量（局部变量）
+1.命名规则
+2.引用变量 ${} 
+
+
+环境变量（全局变量）
+
+[root@oldboyedu01-nb ~]# OLDBOY=10
+[root@oldboyedu01-nb ~]# echo $OLDBOY
+10
+[root@oldboyedu01-nb ~]# 
+[root@oldboyedu01-nb ~]# sh /server/scripts/show.sh
+
+[root@oldboyedu01-nb ~]# export OLDBOY
+[root@oldboyedu01-nb ~]# echo $OLDBOY
+10
+[root@oldboyedu01-nb ~]# sh /server/scripts/show.sh
+10
+
+
+[root@oldboyedu01-nb scripts]# cat show-arg.sh
+#!/bin/bash
+#
+#
+#
+echo '$0:'$0  '$1,$2,$3:' $1 $2 $3  '$#:'$#
+[root@oldboyedu01-nb scripts]# sh show-arg.sh
+$0:show-arg.sh $1,$2,$3: $#:0
+[root@oldboyedu01-nb scripts]# sh show-arg.sh a b c 
+$0:show-arg.sh $1,$2,$3: a b c $#:3
+[root@oldboyedu01-nb scripts]# #在脚本中 $1 $2 $n 表示第1 第2 第n个参数
+[root@oldboyedu01-nb scripts]# 
+[root@oldboyedu01-nb scripts]# # $# 表示脚本一共有多少个参数  参数的个数
+
+[root@oldboyedu01-nb scripts]# ls /root/alex.oldboy.txt
+ls: cannot access /root/alex.oldboy.txt: No such file or directory
+[root@oldboyedu01-nb scripts]# echo $?
+2
+[root@oldboyedu01-nb scripts]# ls /root/
+[root@oldboyedu01-nb scripts]# ls /root/
+-                hosts               oldboy-20171111.log  oldboy.txt-hard
+anaconda-ks.cfg  ifcfg-eth0          oldboydir            services
+echo.txt         install.log         oldboyedu.com        show.sh
+finger.log       install.log.syslog  oldboy.txt
+[root@oldboyedu01-nb scripts]# echo $?
+0
+
+
+#显示上一个命令的执行结果
+#命令执行正确  结果0
+#命令执行错误  结果非0
+
+[root@oldboyedu01-nb scripts]# cat show-arg.sh
+#!/bin/bash
+#
+#
+#
+
+#x=$1
+#y=$2
+read -p "input x y:" x y
+echo $x $y
+[root@oldboyedu01-nb scripts]# sh show-arg.sh
+input x y:30 40
+30 40
+
+测试表达式
+
+[root@oldboyedu01-nb ~]# [ -f /root/oldboy.alex.txt ]
+[root@oldboyedu01-nb ~]# echo $?
+1
+[root@oldboyedu01-nb ~]# [ -f /root/oldboy.txt ]
+[root@oldboyedu01-nb ~]# echo $?
+0
+[root@oldboyedu01-nb ~]# [ -d /root ]
+[root@oldboyedu01-nb ~]# echo $?
+0
+[root@oldboyedu01-nb ~]# [ -d /rot ]
+[root@oldboyedu01-nb ~]# echo $?
+1
+
+[root@oldboyedu01-nb ~]# cat /server/scripts/arg.sh
+#!/bin/bash
+#
+#
+#
+[ $# -eq 2 ] &&  echo "arg:"$#
+[root@oldboyedu01-nb ~]# sh /server/scripts/arg.sh
+[root@oldboyedu01-nb ~]# sh /server/scripts/arg.sh a b 
+arg:2
+
+
+如果/oldboy目录不存在则创建
+如果/root/oldboy.txt存在则提示文件已存在
+
+
+#如果/oldboy目录不存在则创建
+[ -d /oldboy ] || mkdir -p /oldboy
+
+[root@oldboyedu01-nb ~]# #如果/root/oldboy.txt存在则提示文件已存在
+[root@oldboyedu01-nb ~]# [ -f /root/oldboy.txt ] && echo file esists
+file esists
+
+
+
+10  20 
+
+[root@oldboyedu01-nb ~]#  cat /server/scripts/compare.sh
+#!/bin/bash
+
+num1=$1
+num2=$2
+
+if [ $num1 -gt $num2 ];then
+    echo $num1 greater than $num2
+fi
+[root@oldboyedu01-nb ~]# sh /server/scripts/compare.sh
+greater than
+[root@oldboyedu01-nb ~]# sh /server/scripts/compare.sh 10 20
+[root@oldboyedu01-nb ~]# sh /server/scripts/compare.sh 20 10
+20 greater than 10
+
+
+[root@oldboyedu01-nb ~]# cat /server/scripts/compare.sh
+#!/bin/bash
+
+num1=$1
+num2=$2
+
+if [ $num1 -gt $num2 ];then
+    echo $num1 greater than $num2
+else
+    echo $num1 less    than $num2
+fi
+[root@oldboyedu01-nb ~]# sh  /server/scripts/compare.sh 10 20 
+10 less than 20
+[root@oldboyedu01-nb ~]# sh  /server/scripts/compare.sh 100 20
+100 greater than 20
+[root@oldboyedu01-nb ~]# sh  /server/scripts/compare.sh 100 20 10 20 20 30 
+100 greater than 20
+
+
+
+[root@oldboyedu01-nb scripts]# cat compare.sh 
+#!/bin/bash
+
+num1=$1
+num2=$2
+
+if [ $# -ne 2 ];then
+   echo "Usage: please input 2 number : num1 num2"
+   exit
+fi
+
+
+if [ $num1 -gt $num2 ];then
+    echo $num1 greater than $num2
+else
+    echo $num1 less    than $num2
+fi
+
+
+
+
+[root@oldboyedu01-nb scripts]# cat compare.sh
+#!/bin/bash
+
+num1=$1
+num2=$2
+
+if [ $# -ne 2 ];then
+   echo "Usage: please input 2 number : num1 num2"
+   exit
+fi
+
+
+if [ $num1 -gt $num2 ];then
+    echo $num1 greater than $num2
+
+elif [ $num1 -lt $num2 ];then
+    echo $num1 less    than $num2
+
+else
+    echo $num1 equal $num2
+fi
+[root@oldboyedu01-nb scripts]# sh 
+[root@oldboyedu01-nb scripts]# sh compare.sh 1
+Usage: please input 2 number : num1 num2
+[root@oldboyedu01-nb scripts]# sh compare.sh 1 2 3 
+Usage: please input 2 number : num1 num2
+[root@oldboyedu01-nb scripts]# sh compare.sh 1 2 
+1 less than 2
+[root@oldboyedu01-nb scripts]# sh compare.sh 20 10
+20 greater than 10
+[root@oldboyedu01-nb scripts]# sh compare.sh 10 10 
+10 equal 10
+
+
+小结：
+1.条件表达式 
+[ -d /oldboy ]
+[ -f /oldboy/oldboy.txt ]
+[ 10 -gt 9 ]   great than >
+[ 10 -ge 9 ]   great equal >=
+[ 10 -eq 10 ]  equal      ==
+[ 10 -ne 9 ]   not equal  !=
+
+[ 9 -lt 90 ]   less  than <
+[ 9 -le 90 ]   less  equal <=
+
+man test 
+
+[ -d /oldboy ]  === test -d  /oldboy 
+
+2.判断
+判断脚本的参数个数不是2就退出。
+
+
+
+双分支判断 
+
+if [ $1 -gt $2 ];then 
+   echo  $1 bigger than $2
+else 
+   echo  $1 not bigger than $2
+fi 
+
+如果 [ $1 -gt $2 ];然后
+   echo  $1 bigger than $2
+那么 
+   echo  $1 not bigger than $2
+果如
+
+
+
+##for循环
+格式 
+for 变量名字  in  列表
+do
+     命令
+done
+
+
+for num  in  1 2 3 4 5 6 7
+do
+     echo "the $num number is :$num"
+done 
+
+the 1 number is :1
+the 2 number is :2
+
+[root@oldboyedu01-nb scripts]# for num  in  1 2 3 4 5 6 7
+> do
+>      echo "the $num number is :$num"
+> done 
+the 1 number is :1
+the 2 number is :2
+the 3 number is :3
+the 4 number is :4
+the 5 number is :5
+the 6 number is :6
+the 7 number is :7
+
+
+
+
+for num  in  {01..10}
+do
+     echo "the $num number is :$num"
+done 
+
+优化linux开机启动项目,只保留crond;sshd;network;rsyslog;sysstat,其他的都关闭
+
+chkconfig 服务  off 
+
+
+#1.目标
+chkconfig 服务 off
+
+#2.取出服务名字
+
+for name  in  服务1 服务2 服务3 。。。。 
+do
+    echo chkconfig $name off 
+done 
+
+[root@oldboyedu01-nb scripts]# chkconfig |egrep  "crond|sshd|rsyslog|network|sysstat"
+crond          	0:off	1:off	2:on	3:on	4:on	5:on	6:off
+network        	0:off	1:off	2:on	3:on	4:on	5:on	6:off
+rsyslog        	0:off	1:off	2:on	3:on	4:on	5:on	6:off
+sshd           	0:off	1:off	2:on	3:on	4:on	5:on	6:off
+sysstat        	0:off	1:on	2:on	3:on	4:on	5:on	6:off
+[root@oldboyedu01-nb scripts]# chkconfig |egrep  "crond|sshd|rsyslog|network|sysstat" -v 
+
+[root@oldboyedu01-nb scripts]# chkconfig |egrep  "crond|sshd|rsyslog|network|sysstat" -v |awk '{print $1}'
+abrt-ccpp
+abrtd
+acpid
+atd
+auditd
+blk-availability
+cpuspeed
+haldaemon
+ip6tables
+iptables
+irqbalance
+kdump
+lvm2-monitor
+mdmonitor
+messagebus
+netconsole
+netfs
+nfs-rdma
+ntpd
+ntpdate
+oldboyd
+postfix
+psacct
+quota_nld
+rdisc
+rdma
+restorecond
+rngd
+saslauthd
+smartd
+svnserve
+udev-post
+
+
+#3.取出服务名 加入到 for循环中 
+
+
+for name  in  服务1 服务2 服务3 。。。。 
+do
+    echo chkconfig $name off 
+done 
+
+
+
+for name  in  $(chkconfig |egrep  "crond|sshd|rsyslog|network|sysstat" -v |awk '{print $1}') 
+do
+    echo chkconfig $name off 
+done 
+
+#4.执行优化并检查
+
+for name  in  $(chkconfig |egrep  "crond|sshd|rsyslog|network|sysstat" -v |awk '{print $1}') 
+do
+     chkconfig $name off 
+done 
+
+[root@oldboyedu01-nb scripts]# chkconfig |grep 3:on
+crond          	0:off	1:off	2:on	3:on	4:on	5:on	6:off
+network        	0:off	1:off	2:on	3:on	4:on	5:on	6:off
+rsyslog        	0:off	1:off	2:on	3:on	4:on	5:on	6:off
+sshd           	0:off	1:off	2:on	3:on	4:on	5:on	6:off
+sysstat        	0:off	1:on	2:on	3:on	4:on	5:on	6:off
+
+
+
+linux运行脚本调试技巧
+
+sh -x 
+
+
+总结：
+1.特殊变量 位置$1 $2 $0  状态$?  其他$# 
+2.普通变量命令规则
+3.普通变量与环境变量区别 
+4.与用户有关的文件和目录
+5.条件表达式，判断，循环
+6.优化系统启动项目
+7.批量添加用户并设置随机密码
+
+
+ 
+
+
+
+
+
+
+

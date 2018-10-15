@@ -1,0 +1,1663 @@
+正则表达式与通配符
+
+1.特殊符号 
+
+''     所见即所得，吃啥吐啥
+""     特殊符号会被解析运行
+``     ==== $() 先运行里面的命令 把结果留下
+
+>     重定向符号        先清空文件的内容 然后追加文件的最后
+>>    追加重定向        追加文件的最后
+2>    错误重定向        只有错误的信息 才会通过这个漏洞进入文件中
+2>>   错误追加重定向    
+
+~     当前用户的家目录  
+root   ~ /root 
+oldboy ~ /home/oldboy 
+!     查找并运行历史命令
+!awk  包含awk的命令 最近的一条运行
+      history |grep awk 
+#     注释
+      root用户的命令提示符
+	  
+$     取出变量的内容
+      awk $取某一列的内容
+	  普通用户的命令提示符
+*     所有 任何东西
+\     撬棍  转义字符
+
+&&    前一个命令执行成功然后在执行后一个命令
+      ifdown eth0 && ifup eth0
+	  
+
+||    前一个命令支持失败了再执行后面的命令
+
+
+
+2.通配符
+
+通配符是用来查找文件的。 以.txt结尾的文件 *.txt *.log   
+
+##1.  *      所有，任意
+找出文件名包含oldboy的文件
+mkdir -p /oldboy
+cd  /oldboy 
+touch oldboy.txt oldboy  oldboyfile oldboy.awk  eduoldboy
+
+[root@oldboyedu01-nb oldboy]# find /oldboy/ -type f -name "oldboy"
+/oldboy/oldboy
+[root@oldboyedu01-nb oldboy]# find /oldboy/ -type f -name "*oldboy"
+/oldboy/oldboy
+/oldboy/eduoldboy
+[root@oldboyedu01-nb oldboy]# find /oldboy/ -type f -name "*oldboy*"
+/oldboy/oldboyfile
+/oldboy/oldboy.txt-hard
+/oldboy/oldboy.awk
+/oldboy/oldboy.txt
+/oldboy/oldboy
+/oldboy/eduoldboy
+
+
+##2.  {} 生成序列
+[root@oldboyedu01-nb oldboy]# echo {1..6}
+1 2 3 4 5 6
+[root@oldboyedu01-nb oldboy]# echo {1..10}
+1 2 3 4 5 6 7 8 9 10
+ 
+[root@oldboyedu01-nb oldboy]# echo {a..z}
+a b c d e f g h i j k l m n o p q r s t u v w x y z
+[root@oldboyedu01-nb oldboy]# echo {a..z}
+a b c d e f g h i j k l m n o p q r s t u v w x y z
+[root@oldboyedu01-nb oldboy]# echo {01..10}
+01 02 03 04 05 06 07 08 09 10
+[root@oldboyedu01-nb oldboy]# echo stu{01..10}
+stu01 stu02 stu03 stu04 stu05 stu06 stu07 stu08 stu09 stu10
+[root@oldboyedu01-nb oldboy]# echo 20{01..10}
+2001 2002 2003 2004 2005 2006 2007 2008 2009 2010
+[root@oldboyedu01-nb oldboy]# 
+[root@oldboyedu01-nb oldboy]# echo {1,9,20}
+1 9 20
+
+
+
+#通过{}进行备份
+[root@oldboyedu01-nb oldboy]# echo A{B,C}
+AB AC
+[root@oldboyedu01-nb oldboy]# echo A{,C}
+A AC
+[root@oldboyedu01-nb oldboy]# echo oldboy.txt{,.bak}
+oldboy.txt oldboy.txt.bak
+[root@oldboyedu01-nb oldboy]# touch oldboy.txt
+[root@oldboyedu01-nb oldboy]# cp oldboy.txt{,.bak}
+[root@oldboyedu01-nb oldboy]# ls -l oldboy.txt*
+-rw-r--r--. 2 root root 29 Oct 18 07:42 oldboy.txt
+-rw-r--r--  1 root root 29 Oct 18 07:42 oldboy.txt.bak
+-rw-r--r--. 2 root root 29 Oct 18 07:42 oldboy.txt-hard
+lrwxrwxrwx  1 root root 10 Oct 17 09:27 oldboy.txt-soft -> oldboy.txt
+[root@oldboyedu01-nb oldboy]# cp oldboy.txt{,.bak}
+[root@oldboyedu01-nb oldboy]# #cp oldboy.txt{,.bak}
+[root@oldboyedu01-nb oldboy]# echo oldboy.txt{,.bak}
+oldboy.txt oldboy.txt.bak
+[root@oldboyedu01-nb oldboy]# echo A{,B}
+A AB
+
+
+3.正则表达式
+
+
+id.txt
+110000198810098735
+110000199007021063
+11000019781119429X
+110000199103081090
+110000198aa0300201
+110000197907030484
+110ddd197902181654
+110000198510204911
+110000197908083836
+11000019860ddd9605
+110000199410252806
+110000199003296713
+110000197510314892
+110000198209062811
+110asdf98209062811
+11000019820dddd811
+110000198209062811
+110000198307170496
+110000198909149301
+
+egrep "^[0-9X]+$" id.txt
+
+  1)什么是正则？为何使用它？
+  通过符号表示文字内容。
+  
+  提高效率，省事。
+  支持正则表达式:Linux三剑客 grep sed awk 
+  
+  2)使用正则的时候注意事项
+    #1] 正则表达式是按照行进行处理的 
+    #2] 禁止使用中文符号
+	#3] 给grep和egrep配置别名
+cat >>/etc/profile<<EOF 
+alias grep='grep --color=auto'
+alias egrep='egrep --color=auto'
+EOF
+  
+source /etc/profile
+    
+  3)正则表达式与通配符区别 
+  用途                             匹配的内容                         支持的命令
+  通配符---用来匹配查找文件名      *.txt *.log 以.txt .log结尾的文件  大部分命令都可以使用
+  正则-----在文件中匹配查找内容    包含oldboy的行                     Linux三剑客
+  
+  
+
+  4)正则表达式分类
+    基础正则       ^ $ . * []  [^]    basic      regular expression BRE   grep           sed    awk 
+	                                             
+	扩展正则       | +   {} () ?      extended   regular expression ERE   grep -E/egrep  sed -r awk
+	
+	  
+  5)准备环境 
+I am oldboy teacher!
+I teach linux.
+
+I like badminton ball ,billiard ball and chinese chess!
+my blog is http://oldboy.blog.51cto.com
+our site is http://www.etiantian.org
+my qq num is 49000448.
+
+not 4900000448.
+my god ,i am not oldbey,but OLDBOY!
+  
+  6)基础正则 
+    #1].  ^  以....开头的行
+[root@oldboyedu01-nb oldboy]# grep '^m' oldboy.txt
+my blog is http://oldboy.blog.51cto.com
+my qq num is 49000448.
+my god ,i am not oldbey,but OLDBOY!  
+    
+	#2].  $  以....结尾的行
+[root@oldboyedu01-nb oldboy]# grep 'm$' oldboy.txt
+my blog is http://oldboy.blog.51cto.com
+    
+	#3].  ^$ 空行 这一行中没有任何的符号
+[root@oldboyedu01-nb oldboy]# grep -n '^$' oldboy.txt
+3:
+8:
+
+排除文件中的空行
+[root@oldboyedu01-nb oldboy]# grep  -v '^$' oldboy.txt
+I am oldboy teacher!
+I teach linux.  
+I like badminton ball ,billiard ball and chinese chess!  
+my blog is http://oldboy.blog.51cto.com
+our site is http://www.etiantian.org
+my qq num is 49000448.
+not 4900000448.  
+my god ,i am not oldbey,but OLDBOY!  
+    
+    #4].  .(点)  任意一个字符 不包含空行 
+        #-o 表示grep的执行过程 正则每次匹配到了什么？
+    
+	找出文件中以点结尾的行
+[root@oldboyedu01-nb oldboy]# grep '.$' oldboy.txt
+I am oldboy teacher!
+I teach linux.  
+I like badminton ball ,billiard ball and chinese chess!  
+my blog is http://oldboy.blog.51cto.com
+our site is http://www.etiantian.org
+my qq num is 49000448.
+not 4900000448.  
+my god ,i am not oldbey,but OLDBOY!  
+
+[root@oldboyedu01-nb oldboy]# grep '\.$' oldboy.txt
+I teach linux.
+my qq num is 49000448.
+
+    #5].  \(撬棍)  转义符号  脱掉马甲，打回原形
+          \n     表示回车换行
+		  
+    #6].  *  前一个字符连续出现了0次或1次以上  >=0 
+    A
+	AA
+	AAA
+	AAAA
+[root@oldboyedu01-nb oldboy]# grep '0' oldboy.txt
+my qq num is 49000448.
+not 4900000448.  
+[root@oldboyedu01-nb oldboy]# grep -o '0' oldboy.txt
+0
+0
+0
+0
+0
+0
+0
+0
+
+[root@oldboyedu01-nb oldboy]# grep '0*' oldboy.txt
+I am oldboy teacher!
+I teach linux.
+
+I like badminton ball ,billiard ball and chinese chess!  
+my blog is http://oldboy.blog.51cto.com
+our site is http://www.etiantian.org
+my qq num is 49000448.
+
+not 4900000448.  
+my god ,i am not oldbey,but OLDBOY!  
+[root@oldboyedu01-nb oldboy]# 
+[root@oldboyedu01-nb oldboy]# grep -o '0*' oldboy.txt
+000
+00000
+
+Linux正则表达式之问题1.为何会取出000 而不是 00 和0  0 0 0 
+#因为正则在表示 连续出现的时候表现出贪婪性  有多少吃多少 有多少匹配多少
+
+
+Linux正则表达式之问题2.为何使用'0*'  会把整个文件的内容都显示出来
+#A*表示 
+#      连续出现了0次A ====什么也没有 就会把整个文件的内容都显示出来
+#      A连续出现了1次以上 A  
+#
+
+小结：
+什么是连续出现
+-o的使用
+
+    #7].  .*  所有字符 所有符号  所有
+	#正则中表示连续出现 或 所有的时候 贪婪性 有多少匹配多少 
+    找出文件中以m开头的行并且以m结尾的行
+[root@oldboyedu01-nb oldboy]# grep '^m.*m$' oldboy.txt
+my blog is http://oldboy.blog.51cto.com
+
+    #8].  []  中括号 [abc]  相当于是一个字符 找出包含a或b或c的行
+	
+[root@oldboyedu01-nb oldboy]# grep '[abc]' oldboy.txt
+I am oldboy teacher!
+I teach linux.
+I like badminton ball ,billiard ball and chinese chess!  
+my blog is http://oldboy.blog.51cto.com
+our site is http://www.etiantian.org
+my god ,i am not oldbey,but OLDBOY!  
+[root@oldboyedu01-nb oldboy]# grep -on '[abc]' oldboy.txt
+1:a
+1:b
+1:a
+1:c
+2:a
+2:c
+
+
+
+grep '[a-z]' oldboy.txt
+grep '[A-Z]' oldboy.txt
+grep '[0-9]' oldboy.txt
+grep '[a-zA-Z0-9]' oldboy.txt
+
+练习3:以 m或n或o开头的 并且以  m或g 结尾的行
+[root@oldboyedu01-nb oldboy]# grep '^[mno].*[mg]$' oldboy.txt
+my blog is http://oldboy.blog.51cto.com
+our site is http://www.etiantian.org
+
+[root@oldboyedu01-nb oldboy]# grep '[m,n,o]' oldboy.txt
+I am oldboy teacher!
+I teach linux.
+I like badminton ball ,billiard ball and chinese chess!  
+my blog is http://oldboy.blog.51cto.com
+our site is http://www.etiantian.org
+my qq num is 49000448.
+not 4900000448.  
+my god ,i am not oldbey,but OLDBOY!  
+
+
+    #9].  [^] [^abc] 排除a或b或c的内容
+[root@oldboyedu01-nb oldboy]# grep '[^abc]' oldboy.txt
+I am oldboy teacher!
+I teach linux.
+I like badminton ball ,billiard ball and chinese chess!  
+my blog is http://oldboy.blog.51cto.com
+our site is http://www.etiantian.org
+my qq num is 49000448.
+not 4900000448.  
+my god ,i am not oldbey,but OLDBOY! 
+    
+	#10].基础正则小结
+    ##1))    ^ $ ^$ . * .* [] [^]
+    ##2))    grep  grep -o 
+
+
+  
+ 
+  7)扩展正则
+  +  | () {} ? 
+  
+  
+  
+  
+  
+  
+    #1].  +前一个符号连续出现了1次或多次
+[root@oldboyedu01-nb oldboy]# egrep  '0' oldboy.txt 
+my qq num is 49000448.
+not 4900000448.  
+[root@oldboyedu01-nb oldboy]# egrep  '0+' oldboy.txt 
+my qq num is 49000448.
+not 4900000448.  
+[root@oldboyedu01-nb oldboy]# egrep  '0+' oldboy.txt -o
+000
+00000
+[root@oldboyedu01-nb oldboy]# egrep  '0' oldboy.txt -o
+0
+0
+0
+0
+0
+0
+0
+0
+    #把文件中连续出现的小写字母取出来
+#1.取出小写字母
+[root@oldboyedu01-nb oldboy]# egrep '[a-z]' oldboy.txt
+I am oldboy teacher!
+I teach linux.
+I like badminton ball ,billiard ball and chinese chess!  
+my blog is http://oldboy.blog.51cto.com
+our site is http://www.etiantian.org
+my qq num is 49000448.
+not 4900000448.  
+my god ,i am not oldbey,but OLDBOY!  
+
+#2.连续出现的小写字母
+[root@oldboyedu01-nb oldboy]# egrep '[a-z]+' oldboy.txt
+I am oldboy teacher!
+I teach linux.
+I like badminton ball ,billiard ball and chinese chess!  
+my blog is http://oldboy.blog.51cto.com
+our site is http://www.etiantian.org
+my qq num is 49000448.
+not 4900000448.  
+my god ,i am not oldbey,but OLDBOY!  
+
+#3.只保留连续出现的小写字母
+[root@oldboyedu01-nb oldboy]# egrep '[a-z]+' oldboy.txt -o
+am
+oldboy
+teacher
+teach
+linux
+like
+badminton
+ball
+billiard
+ball
+and
+chinese
+chess
+my
+blog
+is
+http
+oldboy
+blog
+cto
+com
+our
+site
+is
+http
+www
+etiantian
+org
+my
+qq
+num
+is
+not
+my
+god
+i
+am
+not
+oldbey
+but
+
+	小结：
+	1.可以把连续的东西通过正则取出来
+	2.一般与[]配合
+	
+	#2]. | 或者
+	
+[root@oldboyedu01-nb oldboy]# egrep 'oldboy|linux' oldboy.txt
+I am oldboy teacher!
+I teach linux.
+my blog is http://oldboy.blog.51cto.com
+	
+	Linux正则表达式之问题3：[] 与 | 区别 
+	
+	都可以表示或者 [abc] a|b|c
+	区别：
+	1.[]基础正则  |扩展正则 
+	2.[]表示的是单个字符或者   |单个字符的或多个字符的都可  
+	  [a-z]                    oldboy|linux
+	  
+	
+	#3]. ()  括号中的内容相当于是一个整体 后向引用（反向引用）
+[root@oldboyedu01-nb oldboy]# egrep 'oldb(o|e)y' oldboy.txt
+I am oldboy teacher!
+my blog is http://oldboy.blog.51cto.com
+my god ,i am not oldbey,but OLDBOY!  	
+
+先乘除再加减，有括号的先算括号里面的。
+
+	#后向引用，反向引用
+	sed，把你想要的内容先保护起来（通过小括号），然后再使用他。
+[root@oldboyedu01-nb oldboy]# echo '<123456>'
+<123456>
+[root@oldboyedu01-nb oldboy]# echo 123456|sed 's#(.*)#\1#g'
+sed: -e expression #1, char 11: invalid reference \1 on `s' command's RHS
+[root@oldboyedu01-nb oldboy]# echo 123456|sed -r 's#(.*)#\1#g'
+123456
+[root@oldboyedu01-nb oldboy]# echo 123456|sed -r 's#(.*)#<\1#g'
+<123456
+[root@oldboyedu01-nb oldboy]# echo 123456|sed -r 's#(.*)#<\1>#g'
+<123456>
+[root@oldboyedu01-nb oldboy]# echo 123456|sed -r 's#.(.)..(.).#\1#g'
+2
+[root@oldboyedu01-nb oldboy]# echo 123456|sed -r 's#.(.)..(.).#\2#g'
+5
+[root@oldboyedu01-nb oldboy]# echo 123456|sed -r 's#.(.).(.)(.).#\3#g'
+5
+   #4]. o{n,m}  前一个字符连续出现了至少n次，最多m次。
+        o{n}    前一个字符连续出现了n次
+        o{n,}   前一个字符连续出现了至少n次
+		
+		o{,m}   前一个字符连续出现了最多m次
+         
+[root@oldboyedu01-nb oldboy]# egrep '0{1,4}'  oldboy.txt
+my qq num is 49000448.
+not 4900000448.  
+[root@oldboyedu01-nb oldboy]# egrep -o '0{1,4}'  oldboy.txt
+000
+0000
+0
+[root@oldboyedu01-nb oldboy]# egrep  '0{3,4}'  oldboy.txt
+my qq num is 49000448.
+not 4900000448.  
+[root@oldboyedu01-nb oldboy]# egrep  '0{3,4}'  oldboy.txt -o
+000
+0000
+        
+[root@oldboyedu01-nb oldboy]# egrep  '0{3,}'  oldboy.txt
+my qq num is 49000448.
+not 4900000448.  
+[root@oldboyedu01-nb oldboy]# egrep  '0{3,}'  oldboy.txt -o
+000
+00000
+	 
+[root@oldboyedu01-nb oldboy]# egrep  '0{3}'  oldboy.txt
+my qq num is 49000448.
+not 4900000448.  
+[root@oldboyedu01-nb oldboy]# egrep  '0{3}'  oldboy.txt -o
+000
+000
+  	
+[root@oldboyedu01-nb oldboy]# egrep '[0-9]' oldboy.txt
+my blog is http://oldboy.blog.51cto.com
+my qq num is 49000448.
+not 4900000448.  
+[root@oldboyedu01-nb oldboy]# egrep '[0-9]{8,}' oldboy.txt
+my qq num is 49000448.
+not 4900000448.  
+[root@oldboyedu01-nb oldboy]# egrep '[0-9]{8,}' oldboy.txt -o
+49000448
+4900000448
+
+	#5]. ?  表示前一个字符连续出现0次或1次
+gd
+good
+god
+gooood
+	
+[root@oldboyedu01-nb oldboy]# egrep 'gd|god' li.log
+gd
+god
+[root@oldboyedu01-nb oldboy]# egrep 'go?d' li.log
+gd
+god
+[root@oldboyedu01-nb oldboy]# egrep 'go*d' li.log
+gd
+good
+god
+gooood	
+  
+     9) 正则表达式总结 
+     连续出现(重复) 
+            *        >=0 
+            +        >=1 
+            ?        0 1 
+            {n,m}    >=n  <=m 
+            {n}      ==n
+     其他 
+            .        任意一个字符
+            [abc]    一个整体 相当于是一个字符 
+                     [a-z] [0-9] [A-Z]
+            [^abc]   排除       
+            |        或者
+            ()       后向引用  反向引用  先保护再使用
+            ^
+            $
+			.*       所有 
+			^$       空行
+			
+			
+			
+			
+			
+			
+     10) 基础正则与扩展正则区别:
+         支持基础正则            基础+扩展
+         grep                    egrep === grep -E   
+         sed                     sed -r 
+         awk                     awk     
+     
+	 
+	 
+	 
+	 
+	 
+     11）man grep
+	     info grep
+		 
+		 
+		 
+		 
+		 
+		 
+		 
+		 
+		 
+		 
+		 
+		 
+		 
+		 
+		 
+		 
+		 
+		 
+		 
+		 
+###第三关-第1题 请执行命令取出linux中eth0的IP地址(请用cut，有能力者也可分别用awk,sed命令答)
+
+思路 
+1.定位-取出第2行
+2.取出你要的ip地址
+
+方法1-awk方法+awk+awk
+[root@oldboyedu01-nb ~]# ifconfig eth0|awk 'NR==2'
+          inet addr:10.0.0.200  Bcast:10.0.0.255  Mask:255.255.255.0
+[root@oldboyedu01-nb ~]# ifconfig eth0|awk 'NR==2'|awk '{print $2}'
+addr:10.0.0.200
+[root@oldboyedu01-nb ~]# ifconfig eth0|awk 'NR==2'|awk '{print $2}'|awk -F":" '{print $2}'
+10.0.0.200
+
+方法2-awk+awk ******
+[root@oldboyedu01-nb ~]# ifconfig eth0|awk 'NR==2'
+          inet addr:10.0.0.200  Bcast:10.0.0.255  Mask:255.255.255.0
+[root@oldboyedu01-nb ~]# ifconfig eth0|awk 'NR==2'|awk -F "[: ]" '{print $4}'
+
+[root@oldboyedu01-nb ~]# ifconfig eth0|awk 'NR==2'|awk -F "[: ]" '{print $11}'
+inet
+[root@oldboyedu01-nb ~]# ifconfig eth0|awk 'NR==2'|awk -F "[: ]" '{print $13}'
+10.0.0.200
+[root@oldboyedu01-nb ~]# ifconfig eth0|awk 'NR==2'
+          inet addr:10.0.0.200  Bcast:10.0.0.255  Mask:255.255.255.0
+[root@oldboyedu01-nb ~]# ifconfig eth0|awk 'NR==2'|awk -F "[: ]+" '{print $4}'
+10.0.0.200
+		 
+		 
+##理解连续出现  理解 [] +
+[root@oldboyedu01-nb ~]# echo '######1@@@@@@@@2'
+######1@@@@@@@@2
+[root@oldboyedu01-nb ~]# echo '######1@@@@@@@@2' |egrep '[@#]'
+######1@@@@@@@@2
+[root@oldboyedu01-nb ~]# echo '######1@@@@@@@@2' |egrep '[@#]' -o
+#
+#
+#
+#
+#
+#
+@
+@
+@
+@
+@
+@
+@
+@
+[root@oldboyedu01-nb ~]# 
+[root@oldboyedu01-nb ~]# echo '######1@@@@@@@@2' |egrep '[@#]+'  
+######1@@@@@@@@2
+[root@oldboyedu01-nb ~]# echo '######1@@@@@@@@2' |egrep '[@#]+'  -o
+######
+@@@@@@@@
+[root@oldboyedu01-nb ~]# echo '######1@@@@@@@@2' |awk -F "[@#]+" '{print $2}'
+1
+[root@oldboyedu01-nb ~]# echo '######1@@@@@@@@2' |awk -F "[@#]+" '{print $3}'
+2
+		 
+		 
+		 
+方法3-awk 	 
+		 
+		 
+#预备姿势-通过awk取出 ifconfig eth0 结果中的 第二行的第二列
+[root@oldboyedu01-nb ~]# ifconfig eth0|awk 'NR==2'
+          inet addr:10.0.0.200  Bcast:10.0.0.255  Mask:255.255.255.0
+[root@oldboyedu01-nb ~]# ifconfig eth0|awk 'NR==2'|awk '{print $2}'
+addr:10.0.0.200
+
+[root@oldboyedu01-nb ~]# ifconfig eth0|awk 'NR==2{print $2}'
+addr:10.0.0.200
+[root@oldboyedu01-nb ~]# #awk '找谁{干啥}'
+
+#最终结果
+[root@oldboyedu01-nb ~]# ifconfig eth0|awk -F "[: ]+"  'NR==2{print $4}'
+10.0.0.200
+		 
+方法4-sed+sed+sed
+[root@oldboyedu01-nb ~]# ifconfig eth0|sed -n '2p'
+          inet addr:10.0.0.200  Bcast:10.0.0.255  Mask:255.255.255.0
+[root@oldboyedu01-nb ~]# ifconfig eth0|sed -n '2p'|sed 's#^.*:##g'
+255.255.255.0
+[root@oldboyedu01-nb ~]# ifconfig eth0|sed -n '2p'|sed 's#^.*dr:##g'
+10.0.0.200  Bcast:10.0.0.255  Mask:255.255.255.0
+[root@oldboyedu01-nb ~]# ifconfig eth0|sed -n '2p'|sed 's#^.*dr:##g'|sed 's#  Bc.*$##g'
+10.0.0.200
+
+方法5-sed命令的后向引用 ******
+#原则-先把你想要的内容保护起来，然后在后面使用
+[root@oldboyedu01-nb ~]# ifconfig eth0|sed -n '2p'
+          inet addr:10.0.0.200  Bcast:10.0.0.255  Mask:255.255.255.0
+[root@oldboyedu01-nb ~]# ifconfig eth0|sed -n '2p'|sed -r 's#^.*dr:##g'
+10.0.0.200  Bcast:10.0.0.255  Mask:255.255.255.0
+[root@oldboyedu01-nb ~]# ifconfig eth0|sed -n '2p'|sed -r 's#^.*dr:(.*)  Bc.*$#\1#g'
+10.0.0.200
+
+方法6-sed
+#预备姿势-ifconfig eth0第二行的inet替换为oldboy
+[root@oldboyedu01-nb ~]# ifconfig eth0|sed -n '2p'
+          inet addr:10.0.0.200  Bcast:10.0.0.255  Mask:255.255.255.0
+[root@oldboyedu01-nb ~]# ifconfig eth0|sed -n '2p'|sed 's#inet#oldboy#g'
+          oldboy addr:10.0.0.200  Bcast:10.0.0.255  Mask:255.255.255.0
+[root@oldboyedu01-nb ~]# ifconfig eth0|sed -n '2s#inet#oldboy#gp'
+          oldboy addr:10.0.0.200  Bcast:10.0.0.255  Mask:255.255.255.0
+#最终结果-
+[root@oldboyedu01-nb ~]# ifconfig eth0|sed -nr '2s#^.*dr:(.*)  Bc.*$#\1#gp'
+10.0.0.200
+
+
+小结：
+1.理解第2 3 5方法
+2.了解6
+3.awk指定多个连续的分隔符，sed的反向引用
+
+
+
+###第三关-第2题
+#如何取得/etc/hosts文件的权限对应的数字内容，如-rw-r--r-- 为644，要求使用命令取得644或0644这样的数字。
+
+#方法1-awk 
+[root@oldboyedu01-nb ~]# stat /etc/hosts |awk 'NR==4'
+Access: (0644/-rw-r--r--)  Uid: (    0/    root)   Gid: (    0/    root)
+[root@oldboyedu01-nb ~]# stat /etc/hosts |awk -F "[(/]" 'NR==4{print $2}'
+0644
+
+
+#方法2-sed
+[root@oldboyedu01-nb ~]# stat /etc/hosts |sed -n '4p'
+Access: (0644/-rw-r--r--)  Uid: (    0/    root)   Gid: (    0/    root)
+[root@oldboyedu01-nb ~]# stat /etc/hosts |sed -nr '4s#^.*\(##gp'
+    0/    root)
+[root@oldboyedu01-nb ~]# stat /etc/hosts |sed -nr '4s#^.*\([0-9]+##gp'
+/-rw-r--r--)  Uid: (    0/    root)   Gid: (    0/    root)
+[root@oldboyedu01-nb ~]# stat /etc/hosts |sed -nr '4s#^.*\(([0-9]+).*$#\1#gp'
+0644
+
+#方法3-stat命令的参数
+[root@oldboyedu01-nb ~]# stat -c%a /etc/hosts 
+644
+
+小结：
+1.sed 反向引用  awk方法指定分隔符
+
+
+#第3题 
+
+#方法1-grep
+[root@oldboyedu01-nb oldboy]# grep '^$' test.txt 
+
+
+[root@oldboyedu01-nb oldboy]# grep -n '^$' test.txt 
+2:
+4:
+[root@oldboyedu01-nb oldboy]# grep -v '^$' test.txt 
+oldboy
+xizi
+xiaochao
+
+[root@oldboyedu01-nb oldboy]# awk '/^$/' test.txt 
+
+#方法2-awk
+[root@oldboyedu01-nb oldboy]# awk '不要/^$/' test.txt 
+awk: 不要/^$/
+awk: ^ invalid char '⥠in expression
+[root@oldboyedu01-nb oldboy]# awk '!/^$/' test.txt 
+oldboy
+xizi
+xiaochao
+[root@oldboyedu01-nb oldboy]## awk '不要/空行/' test.txt 
+
+
+#方法3-sed-删除
+[root@oldboyedu01-nb oldboy]# sed  '/^$/d'  test.txt 
+oldboy
+xizi
+xiaochao
+
+小结:
+1.通awk sed表示排除
+2.awk !
+3.sed d		 
+		 
+###第4题
+oldboy
+olldboooy
+test
+
+#如何通过-sed awk 实现过滤 === grep/egrep 		 
+[root@oldboyedu01-nb oldboy]# cat ett.txt
+oldboy
+olldboooy
+test
+[root@oldboyedu01-nb oldboy]# egrep 'oldboy' ett.txt 
+oldboy
+[root@oldboyedu01-nb oldboy]# awk '/oldboy/' ett.txt
+oldboy
+[root@oldboyedu01-nb oldboy]# sed -n '/oldboy/p' ett.txt
+oldboy
+
+[root@oldboyedu01-nb oldboy]# egrep 'ol+dbo+y' ett.txt 
+oldboy
+olldboooy
+[root@oldboyedu01-nb oldboy]# awk '/ol+dbo+y/' ett.txt
+oldboy
+olldboooy
+[root@oldboyedu01-nb oldboy]# sed -n '/ol+dbo+y/p' ett.txt
+[root@oldboyedu01-nb oldboy]# sed -nr '/ol+dbo+y/p' ett.txt
+oldboy
+olldboooy
+[root@oldboyedu01-nb oldb		 
+
+小结：
+1.sed awk如何实现过滤类似grep/egrep 
+2.awk定位的方法
+awk 'NR==1'
+awk 'NR==1,NR==10'
+awk '//'
+
+3.sed定位
+sed -n '1p'
+sed -n '1,10p'
+sed -n '10,$p'
+sed -n '//p'
+
+
+###第5题  linux下通过mkdir命令创建一个新目录/alexdir，alexdir的硬链接数是多少，为什么？
+             然后在alexdir下面又创建了一个目录 /alexdir/test,问alexdir的硬链接数量是多少？
+			 
+[root@oldboyedu01-nb oldboy]# ls -lid /alexdir/ /alexdir/.
+130426 drwxr-xr-x 2 root root 4096 Oct 20 04:39 /alexdir/
+130426 drwxr-xr-x 2 root root 4096 Oct 20 04:39 /alexdir/.
+
+
+[root@oldboyedu01-nb alexdir]# ls -lid /alexdir/ /alexdir/. /alexdir/test/..
+130426 drwxr-xr-x 3 root root 4096 Oct 20 04:42 /alexdir/
+130426 drwxr-xr-x 3 root root 4096 Oct 20 04:42 /alexdir/.
+130426 drwxr-xr-x 3 root root 4096 Oct 20 04:42 /alexdir/test/..
+
+
+
+
+
+
+
+###第6题 请给出默认情况eth0网卡配置文件的路径及客户端DNS的路径。
+ /etc/sysconfig/network-scripts/ifcfg-eth0 
+ /配置/系统配置/网络-脚本/if(c f g)-eth0 
+ 
+ DNS的配置
+ 1./etc/resolv.conf 
+ 2.网卡配置文件
+ 3.网卡配置文件里面的DNS优先 
+ 
+###第7 查找当前目录下所有文件，并把文件中的www.etiantian.org字符串替换成www.oldboyedu.com
+ 假设现在在/oldboy 
+ find /oldboy -type f -name "*.txt"
+ 
+ #方法1
+ find /oldboy -type f -name "*.txt"|xargs sed 's#www.etiantian.org#www.oldboyedu.com#g'
+ 
+ #方法2
+ ##预备姿势
+ [root@oldboyedu01-nb ~]# #ls -l 此处存放着 which mkdir命令的结果
+ [root@oldboyedu01-nb ~]# #ls -l  which mkdir
+ [root@oldboyedu01-nb ~]# #ls -l $(which mkdir)
+ [root@oldboyedu01-nb ~]# #ls -l `which mkdir`
+ [root@oldboyedu01-nb ~]# ls -l `which mkdir`
+ -rwxr-xr-x. 1 root root 50056 Mar 23  2017 /bin/mkdir
+ [root@oldboyedu01-nb ~]# ls -l $(which mkdir)
+ -rwxr-xr-x. 1 root root 50056 Mar 23  2017 /bin/mkdir
+ ##最终结果
+ sed 's#www.etiantian.org#www.oldboyedu.com#g'  此处存放着find命令的结果
+ sed 's#www.etiantian.org#www.oldboyedu.com#g'  $(find /oldboy -type f -name "*.txt")
+ 
+ #方法3
+ find /oldboy -type f -name "*.txt"  -exec ls -l  {}  \;
+
+ 
+###第2.8 问题:请问在一个命令上加什么参数可以实现下面命令的内容在同一行输出。
+       echo "oldboy";echo "oldboy" 
+	   
+;  ====分号表示分隔多条命令
+ls;pwd;hello 
+	   
+[root@oldboyedu01-nb ~]# echo -n "oldboy";echo "oldboy" 
+oldboyoldboy
+[root@oldboyedu01-nb ~]# #-n 表示取消输出每一行结尾的换行符号
+
+[root@oldboyedu01-nb ~]# echo -e "a\nb"
+a
+b
+[root@oldboyedu01-nb ~]# echo -e "a\nb\n\tc" >echo.txt
+[root@oldboyedu01-nb ~]# cat echo.txt
+a
+b
+	c
+[root@oldboyedu01-nb ~]# cat -A echo.txt
+a$
+b$
+^Ic$
+	   
+	   
+	  
+	   
+	   
+###第2.9 问题：请给出如下格式的date命令 
+例：11-02-26。
+再给出实现按周输出 比如：周六输出为6，请分别给出命令。
+###第2.10 问题：扩展问题：打印三天前的日期,格式如：2011-02-26
+
+[root@oldboyedu01-nb ~]# date
+Fri Oct 20 05:20:30 CST 2017
+[root@oldboyedu01-nb ~]# #2017-11-11
+[root@oldboyedu01-nb ~]# #date +格式
+[root@oldboyedu01-nb ~]# date +%F
+2017-10-20
+[root@oldboyedu01-nb ~]# date +%Y-%m-%d
+2017-10-20
+[root@oldboyedu01-nb ~]# date +%w
+5
+[root@oldboyedu01-nb ~]# #显示当前的日期以年-月-日_周几
+
+[root@oldboyedu01-nb ~]# date +%F_%w
+2017-10-20_5
+
+[root@oldboyedu01-nb ~]# date +%F_%w
+2017-10-20_5
+[root@oldboyedu01-nb ~]# date +%T
+05:25:33
+[root@oldboyedu01-nb ~]# date +%H:%M:%S
+05:25:51
+
+date命令按照格式显示日期小结:
+1.date +格式 
+2.%F  %Y-%m-%d 年-月-日
+  %T  %H:%M:%S 时:分:秒
+  %w  周几
+
+  
+  
+  按照说明显示日期
+[root@oldboyedu01-nb ~]# date 
+Fri Oct 20 05:28:44 CST 2017
+[root@oldboyedu01-nb ~]# date -d "1day"
+Sat Oct 21 05:29:07 CST 2017
+[root@oldboyedu01-nb ~]# date -d "+1day"
+Sat Oct 21 05:29:18 CST 2017
+[root@oldboyedu01-nb ~]# date -d "-1day"
+Thu Oct 19 05:29:42 CST 2017
+  
+[root@oldboyedu01-nb ~]# date -d "-1day" +%F
+2017-10-19
+[root@oldboyedu01-nb ~]# date -d "1day" +%F
+2017-10-21
+[root@oldboyedu01-nb ~]# #year month day hour min sec
+
+#显示7天前的时间按照格式年-月-日_周几
+[root@oldboyedu01-nb ~]# 
+[root@oldboyedu01-nb ~]# date +%F_%w
+2017-10-20_5
+[root@oldboyedu01-nb ~]# date +%F_%w -d "-7day"
+2017-10-13_5
+
+修改日期-慎用
+[root@oldboyedu01-nb ~]# date -s "21111111 11:11:11"
+Wed Nov 11 11:11:11 CST 2111
+[root@oldboyedu01-nb ~]# date -s "1hour"
+Wed Nov 11 12:12:51 CST 2111
+[root@oldboyedu01-nb ~]# date -s "-1hour"
+Wed Nov 11 11:12:56 CST 2111
+
+
+自动修改系统时间
+时间服务器
+pool.ntp.org 
+ntp1.aliyun.com 
+
+ntpdate pool.ntp.org
+
+
+####2.11 问题：【Centos 5.x】当从root用户切到普通用户oldboy时，执行ifconfig会提示。
+command not found.
+1.Linux运行命令过程
+输入命令
+linux会在PATH里面进行查找
+运行
+报错
+
+
+
+PATH环境变量的
+
+
+修改PATH环境变量
+##临时
+[root@oldboyedu01-nb ~]# export PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin:/root/bin
+[root@oldboyedu01-nb ~]# 
+[root@oldboyedu01-nb ~]# 
+[root@oldboyedu01-nb ~]# echo $PATH
+/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin:/root/bin
+
+##永久
+把环境变量的配置命令追加到/etc/profile中
+export PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin:/root/bin
+
+##生效
+source /etc/profile
+
+
+小结：
+1.什么是PATH环境变量
+2.如何修改PATH环境变量
+
+##第12题 请描述下列路径的内容是做什么的？
+/var/log/messages          系统默认的日志
+/var/log/secure            用户的登录信息
+/etc/fstab                 开机的时候自动挂载列表  在开机的时候每个磁盘分区对应着什么入口的列表                        
+/etc/profile               配置环境变量  别名 
+/var/spool/cron/root       定时任务的配置文件
+/etc/hosts                 解析主机名   
+                          /etc/hosts                 主机名---->ip地址
+                          DNS解析                    域名--->ip过程
+
+						  
+						  
+
+
+##第13题 如何快速查到ifconfig的全路径，请给出命令。
+
+####方法1 which (在PATH环境变量)
+[root@oldboyedu01-nb ~]# which mkdir 
+/bin/mkdir
+[root@oldboyedu01-nb ~]# which sed
+/bin/sed
+
+####方法2 find
+[root@oldboyedu01-nb ~]# find / -type f -name "gawk"
+/bin/gawk
+[root@oldboyedu01-nb ~]# find / -type f -name "sed"
+/bin/sed
+[root@oldboyedu01-nb ~]# find / -type f -name "mkdir"
+/bin/mkdir
+
+####方法3  whereis 找出命令相关的 帮助 man 
+[root@oldboyedu01-nb ~]# whereis sed
+sed: /bin/sed /usr/share/man/man1p/sed.1p.gz /usr/share/man/man1/sed.1.gz
+[root@oldboyedu01-nb ~]# whereis awk
+awk: /bin/awk /usr/bin/awk /usr/libexec/awk /usr/share/awk /usr/share/man/man1p/awk.1p.gz /usr/share/man/man1/awk.1.gz
+
+####方法4  locate    根据名字 找出文件的路径
+                     文件名字与文件路径表格 数据库
+				     updatedb 
+[root@oldboyedu01-nb ~]# touch oldboy-20171111.log
+[root@oldboyedu01-nb ~]# locate 20171111
+[root@oldboyedu01-nb ~]# updatedb 
+[root@oldboyedu01-nb ~]# locate 20171111
+/root/oldboy-20171111.log
+
+
+##第14题 请给出查看当前哪些用户在线的linux命令。
+用户在线=====<远程连接>到服务器的用户
+
+远程登录的用户=====通过xshell或SecureCRT连接服务器
+
+####方法1 w 
+[root@oldboyedu01-nb ~]# w
+ 11:59:31 up 4 days,  5:40,  3 users,  load average: 1.41, 2.58, 2.86
+USER           TTY      FROM              LOGIN@              IDLE   JCPU   PCPU WHAT
+root           pts/0    10.0.0.1         11:31               0.00s  0.02s  0.00s w
+root           pts/1    10.0.0.1         11:55               3:35   0.00s  0.00s -bash
+root           pts/2    10.0.0.1         11:55              12.00s  0.01s  0.01s -bash
+远程登录的用户          从哪里登录的     什么时候连接入系统                      这个用户在做什么
+
+系统的负载---系统繁忙程度
+             如果负载接近-服务cpu的核心总数
+			 
+####方法2 last 谁在什么时间连接到系统  连接了多久 
+
+
+
+####方法3 lastlog  显示系统中所有用户的最近一次的登录信息 
+ 
+##第15题 请给出正确的关机和重起服务器的命令。
+重启 
+init 6 
+reboot 
+
+shutdown -r 1
+shutdown -r now ===== reboot 
+
+关机
+init 0 
+poweroff   
+halt       #需要手动关闭电源
+shutdown -h 1 
+shutdown -h now 
+
+2.16 请写出下面linux命令行快捷键的功能？
+Ctrl + a   把光标移动到《行首》
+Ctrl + e   把光标移动到《行尾》
+ 
+Ctrl + c   取消当前的操作 cancel
+Ctrl + d   logout命令（当前行没有任何内容，退出当前用户）
+Ctrl + l  （小写字母L） 清除屏幕内容 clear
+ 
+Ctrl + u   剪切光标所在位置到行首的内容
+Ctrl + k   剪切光标所在位置到行尾的内容
+ctrl + y   粘贴
+
+ctrl + →   把光标向右移动一个单词 
+ctrl + ←   把光标向左移动一个单词 
+
+
+history |grep awk
+
+Ctrl + r search 搜索历史命令，继续搜索
+
+ 
+
+
+linux快捷键练习:
+#命令行输入oldboyedu
+#然后让光标移动到行首 加上注释符号和I am studying
+#然后让光标移动到行尾，加上 linux.site:www.oldboyedu.com;
+#剪切，这一行内容。
+#粘贴3次。
+
+
+
+2.17 vi/vim快捷键初级
+
+移动光标：
+
+    ↑k
+←h      →l
+    ↓j
+	
+两边左右hl  中间是上下
+ 
+
+移动到文件的第一行           gg   :1  1G
+移动到文件的最后一行         G    :$  
+快速到达文件的第100行       100gg  100G  :100  
+移动光标到行首              0    ^
+移动光标到行尾              $
+
+ 
+编辑:
+在当前行下一行插入一个空行并进入到编辑模式       o(小写字母O)
+剪切光标所在位置到行尾的内容，然后进入编辑模式   C(大写字母C)
+删除当前行的内容到行尾                          dG 
+撤销上一次的操作                                 u
+恢复上一次的操作                            ctrl+r 
+
+
+复制粘贴剪切：
+
+删除光标所在位置的内容到行尾 D 	
+
+复制当前行                                      yy
+剪切(删除)当前行                                dd
+粘贴                                            p
+
+
+搜索：
+/你要找的内容    继续向下搜索n     继续向上搜索N
+
+
+vim查询帮助
+
+:h  :wq 
+:h  G
+
+第三关练习题总结
+	正则表达式练习题
+		取出网卡ip地址
+		取出权限
+	grep,sed,awk进行过滤
+	find命令与其他命令配置rm ls -l sed 
+		三种方法
+	date显示或设置系统日期
+		按照你的说明显示指定的日期
+		以指定格式显示日期
+		自动修改系统时间
+	Linux下面快捷键
+	vi/vim快捷键
+
+
+[oldboy@oldboyedu01-nb ~]$ ls /root/
+ls: cannot open directory /root/: Permission denied
+[oldboy@oldboyedu01-nb ~]$ rm -f /etc/passwd
+do not use rm -f /etc/passwd
+[oldboy@oldboyedu01-nb ~]$ \rm -f /etc/passwd
+rm: cannot remove `/etc/passwd': Permission denied
+[oldboy@oldboyedu01-nb ~]$ touch /etc/oldboy.txt
+touch: cannot touch `/etc/oldboy.txt': Permission denied
+
+
+Linux权限详解
+
+1）权限之rwx
+
+2）如何知道我对某个文件有什么权限
+
+1】看看你是谁
+whoami
+
+2】你与这个文件或目录有什么关系
+主人 家人  陌生人
+判断是否和这个文件是一家子的
+id====>groups
+oldboy用户是这个文件/etc/hosts的陌生人
+
+3】oldboy用户对这个文件权限是后三个 r-- 
+
+3)权限的计算
+r======4
+w      2
+x      1
+-      0
+
+-rw-------
+ 420000000
+ 6  0  0
+ 
+-rw-r--r--
+ 420400400
+ 6  4  4
+ 
+ 
+drwxr-xr-x
+ 421401401
+ 7  5  5
+ 
+4)权限的修改
+  chmod ===change mode 
+  
+  1]使用数字的方法修改权限
+  chmod 755 oldboy.txt
+ 
+  2]使用字符
+主人  家人    陌生人
+user  group   other
+u     g       o  
+ 
+[root@oldboyedu01-nb oldboy]# ls -l oldboy.txt
+-rw-r--r--. 2 root root 252 Oct 18 09:10 oldboy.txt
+[root@oldboyedu01-nb oldboy]# chmod u+x oldboy.txt
+[root@oldboyedu01-nb oldboy]# ls -l oldboy.txt
+-rwxr--r--. 2 root root 252 Oct 18 09:10 oldboy.txt
+[root@oldboyedu01-nb oldboy]# chmod u-x oldboy.txt
+[root@oldboyedu01-nb oldboy]# ls -l oldboy.txt
+-rw-r--r--. 2 root root 252 Oct 18 09:10 oldboy.txt
+[root@oldboyedu01-nb oldboy]# chmod u=x oldboy.txt
+[root@oldboyedu01-nb oldboy]# ll oldboy.txt
+---xr--r--. 2 root root 252 Oct 18 09:10 oldboy.txt
+[root@oldboyedu01-nb oldboy]# chmod u=rwx oldboy.txt
+[root@oldboyedu01-nb oldboy]# ll oldboy.txt
+-rwxr--r--. 2 root root 252 Oct 18 09:10 oldboy.txt
+ 
+给文件添加上执行权限
+chmod +x oldboy.txt === chmod ugo+x oldboy.txt  === chmod a+x oldboy.txt 
+ 
+修改文件的所有者和所属的用户组
+chown  change owner 
+ 
+[root@oldboyedu01-nb oldboy]# ls -l oldboy.txt
+-rwxr-xr-x. 2 root root 252 Oct 18 09:10 oldboy.txt
+[root@oldboyedu01-nb oldboy]# chown oldboy.oldboy oldboy.txt
+[root@oldboyedu01-nb oldboy]# ll oldboy.txt
+-rwxr-xr-x. 2 oldboy oldboy 252 Oct 18 09:10 oldboy.txt
+[root@oldboyedu01-nb oldboy]# 
+[root@oldboyedu01-nb oldboy]# 
+[root@oldboyedu01-nb oldboy]# 
+[root@oldboyedu01-nb oldboy]# chown root oldboy.txt
+[root@oldboyedu01-nb oldboy]# ll oldboy.txt
+-rwxr-xr-x. 2 root oldboy 252 Oct 18 09:10 oldboy.txt
+[root@oldboyedu01-nb oldboy]# 
+[root@oldboyedu01-nb oldboy]# chown root.root oldboy.txt
+[root@oldboyedu01-nb oldboy]# ll oldboy.txt
+-rwxr-xr-x. 2 root root 252 Oct 18 09:10 oldboy.txt
+[root@oldboyedu01-nb oldboy]# chown oldboy.oldboy oldboy.txt
+[root@oldboyedu01-nb oldboy]# ll oldboy.txt
+-rwxr-xr-x. 2 oldboy oldboy 252 Oct 18 09:10 oldboy.txt
+ 
+ 
+ 
+5)对于文件来说rwx的含义
+环境准备
+mkdir -p /oldboy 
+echo -e 'hostname\npwd' >/oldboy/alex.sh
+chown oldboy.oldboy /oldboy/alex.sh
+ll /oldboy/alex.sh
+root用户
+oldboy用户
+
+#root用户下面修改 r 
+[root@oldboyedu01-nb oldboy]# ll /oldboy/alex.sh
+-rw-r--r-- 1 oldboy oldboy 13 Oct 29 23:57 /oldboy/alex.sh
+[root@oldboyedu01-nb oldboy]# chmod u=r /oldboy/alex.sh
+[root@oldboyedu01-nb oldboy]# ll /oldboy/alex.sh
+-r--r--r-- 1 oldboy oldboy 13 Oct 29 23:57 /oldboy/alex.sh
+[root@oldboyedu01-nb oldboy]# 
+
+#oldboy用户下面验证
+[oldboy@oldboyedu01-nb oldboy]$ cat alex.sh
+hostname
+pwd
+[oldboy@oldboyedu01-nb oldboy]$ echo "ls -ld /root" >>alex.sh
+-bash: alex.sh: Permission denied
+[oldboy@oldboyedu01-nb oldboy]$ /oldboy/alex.sh 
+-bash: /oldboy/alex.sh: Permission denied
+[oldboy@oldboyedu01-nb oldboy]$ ./alex.sh
+-bash: ./alex.sh: Permission denied
+
+
+#root用户下面修改 w 
+[root@oldboyedu01-nb oldboy]# chmod u=w /oldboy/alex.sh
+[root@oldboyedu01-nb oldboy]# ll /oldboy/alex.sh
+--w-r--r-- 1 oldboy oldboy 13 Oct 29 23:57 /oldboy/alex.sh
+
+
+#oldboy用户下面验证
+[oldboy@oldboyedu01-nb oldboy]$ ll /oldboy/alex.sh 
+--w-r--r-- 1 oldboy oldboy 13 Oct 29 23:57 /oldboy/alex.sh
+[oldboy@oldboyedu01-nb oldboy]$ cat /oldboy/alex.sh
+cat: /oldboy/alex.sh: Permission denied
+[oldboy@oldboyedu01-nb oldboy]$ echo 'w' >>/oldboy/alex.sh
+[oldboy@oldboyedu01-nb oldboy]$ /oldboy/alex.sh
+-bash: /oldboy/alex.sh: Permission denied
+
+
+小结：
+1.r读取文件内容
+2.w修改文件的内容，但是需要r的配合
+  没有r配合强制修改退出，会清空文件的内容
+  
+
+
+#root用户下面修改 x
+[root@oldboyedu01-nb oldboy]# chmod u=x /oldboy/alex.sh
+[root@oldboyedu01-nb oldboy]# ll /oldboy/alex.sh
+---xr--r-- 1 oldboy oldboy 22 Oct 30 00:19 /oldboy/alex.sh
+
+
+#oldboy用户下面验证
+[oldboy@oldboyedu01-nb oldboy]$ ll alex.sh
+---xr--r-- 1 oldboy oldboy 22 Oct 30 00:19 alex.sh
+[oldboy@oldboyedu01-nb oldboy]$ cat alex.sh
+cat: alex.sh: Permission denied
+[oldboy@oldboyedu01-nb oldboy]$ echo 'w' >>alex.sh
+-bash: alex.sh: Permission denied
+[oldboy@oldboyedu01-nb oldboy]$ /oldboy/alex.sh 
+bash: /oldboy/alex.sh: Permission denied
+[oldboy@oldboyedu01-nb oldboy]$ 
+
+#给文件加上r
+[root@oldboyedu01-nb oldboy]# ll /oldboy/alex.sh
+-r-xr--r-- 1 oldboy oldboy 22 Oct 30 00:19 /oldboy/alex.sh
+
+
+
+对于文件来说rwx小结：
+     1.r读取文件内容
+     2.w修改文件的内容，但是需要r的配合
+       没有r配合强制修改退出，会清空文件的内容
+     3.x权限执行，需要r权限的配合
+
+6)目录的权限
+  r 查看目录里面的内容，    ls   
+  w 可以在目录里面创建      删除 重命名文件
+  x 可以进入(cd)到这个目录  
+
+  环境
+mkdir -p /oldboy/alexdir
+chown oldboy.oldboy /oldboy/alexdir
+touch    /oldboy/alexdir/luffy{01..5}.txt
+  
+  #root修改目录权限r
+[root@oldboyedu01-nb oldboy]# ll -d alexdir/
+drwxr-xr-x 2 oldboy oldboy 4096 Oct 30 00:39 alexdir/
+[root@oldboyedu01-nb oldboy]# chmod u=r alexdir/
+[root@oldboyedu01-nb oldboy]# ll -d alexdir/
+dr--r-xr-x 2 oldboy oldboy 4096 Oct 30 00:39 alexdir/
+  
+  #oldboy用户下面验证
+[oldboy@oldboyedu01-nb oldboy]$ ls -ld alexdir/
+dr--r-xr-x 2 oldboy oldboy 4096 Oct 30 00:39 alexdir/
+[oldboy@oldboyedu01-nb oldboy]$ ls alexdir/
+ls: cannot access alexdir/luffy03.txt: Permission denied
+ls: cannot access alexdir/luffy05.txt: Permission denied
+ls: cannot access alexdir/luffy04.txt: Permission denied
+ls: cannot access alexdir/luffy02.txt: Permission denied
+ls: cannot access alexdir/luffy01.txt: Permission denied
+luffy01.txt  luffy02.txt  luffy03.txt  luffy04.txt  luffy05.txt
+[oldboy@oldboyedu01-nb oldboy]$ ls -l alexdir/
+ls: cannot access alexdir/luffy03.txt: Permission denied
+ls: cannot access alexdir/luffy05.txt: Permission denied
+ls: cannot access alexdir/luffy04.txt: Permission denied
+ls: cannot access alexdir/luffy02.txt: Permission denied
+ls: cannot access alexdir/luffy01.txt: Permission denied
+total 0
+-????????? ? ? ? ?            ? luffy01.txt
+-????????? ? ? ? ?            ? luffy02.txt
+-????????? ? ? ? ?            ? luffy03.txt
+-????????? ? ? ? ?            ? luffy04.txt
+-????????? ? ? ? ?            ? luffy05.txt
+[oldboy@oldboyedu01-nb oldboy]$ stat alexdir/luffy01.txt 
+stat: cannot stat `alexdir/luffy01.txt': Permission denied
+
+[root@oldboyedu01-nb oldboy]# chmod u=rx alexdir/
+[root@oldboyedu01-nb oldboy]# ll -d alexdir/
+dr-xr-xr-x 2 oldboy oldboy 4096 Oct 30 00:39 alexdir/
+[oldboy@oldboyedu01-nb oldboy]$ ls -ld alexdir/
+dr-xr-xr-x 2 oldboy oldboy 4096 Oct 30 00:39 alexdir/
+[oldboy@oldboyedu01-nb oldboy]$ ls -l alexdir/
+total 0
+-rw-r--r-- 1 root root 0 Oct 30 00:39 luffy01.txt
+-rw-r--r-- 1 root root 0 Oct 30 00:39 luffy02.txt
+-rw-r--r-- 1 root root 0 Oct 30 00:39 luffy03.txt
+-rw-r--r-- 1 root root 0 Oct 30 00:39 luffy04.txt
+-rw-r--r-- 1 root root 0 Oct 30 00:39 luffy05.txt
+
+
+小结：
+1.对于目录来说 r表示 查看目录里面内容的权限，ls  需要x配合
+2.没有x权限，那么显示的时候文件的属性无法显示
+
+
+ #root修改目录权限w
+[root@online01 oldboy]# chmod u=w alexdir/
+[root@online01 oldboy]# ll -d alexdir/
+d-w-r-xr-x. 2 oldboy oldboy 4096 Nov  8 04:01 alexdir/
+
+ #oldboy用户下面验证
+ [oldboy@online01 oldboy]$ ll
+total 4
+d-w-r-xr-x. 2 oldboy oldboy 4096 Nov  8 04:01 alexdir
+[oldboy@online01 oldboy]$ ls alexdir/
+ls: cannot open directory alexdir/: Permission denied
+[oldboy@online01 oldboy]$ touch alexdir/oldboy.txt
+touch: cannot touch `alexdir/oldboy.txt': Permission denied
+[oldboy@online01 oldboy]$ rm -f alexdir/stu01.txt
+rm: cannot remove `alexdir/stu01.txt': Permission denied
+[oldboy@online01 oldboy]$ rm -f alexdir/stu01.txta
+rm: cannot remove `alexdir/stu01.txta': Permission denied
+[oldboy@online01 oldboy]$ rm -f alexdir/stu01.txtasdafasdfsdf
+rm: cannot remove `alexdir/stu01.txtasdafasdfsdf': Permission denied
+[oldboy@online01 oldboy]$ rm -f alexdir/luffy01.txt
+rm: cannot remove `alexdir/luffy01.txt': Permission denied
+[oldboy@online01 oldboy]$ \rm -f alexdir/luffy01.txt
+rm: cannot remove `alexdir/luffy01.txt': Permission denied
+ 
+ #root修改目录权限w
+[root@online01 oldboy]# chmod u=wx alexdir
+[root@online01 oldboy]# ll -d alexdir
+d-wxr-xr-x. 2 oldboy oldboy 4096 Nov  8 04:01 alexdir
+ 
+ #oldboy用户下面验证
+ [oldboy@online01 oldboy]$ ll -d alexdir/
+d-wxr-xr-x. 2 oldboy oldboy 4096 Nov  8 04:01 alexdir/
+[oldboy@online01 oldboy]$ touch alexdir/oldboy.txt
+[oldboy@online01 oldboy]$ rm -f alexdir/luffy01.txt
+[oldboy@online01 oldboy]$ rm -f alexdir/luffy01.txt
+[oldboy@online01 oldboy]$ rm -f alexdir/luffy01.tx
+[oldboy@online01 oldboy]$ rm -f alexdir/
+rm: cannot remove `alexdir/': Is a directory
+  
+ 
+ 
+ 
+ 小结： 
+ 1.w表示 可以在目录中创建 删除文件 重命名文件权限
+ 2.w无法删除 创建文件，w需要x配合
+ 
+ #root修改目录权限x 
+[root@online01 oldboy]# chmod u=x alexdir
+[root@online01 oldboy]# ll -d alexdir
+d--xr-xr-x. 2 oldboy oldboy 4096 Nov  8 04:16 alexdir
+
+ #oldboy用户下面验证
+[oldboy@online01 oldboy]$ ls -ld alexdir/
+d--xr-xr-x. 2 oldboy oldboy 4096 Nov  8 04:16 alexdir/
+[oldboy@online01 oldboy]$ cd alexdir/
+[oldboy@online01 alexdir]$ pwd
+/oldboy/alexdir
+[oldboy@online01 alexdir]$ ls
+ls: cannot open directory .: Permission denied
+
+   总结  
+         文件                    目录 
+   r    读取文件的内容           查看目录的内容(需要x权限) 
+   w    修改文件的内容(需要r)    在目录下面创建 删除文件(需要x权限)
+   x    执行文件(需要r)          进入到目录的权限(cd)
+ 
+ 
+ !!!!!!删除一个文件，要看你对这个文件所在的目录是否有wx权限。
+    
+ blog.oldboyedu.com
+ 
+ 网址程序存放在/app/blog目录下面
+ 
+ 0.网站需要被运行起来，通过一个傀儡用户运行起来的www
+ 
+ 
+ 1.blog目录下面 
+ file 644 dir 755 root root 
+ 
+ 2.blog目录下面 
+ /app/blog/ndd.jpg
+ /app/blog/snow.jpg 
+ /app/blog/budongde.avi
+ /app/blog/上船/lwang.jpg
+ /app/blog/上船/lzhang.avi
+ 
+ blog/上船 file644 dir755 www www 
+ 
+ 小结:
+ 1.网站是通过傀儡用户运行的www
+ 2.网站用户上传目录,file 644 dir 755 www www 
+ 3.除了上传目录之外 file 644 dir 755 root root
+ 
+ 
+ 
+ 
+ 
+Linux控制系统默认权限的命令umask
+1.根据umask计算出系统默认的权限
+[root@online01 oldboy]# umask 
+0022 
+
+文件的最大的权限 666 
+目录的最大的权限 777
+
+文件  666  022   644 
+目录  777  022   755 
+
+ 
+####umask 022 
+ 
+#umask
+##根据umask计算文件的默认权限
+##666
+#-022
+#=644
+
+##根据umask计算目录的默认权限
+##777
+#-022
+#=755
+
+
+####umask 032 
+
+##根据umask计算文件的默认权限
+##666
+#-032
+#=634
+#+010
+ =644
+
+
+
+##根据umask计算目录的默认权限
+##777
+#-032
+#=745
+
+
+
+[root@online01 oldboy]# touch file032
+[root@online01 oldboy]# mkdir dir032
+[root@online01 oldboy]# ls -ld *032
+drwxr--r-x. 2 root root 4096 Nov  8 05:22 dir032
+-rw-r--r--. 1 root root    0 Nov  8 05:22 file032
+
+
+根据umask计算出系统默认的权限规则
+1.对于目录 777直接减去umask
+2.对于文件 666减去umask的值，如果umask某一位上面是奇数，减完umask之后奇数位需要+1
+
+
+文件系统属性（文件属性）
+
+[root@online01 ~]# #a=====append 只能追加 
+[root@online01 ~]# #i=====immutable 无敌的 不可修改的
+[root@online01 ~]# lsattr oldboy.txt 
+-------------e- oldboy.txt
+[root@online01 ~]# chattr +a oldboy.txt
+[root@online01 ~]# lsattr oldboy.txt 
+-----a-------e- oldboy.txt
+
+[root@online01 ~]# cat oldboy.txt 
+hello.txt
+[root@online01 ~]# echo hello >>oldboy.txt
+[root@online01 ~]# echo hello >>oldboy.txt
+[root@online01 ~]# cat oldboy.txt
+hello.txt
+hello
+hello
+[root@online01 ~]# echo hello >oldboy.txt
+-bash: oldboy.txt: Operation not permitted
+[root@online01 ~]# rm -f oldboy.txt
+rm: cannot remove `oldboy.txt': Operation not permitted
+[root@online01 ~]# mv oldboy.txt  /tmp/
+mv: cannot move `oldboy.txt' to `/tmp/oldboy.txt': Operation not permitted
+
+
+
+[root@online01 ~]# echo hello >>oldboy.txt
+-bash: oldboy.txt: Permission denied
+[root@online01 ~]# echo hello >oldboy.txt
+-bash: oldboy.txt: Permission denied
+[root@online01 ~]# rm -f oldboy.txt
+rm: cannot remove `oldboy.txt': Operation not permitted
+[root@online01 ~]# mv oldboy.txt  /tmp/
+mv: cannot move `oldboy.txt' to `/tmp/oldboy.txt': Operation not permitted
+
+
+Linux权限体系 
+	1.rwx是啥
+	2.rwx对应的数字 及计算方法 rwxr-xr-x  
+	3.chmod 命令的使用 
+ 	4.对于文件来说r w x 是什么含义 ***** 
+	5.对于目录来说r w x 是什么含义 ***** 
+	6.网站权限-通过控制权限让网站安全 
+	7.linux系统默认权限控制命令umask  
+	8.文件系统属性（文件属性）
+  
+总结：
+1.正则总结 
+2.特殊符合总结
+无分类系列 $   !   |   #   引号系列 $()  `` ''  "" 重定向系列 >  >> 2>  2>> <  <<  位置系列 ~ . ..  
+判断系列 && ||
+
+3.第三关练习题-取出ip地址 权限 
+
+4.使用三剑客进行过滤grep sed awk 
+如何使用三剑客命令过滤出文件中以oldboy开头的行（文件名是oldboy.txt,至少3种方法）
+5.修改时间 linux快捷键  vi/vim快捷键
+6.文件还有目录权限 rwx含义
+7.网站权限-通过控制权限让网站安全
+8.linux系统默认权限控制命令umask 
+9.文件系统属性（文件属性）
+10.linux无法上网
+11.无法远程连接服务器
+课外:
+安装和使用lrzsz htop 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	 
+		 
+		 
+		 
+		 
+		 

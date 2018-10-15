@@ -1,0 +1,457 @@
+
+
+[root@oldboyedu01-nb oldboy]# rpm -qa croniee
+[root@oldboyedu01-nb oldboy]# rpm -qa cronie
+cronie-1.4.4-16.el6_8.2.x86_64
+[root@oldboyedu01-nb oldboy]# rpm -ql cronie 
+/etc/cron.d
+/etc/cron.d/0hourly
+/etc/cron.deny
+/etc/pam.d/crond
+/etc/rc.d/init.d/crond
+/etc/sysconfig/crond
+/usr/bin/crontab
+/usr/sbin/crond
+/usr/share/doc/cronie-1.4.4
+/usr/share/doc/cronie-1.4.4/AUTHORS
+/usr/share/doc/cronie-1.4.4/COPYING
+/usr/share/doc/cronie-1.4.4/ChangeLog
+/usr/share/doc/cronie-1.4.4/INSTALL
+/usr/share/doc/cronie-1.4.4/README
+/usr/share/man/man1/crontab.1.gz
+/usr/share/man/man5/crontab.5.gz
+/usr/share/man/man8/cron.8.gz
+/usr/share/man/man8/crond.8.gz
+/var/spool/cron
+
+
+
+
+[root@oldboyedu01-nb oldboy]# #crond是否在运行
+[root@oldboyedu01-nb oldboy]# /etc/init.d/crond status 
+crond (pid  1144) is running...
+[root@oldboyedu01-nb oldboy]# 
+[root@oldboyedu01-nb oldboy]# ps -ef |grep crond
+root       1144      1  0 05:09 ?        00:00:00 crond
+root       7890   6568  0 14:48 pts/0    00:00:00 grep --color=auto crond
+
+[root@oldboyedu01-nb oldboy]# chkconfig |grep crond
+crond          	0:off	1:off	2:on	3:on	4:on	5:on	6:off
+
+
+
+
+#每五分钟同步一下系统的时间
+###第1个里程碑-命令
+[root@oldboyedu01-nb oldboy]# ntpdate ntp1.aliyun.com
+15 Jan 15:25:02 ntpdate[7921]: adjust time server 182.92.12.11 offset -0.007840 sec
+[root@oldboyedu01-nb oldboy]# /usr/sbin/ntpdate  ntp1.aliyun.com
+15 Jan 15:25:51 ntpdate[7922]: adjust time server 182.92.12.11 offset 0.003084 sec
+###第2个里程碑-写入定时任务
+[root@oldboyedu01-nb oldboy]# 
+[root@oldboyedu01-nb oldboy]# crontab -l
+#sync time by lee at 20171212
+*/3 * * * *  /usr/sbin/ntpdate  ntp1.aliyun.com
+[root@oldboyedu01-nb oldboy]# 
+###第3个里程碑-检查
+#1）看日志
+[root@oldboyedu01-nb oldboy]# tail -f /var/log/cron
+Jan 15 15:30:01 oldboyedu01-nb CROND[7945]: (root) CMD (/usr/sbin/ntpdate  ntp1.aliyun.com)
+Jan 15 15:30:02 oldboyedu01-nb CROND[7955]: (root) CMD (/usr/sbin/ntpdate  ntp1.aliyun.com)
+#2）看结果
+[root@oldboyedu01-nb ~]# date -s "1year"
+Tue Jan 15 15:29:28 CST 2019
+[root@oldboyedu01-nb ~]# date 
+Mon Jan 15 15:30:33 CST 2018
+
+
+
+
+You have new mail in /var/spool/mail/root
+
+每天的上午7点到上午11点 每一个小时运行CMD命令 
+* 07-11 * * *  CMD  #每分钟运行CMD
+
+00 07-11 * * *  CMD #每个小时运行CMD
+
+
+
+
+[root@oldboyedu01-nb oldboy]# #~每分钟把自己的名字 追加到 /oldboy/oldboy.txt 
+##1.命令
+[root@oldboyedu01-nb oldboy]# echo oldboy >>/oldboy/oldboy.txt
+[root@oldboyedu01-nb oldboy]# tail /oldboy/oldboy.txt
+oldboy
+##2.定时任务
+[root@oldboyedu01-nb oldboy]# 
+[root@oldboyedu01-nb oldboy]# 
+[root@oldboyedu01-nb oldboy]# 
+[root@oldboyedu01-nb oldboy]# 
+[root@oldboyedu01-nb oldboy]# crontab -l
+[root@oldboyedu01-nb oldboy]# crontab -l|tail -2 
+#print name to file  by lee at 20171212
+* * * * *  echo oldboy >>/oldboy/oldboy.txt
+#3.检查
+##1)日志
+
+tail -f /var/log/cron
+Jan 15 15:49:01 oldboyedu01-nb CROND[8054]: (root) CMD (echo oldboy >>/oldboy/oldboy.txt)
+
+##2)结果
+[root@oldboyedu01-nb ~]# tail -f /oldboy/oldboy.txt
+oldboy
+
+
+
+oldboy
+
+每分钟显示当前系统的时间（年-月-日）追加到/tmp/time.log中
+##1.命令
+[root@oldboyedu01-nb oldboy]# date +%F
+2018-01-15
+##2.脚本
+[root@oldboyedu01-nb oldboy]# mkdir -p /server/scripts
+[root@oldboyedu01-nb oldboy]# cat /server/scripts/date.sh
+date +%F
+[root@oldboyedu01-nb oldboy]# 
+[root@oldboyedu01-nb oldboy]# sh  /server/scripts/date.sh
+2018-01-15
+[root@oldboyedu01-nb oldboy]# sh  /server/scripts/date.sh >>/tmp/date.log
+[root@oldboyedu01-nb oldboy]# cat /tmp/date.log 
+2018-01-15
+[root@oldboyedu01-nb oldboy]# 
+##3.脚本写入定时任务
+[root@oldboyedu01-nb oldboy]# crontab -e
+#print date to file  by lee at 20171212
+* * * * * /bin/sh /server/scripts/date.sh >>/tmp/date.log
+[root@oldboyedu01-nb oldboy]# 
+##4.检查
+[root@oldboyedu01-nb oldboy]# tail -f /var/log/cron
+Jan 15 16:24:01 oldboyedu01-nb CROND[8330]: (root) CMD (/bin/sh /server/scripts/date.sh >>/tmp/date.log)
+
+[root@oldboyedu01-nb ~]# tail -f /tmp/date.log 
+2018-01-15
+
+
+
+
+05.定时任务中-命令或脚本结果(正确及错误)定向到黑洞(>/dev/null 2>&1)或追加到文件中 >>/tmp/oldboy.txt 2>&1 
+
+#sync time by lee at 20171212
+*/3 * * * *  /usr/sbin/ntpdate  ntp1.aliyun.com           >/dev/null 2>&1
+
+#print name to file  by lee at 20171212
+#* * * * *  echo oldboy                                   >>/oldboy/oldboy.txt 2>&1
+
+#print date to file  by lee at 20171212
+#* * * * * /bin/sh /server/scripts/date.sh                >>/tmp/date.log 2>&1
+* * * * *  date +\%F                                      >>/tmp/date.log 2>&1
+
+
+
+ >/dev/null 2>&1 === >/dev/null  2>/dev/null 
+
+ 故障案例
+ 
+【企业案例】如果定时任务规则结尾不加>/dev/null 2>&1或者追加到文件中>>/tmp/oldboy 2>&1，很容易导致硬盘inode空间被占满，从而系统服务不正常。 
+
+
+
+###定时任务中 命令或脚本的结果 没有定向到空或文件中
+#2.邮件软件开启了---------定时任务会不断的给root用户发邮件 
+#you have new mail in /var/spool/mail/root   
+ 
+ 
+You have new mail in /var/spool/mail/root
+
+
+#1.邮件的软件没有开启------大量小文件堆积在/var/spool/postfix/maildrop/ ---inode满了  
+
+[root@oldboyedu01-nb oldboy]# /etc/init.d/postfix stop 
+Shutting down postfix:                                     [  OK  ]
+[root@oldboyedu01-nb oldboy]# chkconfig postfix 
+[root@oldboyedu01-nb oldboy]# chkconfig postfix off 
+[root@oldboyedu01-nb oldboy]# chkconfig |grep postfix
+postfix        	0:off	1:off	2:off	3:off	4:off	5:off	6:off
+
+ [root@oldboyedu01-nb oldboy]# ll /var/spool/postfix/maildrop/
+total 0
+
+ 
+ #每分钟显示当前系统的时间年-月-日_周 和当前系统的ip地址，追加到/tmp/ip.log中
+ 
+ 
+ 
+ linux定时任务生产java服务无法执行问题群友案例
+http://oldboy.blog.51cto.com/2561410/1541515 
+
+ 
+ 
+ 某个目录有大量小文件
+ 1.ls |xargs rm 
+ 2.删除文件所在的目录（记录好权限和所有者）
+ 
+ 
+[root@oldboyedu01-nb test]# touch {1..500000}.txt
+-bash: /bin/touch: Argument list too long
+[root@oldboyedu01-nb test]# echo {1..500000}.txt|xargs touch 
+ 
+ [root@oldboyedu01-nb test]# find / -type d  -size +1M
+/oldboy/test
+[root@oldboyedu01-nb test]# find / -type d  -size +1M|xargs ls -lhd
+drwxr-xr-x. 2 root root 15M Jan 15 17:52 /oldboy/test
+[root@oldboyedu01-nb test]# ls /oldboy/test |wc -l
+500000
+[root@oldboyedu01-nb test]# \rm -f  *
+-bash: /bin/rm: Argument list too long
+[root@oldboyedu01-nb test]# ls |xargs rm -f 
+[root@oldboyedu01-nb test]# ls
+[root@oldboyedu01-nb test]# ls -l
+total 0
+
+ 
+
+ 让一个命令或脚本开机自启动有什么方法？
+ 1)/etc/rc.local
+ 
+ 2)通过chkconfig管理
+ 
+ 如何让一个脚本被chkconfig管理
+vim /etc/init.d/oldgirld
+ 
+chmod +x /etc/init.d/oldgirld
+ 
+[root@oldboyedu01-nb ~]# 
+[root@oldboyedu01-nb ~]# cat /etc/init.d/oldgirld
+# chkconfig: 2345 99 99
+echo oldboy
+
+chkconfig --add oldgirld
+
+ 
+ 作业：
+ 翻译 man chkconfig RUNLEVEL FILES部分
+ 
+
+chkconfig iptables on 
+chkconfig iptables off  
+背后的故事
+ 
+ 现象
+[root@oldboyedu01-nb ~]# chkconfig iptables on
+[root@oldboyedu01-nb ~]# chkconfig |grep ipt
+iptables       	0:off	1:off	2:on	3:on	4:on	5:on	6:off
+[root@oldboyedu01-nb ~]# ls /etc/rc3.d/ |grep ipt 
+S08iptables
+[root@oldboyedu01-nb ~]# ll  /etc/rc3.d/ |grep ipt 
+lrwxrwxrwx  1 root root 18 Jan 16 10:42 S08iptables -> ../init.d/iptables
+[root@oldboyedu01-nb ~]# chkconfig iptables off
+[root@oldboyedu01-nb ~]# ll  /etc/rc3.d/ |grep ipt 
+lrwxrwxrwx  1 root root 18 Jan 16 10:43 K92iptables -> ../init.d/iptables
+[root@oldboyedu01-nb ~]# chkconfig |grep ipt
+iptables       	0:off	1:off	2:off	3:off	4:off	5:off	6:off
+ 
+ 猜想
+ chkconfig iptables on    ====== /etc/rc3.d  S08iptables -> ../init.d/iptables
+ chkconfig iptables off   ====== /etc/rc3.d  K92iptables -> ../init.d/iptables
+ 
+ S==== start
+ K==== kill 
+ 
+ 验证
+ [root@oldboyedu01-nb ~]# chkconfig |grep ipt
+iptables       	0:off	1:off	2:off	3:off	4:off	5:off	6:off
+[root@oldboyedu01-nb ~]# ls -l /etc/rc3.d/|grep ipt 
+[root@oldboyedu01-nb ~]# ln -s /etc/init.d/iptables  /etc/rc3.d/S08iptables
+[root@oldboyedu01-nb ~]# ls -l /etc/rc3.d/|grep ipt 
+lrwxrwxrwx  1 root root 20 Jan 16 10:48 S08iptables -> /etc/init.d/iptables
+[root@oldboyedu01-nb ~]# 
+[root@oldboyedu01-nb ~]# chkconfig |grep ipt
+iptables       	0:off	1:off	2:off	3:on	4:off	5:off	6:off
+
+ 结论
+ chkconfig iptables on    ====== /etc/rc3.d  S08iptables -> ../init.d/iptables
+ chkconfig iptables off   ====== /etc/rc3.d  K92iptables -> ../init.d/iptables
+ 
+ 
+root :x:0   :0   :root:/root:/bin/bash
+stu01:x:1002:1002:    :/home/stu01:/bin/bash
+stu02:x:1003:1003:    :/home/stu02:/bin/bash
+
+第5列 用户的说明信息
+第6列 用户的家目录
+
+~ 
+  root   /root 
+  oldboy /home/oldboy 
+ 
+第7列 用户使用的命令解释器 shell 
+  /bin/bash         默认
+  /sbin/nologin     虚拟用户 傀儡
+  /bin/sh 
+  /bin/dash         ubuntu
+  /bin/tcsh         Unix 
+  /bin/csh
+ 
+ 
+/etc/skel/
+
+/etc/skel/.bash_logout   === 用户退出会运行里面的命令
+/etc/skel/.bash_profile  === /etc/profile 
+/etc/skel/.bashrc        === /etc/bashrc 
+
+
+请问如下登录环境故障的原理及解决办法？ 
+-bash-4.1$  
+-bash-4.1$ 
+
+模拟
+[root@oldboyedu01-nb ~]# su - alex
+[alex@oldboyedu01-nb ~]$ whoami 
+alex
+[alex@oldboyedu01-nb ~]$ \rm -f .bash*
+
+故障
+
+原因
+用户下的与环境变量相关的隐藏文件 被删除了。
+
+
+解决
+从其他地方复制这些隐藏文件。
+
+方法2 从其他用户家复制
+-bash-4.1$ cp /home/oldboy/.bash* ~
+cp: cannot stat `/home/oldboy/.bash*': Permission denied
+报错的原因
+
+
+方法1 从/etc/skel复制
+-bash-4.1$ cp /etc/skel/.bash* ~
+-bash-4.1$ logout
+[root@oldboyedu01-nb ~]# su - alex
+[alex@oldboyedu01-nb ~]$ 
+[alex@oldboyedu01-nb ~]$ 
+[alex@oldboyedu01-nb ~]$ 
+[alex@oldboyedu01-nb ~]$ 
+[alex@oldboyedu01-nb ~]$ 
+
+
+
+添加一个用户alex999指定uid为888 禁止用户登录系统 不创建家目录 
+
+
+[root@oldboyedu01-nb ~]# id alex888 
+uid=12306(alex888) gid=12306(alex888) groups=12306(alex888)
+[root@oldboyedu01-nb ~]# usermod -g oldboy alex888
+[root@oldboyedu01-nb ~]# id alex888 
+uid=12306(alex888) gid=500(oldboy) groups=500(oldboy)
+
+[root@oldboyedu01-nb ~]# usermod -G root,oldboy alex888
+[root@oldboyedu01-nb ~]# id alex888 
+uid=12306(alex888) gid=12306(alex888) groups=12306(alex888),0(root),500(oldboy)
+
+
+ echo '123456' |passwd --stdin  oldboy
+
+[root@oldboyedu01-nb ~]# echo '123456' |passwd --stdin  oldboy
+Changing password for user oldboy.
+passwd: all authentication tokens updated successfully.
+[root@oldboyedu01-nb ~]# history -c
+[root@oldboyedu01-nb ~]# history 
+   71  history 
+
+1234456
+   
+1qazxsw2
+   
+   
+"oldboy"
+"0ldb0y"
+   
+   
+[root@oldboyedu01-nb oldboy]# md5sum oldboy.txt
+bafd432be9a9ca2dd2a917f24d746c61  oldboy.txt
+[root@oldboyedu01-nb oldboy]# md5sum oldboy.txt >police.log
+[root@oldboyedu01-nb oldboy]# cat police.log 
+bafd432be9a9ca2dd2a917f24d746c61  oldboy.txt
+[root@oldboyedu01-nb oldboy]# 
+[root@oldboyedu01-nb oldboy]# md5sum -c police.log 
+oldboy.txt: OK
+[root@oldboyedu01-nb oldboy]# echo oldboyedu.com >> oldboy.txt
+[root@oldboyedu01-nb oldboy]# md5sum -c police.log 
+oldboy.txt: FAILED
+md5sum: WARNING: 1 of 1 computed checksum did NOT match
+[root@oldboyedu01-nb oldboy]# #oldboy.txt的内容变化了。
+   
+2e227fa14c8a9791293b6525289c7dad  CentOS-6.9-x86_64-bin-DVD1.iso
+   
+2e227fa14c8a9791293b6525289c7dad  CentOS-6.9-x86_64-bin-DVD1.iso   
+   
+   
+http://lidao.blog.51cto.com/3388056/1910889
+   
+   
+
+   
+   
+   
+添加一个虚拟用户用户 mysql 指定用户的uid gid都是999    
+   
+[root@oldboyedu01-nb oldboy]# useradd  -s /sbin/nologin -M -u 999 mysql 
+[root@oldboyedu01-nb oldboy]# id mysql 
+uid=999(mysql) gid=999(mysql) groups=999(mysql)
+   
+   
+   
+dd if=/dev/zero of=/tmp/100  bs=1k count=1000000000000000
+   
+   
+
+
+
+oldboy  ALL=(ALL)       /bin/ls, /bin/touch
+
+
+授权某个目录下面的所有命令/bin/所有命令
+
+授权某个目录下面的所有命令/bin/所有命令 并且排除su
+
+oldboy  ALL=(ALL)       /bin/*, !/bin/su
+
+
+oldboy  ALL=(ALL)       ALL
+
+
+oldboy  ALL=(ALL)       NOPASSWD: ALL
+%sa  
+
+
+
+
+作业：
+批量添加3个用户stu01,stu02....stu10, 并设置123456(禁止使用for,while等循环)   
+批量添加10个用户stu01,stu02....stu10,并设置8位随机密码(禁止使用for,while等循环)   
+
+安装htop ,iotop, iftop 以及了解什么是yum源
+
+-bash-4.1$ cp /home/oldboy/.bash* ~
+cp: cannot stat `/home/oldboy/.bash*': Permission denied
+报错的原因
+
+定时任务题目
+
+
+
+
+
+
+
+   
+   
+   
+   
+   
+   
+
+

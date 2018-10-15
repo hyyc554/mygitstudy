@@ -1,0 +1,122 @@
+在线班-课程回顾
+李老师：
+微信:lidao996
+
+
+无法远程连接服务器
+1.路不通原因
+1）网卡是否运行且ip是否正确
+ifconfig eth0 
+
+2）vmware网络配置-编辑-虚拟网络编辑器
+
+3）网络连接
+VMware Network Adapter VMnet8
+
+
+
+如何查看22端口是否启动 开启 
+	telnet
+	netstat -lntup |grep 22
+	ss -lntup|grep 22
+
+
+ssh进程是否开启
+	ps -ef|grep sshd
+
+
+yum install tree telnet nc nmap lrzsz dos2unix -y
+
+telnet 10.0.0.200  22
+nc 10.0.0.200  22
+nmap -p22  10.0.0.200
+
+
+lrzsz 
+rz 上传 到linux 
+
+sz 下载 到windows
+
+
+
+[root@oldboyedu01-nb ~]# cat /etc/hosts 
+127.0.0.1   localhost localhost.localdomain localhost4 localhost4.localdomain4
+::1         localhost localhost.localdomain localhost6 localhost6.localdomain6
+#10.0.0.200  www.jd.com www.oldboyedu.com
+10.0.0.200   oldboyedu01-nb
+[root@oldboyedu01-nb ~]# ping $(hostname)
+PING oldboyedu01-nb (10.0.0.200) 56(84) bytes of data.
+64 bytes from oldboyedu01-nb (10.0.0.200): icmp_seq=1 ttl=64 time=0.040 ms
+64 bytes from oldboyedu01-nb (10.0.0.200): icmp_seq=2 ttl=64 time=0.019 ms
+
+
+
+cat /etc/services  /etc/sysconfig/network-scripts/ifcfg-eth0 >/oldboy/vim.log
+
+
+E325: ATTENTION
+Found a swap file by the name ".num.txt.swp"
+找到一个叫".num.txt.swp"的swap文件 
+
+          owned by: root   dated: Mon Jan 15 11:56:39 2018
+         file name: /oldboy/num.txt
+          modified: YES
+         user name: root   host name: oldboyedu01-nb
+        process ID: 6542
+While opening file "num.txt"
+             dated: Mon Jan 15 11:56:26 2018
+
+(1) Another program may be editing the same file.  If this is the case,
+    be careful not to end up with two different instances of the same
+    file when making changes.  Quit, or continue with caution.
+(2) An edit session for this file crashed.
+    If this is the case, use ":recover" or "vim -r num.txt"
+    to recover the changes (see ":help recovery").
+    If you did this already, delete the swap file ".num.txt.swp"
+    to avoid this message.
+
+Swap file ".num.txt.swp" 
+临时文件  .num.txt.swp  已经存在。
+       
+[O]pen Read-Only, (E)dit anyway, (R)ecover, (D)elete it, (Q)uit, (A)bort:
+
+
+Found a swap file 或 Swap file xxxx already exists!
+报错原因：
+
+解决流程:
+方法1 确认之前的修改可以丢
+直接删除这个临时文件即可。
+rm  .num.txt.swp -f 
+
+方法2 确认之前的修改 不能丢
+[O]pen Read-Only, (E)dit anyway, (R)ecover, (D)elete it, (Q)uit, (A)bort:
+vim打开文件，输入R恢复之前的修改。或  vim -r 
+保存并退出。
+删除这个临时文件即可。
+rm  .num.txt.swp -f 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	 
+		 
+		 
+		 
+		 
+		 

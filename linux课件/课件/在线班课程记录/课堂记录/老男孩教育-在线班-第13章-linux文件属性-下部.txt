@@ -1,0 +1,327 @@
+﻿=============================================================================================
+# 老男孩教育：                                                                            #
+# www.oldboyedu.com                                                                       #
+# 邮件：miaokm@oldboyedu.com(189 1048 1057)                                               #
+# 地址：北京市昌平区顺沙路8号院汇德商厦4F                                                 #
+# 资源老师   手机电话：		    QQ号码        资源老师： 手机电话：		    QQ号码        #
+# 飞雪		 135 5261 2571		80042789      小雨		 186 0046 2391      390320151     #
+# 歪歪		 189 1171 8229		70271111      丹丹		 158 1059 0206      41117397      #
+# 冰冰		 150 1078 5220		41117483												  #
+=============================================================================================
+
+1.ls -lhi /etc/hosts 每一列的含义
+2.inode和block 
+1）怎么来的 
+创建文件系统（格式化）
+2）啥意思
+inode索引节点，存放的是文件的属性，block的位置
+block实际存放数据
+
+文件名存放在上一级目录的block里面。
+
+特点
+1）创建一个非空文件，要占用一个inode和至少一个block
+2）如果两个文件的inode相同，这两个文件互为硬连接，条件这两个文件必须在同一个分区
+3）block 4k ,如果存放小文件1k，剩余空间被浪费
+4）inode 256字节  
+
+
+3.软连接与硬链接区别
+1）怎么来的
+2）含义
+3）特点
+4）怎么没得
+
+
+
+第二关练习题 
+在配置apache时 执行了./configure --prefix=/application/apache2.2.17 来编译apche,在make install完成后，希望用户的访问路径更简单，需要给/application/apache2.2.17目录做一个软链接/application/apache，使得内部开发或管理人员通过/application/apache就可以访问到apache的安装目录/application/apache2.2.17下的内容，请你给出实现的命令。（提示：apache为一个httpd web服务）
+
+我把apache  安装在/application/apache2.2.17
+
+我想做一个软连接 /application/apache 
+
+[root@oldboyedu-39-nb ~]# mkdir -p /application/apache2.2.17
+[root@oldboyedu-39-nb ~]# ls -l /application/
+total 4
+drwxr-xr-x 2 root root 4096 May 20 15:42 apache2.2.17
+[root@oldboyedu-39-nb ~]# ln -s /application/apache2.2.17/  /application/apache
+[root@oldboyedu-39-nb ~]# ls -l /application/
+total 4
+lrwxrwxrwx 1 root root   26 May 20 15:43 apache -> /application/apache2.2.17/
+drwxr-xr-x 2 root root 4096 May 20 15:42 apache2.2.17
+
+
+
+
+
+创建一个目录oldboydir为何这个目录的硬链接数是2
+[root@oldboyedu-39-nb ~]# ls -ldi /oldboydir/  /oldboydir/.
+405219 drwxr-xr-x 2 root root 4096 May 20 15:48 /oldboydir/
+405219 drwxr-xr-x 2 root root 4096 May 20 15:48 /oldboydir/.
+[root@oldboyedu-39-nb ~]# cd /oldboydir/
+[root@oldboyedu-39-nb oldboydir]# pwd
+/oldboydir
+[root@oldboyedu-39-nb oldboydir]# cd .
+[root@oldboyedu-39-nb oldboydir]# cd .
+[root@oldboyedu-39-nb oldboydir]# pwd
+/oldboydir
+
+创建一个目录oldboydir/test 为何oldboydir目录的硬链接位3
+
+
+
+
+文件删除原理（linux删除一个文件的条件）
+	1.硬链接数为0      rm命令  
+	2.进程调用数为0    重启  使用这个文件的进程/软件
+
+###找出/var/log/messages 这个文件被谁使用着？
+[root@oldboyedu-39-nb oldboydir]# lsof /var/log/messages
+COMMAND   PID USER   FD   TYPE DEVICE SIZE/OFF   NODE NAME
+rsyslogd 1248 root    1w   REG    8,3      254 140769 /var/log/messages
+
+#####进程调用数查看 谁在使用这个文件 
+###测试环境
+tail -f /oldboy/oldboy.txt
+
+####
+[root@oldboyedu-39-nb oldboydir]# lsof /oldboy/oldboy.txt
+COMMAND   PID USER   FD   TYPE DEVICE SIZE/OFF   NODE NAME
+tail    24653 root    3r   REG    8,3       31 405214 /oldboy/oldboy.txt
+[root@oldboyedu-39-nb oldboydir]# lsof /oldboy/oldboy.txt
+[root@oldboyedu-39-nb oldboydir]# lsof /oldboy/oldboy.txt
+
+【企业案例】-磁盘空间满了系列
+你把文件删除了（硬链接），但是这个文件还有进程在调用，这个文件没有被彻底删除，最总导致磁盘空间满了。
+硬链接数为零，进程调用数不为零，导致磁盘空间满了。
+
+
+##模拟：
+seq 500000000 >>/var/log/messages 
+
+##磁盘空间不足-满了 
+[root@oldboyedu-39-nb ~]# df -h
+Filesystem      Size  Used Avail Use% Mounted on
+/dev/sda3       8.8G  6.1G  2.3G  74% /
+tmpfs           931M     0  931M   0% /dev/shm
+/dev/sda1       190M   40M  141M  22% /boot
+/dev/sdc         73K   14K   55K  21% /app/logs
+
+##排查哪里站的地方大
+[root@oldboyedu-39-nb ~]# df -h
+Filesystem      Size  Used Avail Use% Mounted on
+/dev/sda3       8.8G  6.1G  2.3G  74% /
+tmpfs           931M     0  931M   0% /dev/shm
+/dev/sda1       190M   40M  141M  22% /boot
+/dev/sdc         73K   14K   55K  21% /app/logs
+
+
+
+
+[root@oldboyedu-39-nb ~]# du -sh /* |grep G
+du: cannot access `/proc/24690/task/24690/fd/4': No such file or directory
+du: cannot access `/proc/24690/task/24690/fdinfo/4': No such file or directory
+du: cannot access `/proc/24690/fd/4': No such file or directory
+du: cannot access `/proc/24690/fdinfo/4': No such file or directory
+1.1G	/usr
+4.7G	/var
+
+[root@oldboyedu-39-nb ~]# du -sh /var/* |grep G
+4.6G	/var/log
+
+[root@oldboyedu-39-nb ~]# du -sh /var/log/* |grep G
+4.6G	/var/log/messages
+
+[root@oldboyedu-39-nb ~]# ls -lh /var/log/messages
+-rw------- 1 root root 4.6G May 20 16:36 /var/log/messages
+
+##删除占地大的文件-确认好
+\rm -f /var/log/messages
+
+[root@oldboyedu-39-nb ~]# df -h
+Filesystem      Size  Used Avail Use% Mounted on
+/dev/sda3       8.8G  6.1G  2.3G  74% /
+tmpfs           931M     0  931M   0% /dev/shm
+/dev/sda1       190M   40M  141M  22% /boot
+/dev/sdc         73K   14K   55K  21% /app/logs
+
+
+###删除失败
+##1.硬链接数为零  rm
+##2.进程调用数为零 
+
+####谁在使用已经被删除的 /var/log/messages
+[root@oldboyedu-39-nb ~]# lsof |grep messages
+rsyslogd   1248      root    1w      REG                8,3 4888889152     140769 /var/log/messages (deleted)
+[root@oldboyedu-39-nb ~]# #/var/log/messages (deleted)
+[root@oldboyedu-39-nb ~]# 
+[root@oldboyedu-39-nb ~]# #deleted 表示硬链接数为零，进程调用数不为零
+
+##重启对应的软件rsyslogd 
+
+[root@oldboyedu-39-nb ~]# /etc/init.d/rsyslog restart 
+Shutting down system logger:                               [  OK  ]
+Starting system logger:                                    [  OK  ]
+[root@oldboyedu-39-nb ~]# df -h
+Filesystem      Size  Used Avail Use% Mounted on
+/dev/sda3       8.8G  1.6G  6.8G  19% /
+tmpfs           931M     0  931M   0% /dev/shm
+/dev/sda1       190M   40M  141M  22% /boot
+/dev/sdc         73K   14K   55K  21% /app/logs
+
+
+####一个文件被彻底删除条件（文件删除原理）
+#1.硬链接数为零  rm  
+#2.进程调用数为零     lsof 文件  或  lsof |grep 文件 
+
+案例-硬链接数为零，但是进程调用数不为零-----lsof |grep delete 
+
+rm -f /var/log/messages 
+
+
+lsof |grep delete 
+
+
+/etc/init.d/rsyslog restart 
+
+###日志 nginx mysql 
+
+no space left on device  (磁盘空间不足) 
+	inode满了-定时任务 
+	block 正常满了 
+	block 硬链接数为0，进程调用数不为零 lsof|grep delete 
+
+
+
+
+
+用户
+UID  user id 
+UID （User Identify）用户ID，相当于各位的身份证，在系统中是唯一的。
+GID （Group Identify）组ID，相当于各位的家庭住址或者你们的学校ID，户口本的[号码]。
+
+用户分类 远程连接服务 sshd------22 
+
+UID整数范围
+0			超级用户（皇帝）  
+1-499		虚拟用户(傀儡)
+[root@oldboyedu-39-nb ~]# su - nobody
+This account is currently not available.
+500-65535	普通用户（老百姓）
+
+
+与用户有关的文件
+/etc/passwd   记录用户的信息 每一列的含义。
+root:x:0:0:root:/root:/bin/bash
+
+/etc/passwd文件中每一列的含义
+[root@oldboyedu-39-nb ~]# ls -l /etc/passwd  /etc/shadow  /etc/group /etc/gshadow
+-rw-r--r-- 1 root root  599 May 20 17:46 /etc/group         ####用户组信息
+---------- 1 root root  489 May 20 17:46 /etc/gshadow       ####用户组密码
+-rw-r--r-- 1 root root 1134 May 20 17:46 /etc/passwd        ####用户的信息 *****
+---------- 1 root root  851 May 20 17:46 /etc/shadow        ####用户的密码 
+
+
+
+linux下面的几种时间
+mtime modify  time 【修改时间】文件/目录的修改时间，文件内容修改。
+ctime change  time 【属性改变时间】文件/目录的属性的修改时间，大小，硬链接数，权限，所有者，所属于的组，类型。
+atime access  time 【访问时间】文件/目录的访问时间，cat 查看。
+
+
+[root@oldboyedu-39-nb ~]# #1.11.1 mtime
+[root@oldboyedu-39-nb ~]# touch oldboy.txt
+[root@oldboyedu-39-nb ~]# ls -l oldboy.txt 
+-rw-r--r-- 1 root root 0 May 20 18:16 oldboy.txt
+[root@oldboyedu-39-nb ~]# stat oldboy.txt 
+  File: `oldboy.txt'
+  Size: 0         	Blocks: 0          IO Block: 4096   regular empty file
+Device: 803h/2051d	Inode: 405226      Links: 1
+Access: (0644/-rw-r--r--)  Uid: (    0/    root)   Gid: (    0/    root)
+Access: 2017-05-20 18:16:39.111945251 +0800
+Modify: 2017-05-20 18:16:39.111945251 +0800
+Change: 2017-05-20 18:16:39.111945251 +0800
+[root@oldboyedu-39-nb ~]# echo oldboyedu.com >oldboy.txt 
+[root@oldboyedu-39-nb ~]# stat oldboy.txt 
+  File: `oldboy.txt'
+  Size: 14        	Blocks: 8          IO Block: 4096   regular file
+Device: 803h/2051d	Inode: 405226      Links: 1
+Access: (0644/-rw-r--r--)  Uid: (    0/    root)   Gid: (    0/    root)
+Access: 2017-05-20 18:16:39.111945251 +0800
+Modify: 2017-05-20 18:17:31.151955168 +0800
+Change: 2017-05-20 18:17:31.151955168 +0800
+[root@oldboyedu-39-nb ~]# ##
+[root@oldboyedu-39-nb ~]# ##ctime 属性的变化时间 
+[root@oldboyedu-39-nb ~]# stat oldboy.txt 
+  File: `oldboy.txt'
+  Size: 14        	Blocks: 8          IO Block: 4096   regular file
+Device: 803h/2051d	Inode: 405226      Links: 1
+Access: (0644/-rw-r--r--)  Uid: (    0/    root)   Gid: (    0/    root)
+Access: 2017-05-20 18:16:39.111945251 +0800
+Modify: 2017-05-20 18:17:31.151955168 +0800
+Change: 2017-05-20 18:17:31.151955168 +0800
+[root@oldboyedu-39-nb ~]# ln oldboy.txt oldboy.txt-hard
+[root@oldboyedu-39-nb ~]# stat oldboy.txt 
+  File: `oldboy.txt'
+  Size: 14        	Blocks: 8          IO Block: 4096   regular file
+Device: 803h/2051d	Inode: 405226      Links: 2
+Access: (0644/-rw-r--r--)  Uid: (    0/    root)   Gid: (    0/    root)
+Access: 2017-05-20 18:16:39.111945251 +0800
+Modify: 2017-05-20 18:17:31.151955168 +0800
+Change: 2017-05-20 18:19:16.012947040 +0800
+[root@oldboyedu-39-nb ~]# 
+[root@oldboyedu-39-nb ~]# ###atime  访问时间 cat 
+[root@oldboyedu-39-nb ~]# stat oldboy.txt
+  File: `oldboy.txt'
+  Size: 14        	Blocks: 8          IO Block: 4096   regular file
+Device: 803h/2051d	Inode: 405226      Links: 2
+Access: (0644/-rw-r--r--)  Uid: (    0/    root)   Gid: (    0/    root)
+Access: 2017-05-20 18:16:39.111945251 +0800
+Modify: 2017-05-20 18:17:31.151955168 +0800
+Change: 2017-05-20 18:19:16.012947040 +0800
+[root@oldboyedu-39-nb ~]# cat oldboy.txt
+oldboyedu.com
+[root@oldboyedu-39-nb ~]# stat oldboy.txt
+  File: `oldboy.txt'
+  Size: 14        	Blocks: 8          IO Block: 4096   regular file
+Device: 803h/2051d	Inode: 405226      Links: 2
+Access: (0644/-rw-r--r--)  Uid: (    0/    root)   Gid: (    0/    root)
+Access: 2017-05-20 18:19:57.444947932 +0800
+Modify: 2017-05-20 18:17:31.151955168 +0800
+Change: 2017-05-20 18:19:16.012947040 +0800
+[root@oldboyedu-39-nb ~]# cat oldboy.txt
+oldboyedu.com
+[root@oldboyedu-39-nb ~]# cat oldboy.txt
+oldboyedu.com
+[root@oldboyedu-39-nb ~]# cat oldboy.txt
+oldboyedu.com
+[root@oldboyedu-39-nb ~]# cat oldboy.txt
+oldboyedu.com
+[root@oldboyedu-39-nb ~]# cat oldboy.txt
+oldboyedu.com
+[root@oldboyedu-39-nb ~]# cat oldboy.txt
+oldboyedu.com
+[root@oldboyedu-39-nb ~]# cat oldboy.txt
+oldboyedu.com
+[root@oldboyedu-39-nb ~]# cat oldboy.txt
+oldboyedu.com
+[root@oldboyedu-39-nb ~]# cat oldboy.txt
+oldboyedu.com
+[root@oldboyedu-39-nb ~]# stat oldboy.txt
+  File: `oldboy.txt'
+  Size: 14        	Blocks: 8          IO Block: 4096   regular file
+Device: 803h/2051d	Inode: 405226      Links: 2
+Access: (0644/-rw-r--r--)  Uid: (    0/    root)   Gid: (    0/    root)
+Access: 2017-05-20 18:19:57.444947932 +0800
+Modify: 2017-05-20 18:17:31.151955168 +0800
+Change: 2017-05-20 18:19:16.012947040 +0800
+
+
+
+
+
+
+
+
+	   

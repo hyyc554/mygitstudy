@@ -1,0 +1,398 @@
+####################################
+###在线班-单词############
+####################################
+#遇到一个记录一个
+#见到了3次以上的
+1.skip 跳过忽略
+2.next 下一步
+3.hostname 主机名
+4.password  密码
+5.complete  完成
+6.network   网络
+7.conf config configuration 配置 
+8.Connection established 连接建立（连接成功）
+9.Connection failed（废了的）      连接失败 
+10.directory    dir     目录
+11.E37: No write since last change (add ! to override)
+        你修改了文件的内容
+12.command not found 命令找不到
+13.omitting directory 忽略这个目录
+   linux下面很多命令无法直接处理目录 
+14.No such file or directory 没有这个文件或目录 
+15.cannot access 无法访问 
+ls: cannot access /data: No such file or directory
+16.  remove regular file `oldboy.txt'?y
+     删除           文件             ？
+17. cannot remove `data/': Is a directory
+    无法   删除    data    data是一个目录 
+18.mkdir /data ----File exists
+mkdir: cannot create directory `/data': File exists
+       无法    创建  目录       /data   文件已经存在
+19.overwrite `/tmp/test.txt'?
+   覆盖                     ?
+   遇到名字一样的文件，是否覆盖
+20. No such user 没有这个用户    
+21.successfully  success 成功
+22.read-only  readonly   只读
+23.warning               警告 
+24.executable            可以运行的 命令
+25.No package ifconfig available. 没有找到叫ifconfig的软件包
+   Error: Nothing to do           错误：没事干。
+   
+26.no crontab for root root用户没有定时任务 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+5.conf configuration 配置 
+6.established        连接
+7.Connection established  连接已经建立
+8.Connection failed       连接失败
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+笔记本-台式机
+1.CPU
+2.内存
+3.硬盘
+4.电源
+5.显示器
+6.鼠标键盘
+
+服务器
+1.稳定
+2.方便拆卸-模块化
+
+运维职责：运行和维护服务器
+1.数据不能丢---大片不能没
+2.保证网站7*24小时运行--一直要运行
+jd.com  taobao.com 
+3.用户体验要好----打开网站速度
+
+机架式服务器
+
+
+服务器核心之电源
+双电源 AB路
+联通-电信
+
+服务器核心之CPU-计算
+central Processing Unit
+服务器的尺寸-U 2U
+多个物理cpu
+CPU的个数---几路
+2个物理CPU===2路/双路
+
+1cpu有4个核心 
+
+查询服务器的配置-官网查询
+购买：销售
+
+服务器核心之内存
+作用:CPU(大脑)与硬盘(胃硬盘) 内存 
+特点:临时存放数据的地方，断电之后内存中的信息消失
+
+程序 进程 守护进程
+程序          片             存放在硬盘上面
+进程          看片           运行起来的程序
+守护进程/服务 持续看片住院   一直运行的进程
+
+
+如何提高用户体验：
+
+高并发--同一时间段访问网站的人数
+核心：让用户的数据尽量放入到内存中
+
+中小企业：
+
+直接写入到磁盘中
+读取 从内存中读取内容
+
+上课的时候:   保持一个输入
+练习-讨论 :   保持一个输出-说
+
+找工作--面试/笔试-让面试官相信你会了。
+
+
+高并发写入
+
+缺点：
+如何让你数据不丢
+
+1.两个电源 AB路
+2.UPS-不间断供电系统（蓄电池） 30分钟  1一个小时
+3.柴油发电机+油罐
+4.与附近的加油站签订一些 紧急供油协议
+
+buffer cache 
+
+buffer--观看视频的时候 转圈 数据放在你的内存 存放这些数据的空间buffer区域 缓冲区
+        buffering
+
+cache   提高观看速度  主要是用来给用户读取 在内存中的区域cache   缓存区		
+
+写buffer 读cache
+写缓冲   读缓存
+
+
+服务器核心之磁盘 
+接口：磁盘与服务器连接方式  接口种类
+      水壶的壶嘴
+sata:家用  服务器对于速度要求不高 
+sas :服务器标配 	  
+
+转速：rpm  每分钟转多少圈
+      5.4K  7.2K  10K 15K 
+
+1s=1000ms=1000000us=1000000000ns
+	  
+	  
+	  尽量让用户的数据往内存中存放。
+	  缓存无处不在。
+	  
+服务器核心之阵列卡（raid卡）
+1个非常大的文件10000G 1000G	  
+#1.买个一10000G (10T)硬盘
+#2.买20个1000G的硬盘
+	  
+统一管理硬盘	  
+你可以获得更高的容量;变得更加安全;速度更高	  
+	  
+服务器核心之光驱 
+700M cd 
+4.7G dvd
+
+可以通过U盘安装。	  
+批量安装系统kickstart cobbler
+	  
+服务器核心之远程控制卡	  
+	  
+	  
+物理服务器	
+  
+云服务器-按需分配
+阿里云(淘宝 天猫) aws(亚马逊)
+
+第2章
+什么是操作系统
+人与计算机硬件直接的中介
+
+组成？
+蛋-人-人-人
+
+unix诞生
+unix 贝尔实验室
+
+人-谭教授 谭宁邦
+minix mini unix 
+主要用于教学
+
+人-斯托曼 stallman
+我要开发出一个系统：自由 开源 替代你unix
+公司：自由软件基金会 FSF
+项目：GNU
+守则：GPL
+
+人-托瓦兹
+91 开发出了linux内核。
+
+
+
+
+
+自由软件
+不是免费软件
+推荐所有人可以自由使用 自由传播
+
+项目：GNU 发明出一个替代unix系统。
+GNU=GNU is not unix.
+
+gnu.org
+优秀软件：gawk,bash,gcc,emacs
+
+规则：GPL 通用公共许可
+1.所有人可以自由传播开源的软件
+2.虽有人可以任意修改开源软件，但是必须把修改后的内容发出来。
+
+
+RedHat 红帽()
+Red Hat linux 9.0 之后 收费 保持自由 免费下载
+Red Hat Enterprise Linux === RHEL 6.9
+
+CentOS 做到与红帽一模一样
+1.去掉红帽中的收费软件
+2.去掉红帽里面的logo
+
+RedHat红帽与CentOS什么区别？
+
+Fedora===>RedHat====>CentOS
+
+
+CentOS 5.x
+
+CentOS 6.x 50% 6.9 
+
+CentOS 7.x 50% 7.2
+
+centos 6.9  centos 7.  最新版
+https://wiki.centos.org/Download
+
+http://mirrors.aliyun.com/
+http://mirrors.aliyun.com/centos/6.9/isos/x86_64/
+
+CentOS-6.9-x86_64-LiveDVD.iso  
+##体验版-写入到光盘中，刻录到U盘中。                     
+！！！！CentOS-6.9-x86_64-bin-DVD1.iso ##真的安装包   √                
+CentOS-6.9-x86_64-bin-DVD2.iso                    
+CentOS-6.9-x86_64-minimal.iso  ##最小化安装包  
+
+！！！！CentOS-6.9-x86_64-bin-DVD1to2.torrent ##种子 只选择DVD1即可。
+
+##下载CentOS旧版本
+http://vault.centos.org/ 
+
+刚开学的几周-稳定你的环境
+准备好环境
+
+06-【32位系统低配-必备】VMware-8.0
+05-【必备】vmware12-5A02H-AU243-TZJ49-GTC7K-3C61N
+09-【必备】远程连接工具-Xshell5
+
+#vmware出问题
+可以使用vmware软件的修复功能
+
+#创建一个虚拟机-----百脑汇-中关村-购买一台电脑
+
+#如何安装虚拟机系统
+##从光驱
+##从文件中（镜像文件-压缩包）
+##稍后选择
+
+##虚拟机的名字和位置
+
+###d:\vmware\在线班-模板机01
+###d:\vmware\在线班-模板机02
+###d:\vmware\在线班-模板机03
+
+
+运行虚拟机软件的时候 右键单击 --选择以管理员权限运行
+
+vmware运行了一个64为centos 系统。
+需要 虚拟化vt-x.
+去重启计算机笔记本（开机的时候(黑屏 + logo) F2 F1  F12 F10 enter
+
+vmware相关windows服务没有运行
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+配置服务器网络
+1.setup
+ setup
+
+┌───────┤ Choose a Tool ├──────┐
+│  Authentication configuration│ 
+│  Firewall configuration      │ 
+│√ Network configuration       │ 
+│  System services             │ 
+│     ┌──────────┐  ┌──────┐   │ 
+│     │ Run Tool │  │ Quit │   │ 
+│     └──────────┘  └──────┘   │ 
+└──────────────────────────────┘ 
+
+ ┌────┤ Select Action ├───┐
+ │ √Device configuration  │
+ │  DNS configuration     │
+ │┌───────────┐   ┌──────┐│
+ ││ Save&Quit │   │ Quit ││
+ │└───────────┘   └──────┘│
+ └────────────────────────┘
+ 
+┌───────────────────────────────┤ Select A Device ├──────┐
+│                                                       
+│ √[x] eth0 (eth0) - Intel  Ethernet Controller (Copper)
+│ <New Device>                                          
+└────────────────────────────────────────────────────────┘
+
+ 
+┌─────────────┤ Network Configuration ├─────────────┐
+│ Name                         eth0________________ │
+│ Device                       eth0________________ │
+│√Use DHCP                     [ ]                  │
+│√Static IP                    10.0.0.200__________ │
+│√Netmask                      255.255.255.0_______ │
+│√Default gateway IP           10.0.0.2____________ │
+│ Primary DNS Server           ____________________ │
+│ Secondary DNS Server         ____________________ │
+│ Peer DNS                     [*]                  │
+│√On boot                      [*]                  │
+│ Controlled by NetworkManager [*]                  │
+│         ┌────┐                ┌────────┐          │
+│        √│ Ok │                │ Cancel │          │
+│         └────┘                └────────┘          │
+└───────────────────────────────────────────────────┘         
+ 
+┌──────┐ 
+│ Save │ 
+└──────┘                
+       
+┌───────────┐
+│ Save&Quit │
+└───────────┘
+ 
+┌──────┐ 
+│ Quit │ 
+└──────┘ 
+
+
+
+
+
+
+

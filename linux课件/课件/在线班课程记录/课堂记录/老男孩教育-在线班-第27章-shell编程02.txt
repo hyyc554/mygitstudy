@@ -1,0 +1,488 @@
+﻿=============================================================================================
+# 老男孩教育：                                                                            #
+# www.oldboyedu.com                                                                       #
+# 邮件：miaokm@oldboyedu.com(189 1048 1057)                                               #
+# 地址：北京市昌平区顺沙路8号院汇德商厦4F                                                 #
+# 资源老师   手机电话：		    QQ号码        资源老师： 手机电话：		    QQ号码        #
+# 飞雪		 135 5261 2571		80042789      小雨		 186 0046 2391      390320151     #
+# 歪歪		 189 1171 8229		70271111      丹丹		 158 1059 0206      41117397      #
+# 冰冰		 150 1078 5220		41117483												  #
+=============================================================================================
+
+前面的知识点 内容  命令 忘记了。    回顾 记住不忘。
+什么算是会了？
+条件 
+1.纸和笔写出来
+2.说出来 
+
+
+大脑简单组成
+1.意识      听  看    内存
+
+
+2.潜意识   颜色 动画 图片  讨论 交流  硬盘
+
+
+如何做？
+1.不断的说出来-同组的人 
+第一周回顾一下  第一个月回顾   过去两个月回顾 
+
+2.自己把重要的知识点化成图片 
+
+
+3.课堂讨论   
+
+
+4.教会别人 
+
+
+总结：
+1.课堂讲课的时候      保持一个最大化的输入 -----知识写入内存
+2.课堂讨论 课下的时候 保持一个最大化的输出 -----把知识从内存中写入硬盘 
+
+sed 
+p------print
+d------delete
+s------sub替换
+
+a------append 
+i------insert 
+
+
+1.显示文件的第20到30行 sed 
+sed -n '20,30p' ett.txt 
+
+
+sed  '20,30d' ett.txt 
+
+sed  '20,30!d' ett.txt 
+
+[root@oldboyedu-39-nb ~]# seq 30|sed '20,30!d'
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+
+2.什么是变量 
+
+x+y=1  
+
+未知数 ====== 变量 
+
+
+echo $x
+
+
+3.变量的分类
+命名规则
+字母 数字 下划线 
+
+数字不能放在名字的前面 
+
+
+
+
+环境变量（全局） 使用 env ======environment
+LANG PATH  UID HOSTNAME
+export OLDBOY=hello
+
+/etc/profile      /etc/bashrc  /etc/profile.d/ 
+存放别名 环境变量 存放别名     切换到 进入到某一个用户的时候 自动运行的脚本目录 
+
+
+普通变量（局部）
+
+
+
+特殊的变量 
+ $1  $数字     $#      $?
+##########
+#######$1  $2 $数字 
+#计算 1+2
+[root@oldboyedu-39-nb ~]# echo 1+2
+1+2
+[root@oldboyedu-39-nb ~]# echo 1+2|bc
+3
+[root@oldboyedu-39-nb ~]# echo $((1+2))
+3
+[root@oldboyedu-39-nb ~]# echo $((3+4))
+7
+[root@oldboyedu-39-nb ~]# echo $((a+b))
+0
+
+##使用变量省事 方便
+[root@oldboyedu-39-nb ~]# a=1
+[root@oldboyedu-39-nb ~]# b=2
+[root@oldboyedu-39-nb ~]# echo $((a+b))
+3
+
+
+#$1 $2  
+[root@oldboyedu-39-nb ~]# cat /server/scripts/cal.sh
+#!/bin/bash
+
+a=$1
+b=$2
+
+echo $((a+b))
+
+[root@oldboyedu-39-nb ~]# sh /server/scripts/cal.sh a b  ###必须是数字
+/server/scripts/cal.sh: line 4: a: expression recursion level exceeded (error token is "a")
+[root@oldboyedu-39-nb ~]# sh /server/scripts/cal.sh 20 30000
+30020
+[root@oldboyedu-39-nb ~]# #sh /server/scripts/cal.sh 20 30000
+[root@oldboyedu-39-nb ~]# ###                        $1 $2 
+
+
+##要求：给cal2.sh脚本传入三个参数 ，显示三个参数相乘的结果 
+#sh /server/scripts/cal2.sh 10 20 30 
+
+[root@oldboyedu-39-nb ~]# sh /server/scripts/cal2.sh 10 20 30
+6000
+[root@oldboyedu-39-nb ~]# cat /server/scripts/cal2.sh 
+#!/bin/bash
+a=$1
+b=$2
+c=$3
+
+echo $((a*b*c))
+
+
+
+
+[root@oldboyedu-Misong_VM ~]# cat /server/scripts/js.sh 
+
+ 
+#!/bin/bash
+a=$1
+b=$2
+
+echo $((a+b))
+
+
+[root@oldboyedu-Misong_VM ~]# sh /server/scripts/js.sh   23-12   
+11
+[root@oldboyedu-Misong_VM ~]# sh /server/scripts/js.sh   25/5
+5
+[root@oldboyedu-Misong_VM ~]# sh /server/scripts/js.sh   2*2*2
+8
+
+问题：为什么这个脚本可以直接计算这些东西？
+
+
+  
+  
+  
+#############
+########  
+########   $#   表示你这个脚本一共有多少个参数 参数的个数
+##show.sh 
+  
+[root@oldboyedu-39-nb scripts]# cat show.sh
+#!/bin/bash
+
+echo $1 $2  $3
+echo $#
+[root@oldboyedu-39-nb scripts]# sh show.sh a b c
+a b c
+3
+[root@oldboyedu-39-nb scripts]# sh show.sh a b c b d df ef d 
+a b c
+8
+
+
+
+#############
+#####
+#####      $?   显示上一个是否执行成功  如果命令执行成功 会显示0   如果命令执行失败，则会显示不是0
+##########                              如果是0，成功了   如果不是0就失败了。
+
+[root@oldboyedu-39-nb scripts]# echo hello
+hello
+[root@oldboyedu-39-nb scripts]# echo $?
+0
+[root@oldboyedu-39-nb scripts]# echo hello
+[root@oldboyedu-39-nb scripts]# ho hello
+-bash: ho: command not found
+[root@oldboyedu-39-nb scripts]# echo $?
+127
+
+
+
+
+
+##小结 
+###$1 $2 $数字  $#  $? 含义
+
+  
+  
+####定义变量（如何向变量中放内容）
+  
+[root@oldboyedu-39-nb scripts]# read -p "please input :" oldboy
+please input :oldboyedu.com                              
+[root@oldboyedu-39-nb scripts]# echo $oldboy
+oldboyedu.com
+
+
+
+####判断 
+如果你是男生  && 你喜欢女生  
+ifdown eth0   && ifup eth0  
+  
+
+如果 [ 你是男生 ];那么
+    你喜欢女生 
+果如	
+  
+  
+if [ 你是男生 ];then
+    你喜欢女生 
+fi	
+
+如果a等于10则显示恭喜你猜对了。
+
+
+a=1 
+
+if [ $a == 10 ];then 
+   echo "gongxi "
+fi
+
+if [ $a == 10 ];then 
+
+fi
+
+[root@oldboyedu-39-nb scripts]# sh pan.sh 30
+[root@oldboyedu-39-nb scripts]# sh pan.sh 10
+gongxi 
+[root@oldboyedu-39-nb scripts]# cat pan.sh 
+#!/bin/bash
+a=$1 
+
+if [ $a == 10 ];then 
+   echo "gongxi "
+fi
+  
+  
+  
+  
+  
+###test ---- 测试
+
+#####比大小 
+equal     等于             ==  -eq (test )  
+[root@oldboyedu-39-nb scripts]#  [ 2 -eq  2 ]
+[root@oldboyedu-39-nb scripts]# echo $?
+0
+greater than               >   -gt          [ 2 -gt 1 ]
+greater than 并且  equal   >=  -ge          [ 3 -ge 2 ]
+
+[root@oldboyedu-39-nb scripts]# [ 2 -ge 2 ]
+[root@oldboyedu-39-nb scripts]# echo $?
+0
+
+[ 2 -eq 2 ] && echo success
+
+[ 2 -eq  2 ]   2 == 2 
+[ 3 -ge  2 ]   3 >= 2 
+[ 3 -gt  2 ]   3 >  2 
+
+
+##书写一个脚本：输入两个参数 如果第一个参数大于第二个参数则 显示 $1>$2。
+[root@oldboyedu-39-nb scripts]# sh  pan.sh 1 2
+[root@oldboyedu-39-nb scripts]# sh  pan.sh 10 2
+10 > 2 
+[root@oldboyedu-39-nb scripts]# cat pan.sh 
+#!/bin/bash
+a=$1 
+b=$2
+
+if [ $a -gt $b ];then 
+   echo "$a > $b "
+fi
+
+
+#####判断是否存在 *******
+
+###判断 /data/oldboy.txt 这个文件是否存在 
+[root@oldboyedu-39-nb scripts]# [ -f /data/oldboy.txt ]
+[root@oldboyedu-39-nb scripts]# echo $?
+0
+[root@oldboyedu-39-nb scripts]# [ -f /data/oldboy.tx ]
+[root@oldboyedu-39-nb scripts]# echo $?
+1
+
+###判断 /data/           这个目录是否存在 
+
+[root@oldboyedu-39-nb scripts]# [ -d /data/ ]
+[root@oldboyedu-39-nb scripts]# echo $?
+0
+[root@oldboyedu-39-nb scripts]# [ -d /dataa/ ]
+[root@oldboyedu-39-nb scripts]# echo $?
+1
+
+
+####判断你输入的目录是否存在，如果不存在就创建他。
+[root@oldboyedu-39-nb scripts]# cat dir.sh
+#!/bin/bash
+#filename:dir.sh 
+
+dir=$1
+
+if [ ! -d $dir ];then
+   mkdir -p $dir
+   echo  $dir create
+fi
+
+[root@oldboyedu-39-nb scripts]# sh dir.sh /oldboy
+[root@oldboyedu-39-nb scripts]# sh dir.sh /oldbaby
+[root@oldboyedu-39-nb scripts]# sh dir.sh /oldbaby
+/oldbaby create
+
+
+dir=$1
+if [ ! -d $dir ];then   ###如果这个目录不存在 那么
+   mkdir -p $dir        ###创建这个目录 
+   echo  $dir create    ###显示已经创建好了 目录 dir 
+fi
+
+
+###小结：
+####1.判断 if 
+if [ $a -eq $b ];then 
+   echo  
+fi
+
+####2.在if中可以使用的内容  -eq  -ge*** -gt    -f***   -d*** 
+
+
+###循环 
+显示1 2 3 4 5 .... 10
+
+for num in 1 2 3 4 5 6 7 8 9 10 
+do
+     echo $num 
+done 
+
+
+
+for num in {1..10} 
+do
+     echo $num 
+done 
+
+for num in awk sed ls mkdir cp rm mv  
+do
+     echo $num 
+done 
+
+
+
+for num in后宫佳丽3000  
+do
+     echo $num 
+done 
+
+
+
+###优化linux开机启动项目 
+#第一个里程碑明确目标-关闭不必要的 除了network crond sshd rsyslog sysstat 
+chkconfig 服务名字 off    
+
+#第二个里程碑-使用循环之后 我们要的样子
+for fu in 列表    ##列表是我们想要关闭的服务的名字  
+do
+     chkconfig $fu off
+done 
+#第三个里程碑-取出服务的名字
+[root@oldboyedu-39-nb scripts]# chkconfig |egrep -v "sshd|crond|network|rsyslog|sysstat"|awk '{print $1}'
+abrt-ccpp
+abrtd
+acpid
+atd
+此处省略 好多字
+rngd
+saslauthd
+smartd
+svnserve
+udev-post
+
+    
+#第四个里程碑-得到结果    
+for fu in  $(chkconfig |egrep -v "sshd|crond|network|rsyslog|sysstat"|awk '{print $1}' )
+do
+#     chkconfig $fu off
+      echo $fu 
+done 
+    
+    
+    
+    
+#####排查错误 
+#!/bin/bash
+for fu in $(chkconfig|egrep -v "sshd|crond|network|rsyslog|sysstat"|awk '{prind $1}')
+do
+#chkcon $fu off
+ echo $fu
+done
+    
+显示脚本的执行过程 
+sh -x  opt.sh 
+
+
+磁盘
+1.raid 0 1 5 10 
+2.磁盘分区-格式化-挂载
+3.永久挂载
+4.fdisk parted
+5.文件系统 ext3 ext4 xfs reiserfs xfs 
+sed 
+找谁干啥
+条件命令 
+参考图片
+
+shell编程 
+1.变量 
+1）变量-全局变量 环境变量 
+2）普通变量（名字）
+3）特殊变量  $0 (脚本/文件名字) $1  $n    $#   $? 
+2.判断
+大于              [ 3 -gt 2 ] 
+大于等于          [ 3 -ge 3 ]
+等于              [ 3  == 3 ] 等于  [ 3 -eq 3 ]
+判断文件是否存在  [ -f /data/oldboy.txt ]
+判断目录是否存在  [ -d /data ]
+
+if [ 条件 ];then 
+    
+fi 
+
+3.for循环
+for 变量  in  列表 
+do 
+   命令
+   命令
+   命令 
+done  
+
+4.排查错误 sh -x  
+
+
+
+
+
+
+
+
+    
+
+
+  
+  

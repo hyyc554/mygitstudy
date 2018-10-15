@@ -1,0 +1,928 @@
+
+
+5400 rpm round per minute 
+7200 rpm round per minute 
+
+
+https://www.mydigitaldiscount.com/everything-you-need-to-know-about-slc-mlc-and-tlc-nand-flash.html
+http://diy.pconline.com.cn/750/7501340.html
+
+
+
+Disk /dev/sda: 10.7 GB, 10737418240 bytes
+255 heads, 63 sectors/track, 1305 cylinders
+255 磁头   63 扇区/磁道      1305 柱面
+
+Units = cylinders of 16065 * 512 = 8225280 bytes
+单元块大小==柱面的大小
+
+
+Sector size (logical/physical): 512 bytes / 512 bytes
+I/O size (minimum/optimal): 512 bytes / 512 bytes
+Disk identifier: 0x00015574
+
+磁盘的大小=柱面数量*每个柱面的大小
+
+
+每个柱面的大小=磁道的大小*磁头的数量
+
+磁道的大小=扇区的大小*每个磁道扇区的数量
+
+
+[root@oldboyedu01-nb ~]# #磁道的大小=扇区的大小*每个磁道扇区的数量
+[root@oldboyedu01-nb ~]# 
+[root@oldboyedu01-nb ~]# echo 512*63
+512*63
+[root@oldboyedu01-nb ~]# echo 512*63|bc
+32256
+[root@oldboyedu01-nb ~]# 
+[root@oldboyedu01-nb ~]# #每个柱面的大小=磁道的大小*磁头的数量
+[root@oldboyedu01-nb ~]# echo 512*63*255|bc
+8225280
+[root@oldboyedu01-nb ~]# #磁盘的大小=柱面数量*每个柱面的大小
+[root@oldboyedu01-nb ~]# 
+[root@oldboyedu01-nb ~]# echo 512*63*255*1305|bc
+10733990400
+
+位bit
+字节byte
+1Byte=8bits
+
+1KB=1024Byte
+1MB=1024KB=1024^2 Bytes
+1GB=1024MB=1024^3 Bytes
+1TB=1024GB=1024^3 Bytes
+
+
+
+买回来的硬盘500GB硬盘实际可以使用的是465GB左右。
+
+
+
+
+
+
+[root@oldboyedu01-nb ~]# awk  'BEGIN{print 1/3}'
+0.333333
+[root@oldboyedu01-nb ~]# awk  'BEGIN{print 1+4}'
+5
+[root@oldboyedu01-nb ~]# awk  'BEGIN{print 512*63*255*1305/1024/1024/1024}'
+9.99681
+[root@oldboyedu01-nb ~]# awk  'BEGIN{print 512*63*255*1305/1024^3}'
+9.99681
+[root@oldboyedu01-nb ~]# awk  'BEGIN{print 512*63*255*1305/1000^3}'
+10.734
+
+
+
+4*600GB raid 5 3*600GB 
+
+
+
+https://www.processon.com/view/link/5a0ba742e4b049e7f4fd8e2b
+
+
+
+第1块SAS硬盘的第1个主分区
+/dev/sda1
+
+第3块SAS硬盘的第2个扩展分区
+
+
+
+
+[root@oldboyedu01-nb ~]# fdisk -l|grep 'sd[a-c]:'
+Disk /dev/sda: 10.7 GB, 10737418240 bytes
+Disk /dev/sdb: 106 MB, 106954752 bytes
+Disk /dev/sdc: 106 MB, 106954752 bytes
+
+   n   创建分区     
+   d   删除分区     
+   p   显示分区信息 
+   q   退出不保存   
+   w   退出并保存   
+                    
+100M 
+30M主分区  30M逻辑分区
+Command (m for help): p
+
+Disk /dev/sdb: 106 MB, 106954752 bytes
+64 heads, 32 sectors/track, 102 cylinders, total 208896 sectors
+Units = sectors of 1 * 512 = 512 bytes
+Sector size (logical/physical): 512 bytes / 512 bytes
+I/O size (minimum/optimal): 512 bytes / 512 bytes
+Disk identifier: 0x6d033dc2
+
+   Device Boot      Start         End      Blocks   Id  System
+
+Command (m for help): n
+Command action
+   e   extended
+   p   primary partition (1-4)
+p
+Partition number (1-4): 1
+First sector (2048-208895, default 2048): 
+Using default value 2048
+Last sector, +sectors or +size{K,M,G} (2048-208895, default 208895): +30M
+
+Command (m for help): p
+
+Disk /dev/sdb: 106 MB, 106954752 bytes
+64 heads, 32 sectors/track, 102 cylinders, total 208896 sectors
+Units = sectors of 1 * 512 = 512 bytes
+Sector size (logical/physical): 512 bytes / 512 bytes
+I/O size (minimum/optimal): 512 bytes / 512 bytes
+Disk identifier: 0x6d033dc2
+
+   Device Boot      Start         End      Blocks   Id  System
+/dev/sdb1            2048       63487       30720   83  Linux
+
+   
+ Command (m for help): n                             
+Command action
+   e   extended
+   p   primary partition (1-4)
+e
+Partition number (1-4): 2
+First sector (63488-208895, default 63488): 
+Using default value 63488
+Last sector, +sectors or +size{K,M,G} (63488-208895, default 208895): 
+Using default value 208895
+
+Command (m for help): p
+
+Disk /dev/sdb: 106 MB, 106954752 bytes
+64 heads, 32 sectors/track, 102 cylinders, total 208896 sectors
+Units = sectors of 1 * 512 = 512 bytes
+Sector size (logical/physical): 512 bytes / 512 bytes
+I/O size (minimum/optimal): 512 bytes / 512 bytes
+Disk identifier: 0x6d033dc2
+
+   Device Boot      Start         End      Blocks   Id  System
+/dev/sdb1            2048       63487       30720   83  Linux
+/dev/sdb2           63488      208895       72704    5  Extended
+  
+ Command (m for help): w
+The partition table has been altered!
+
+Calling ioctl() to re-read partition table.
+Syncing disks.
+  
+   
+   
+
+给/dev/sdb硬盘只创建一个分区，把他挂载到/mnt上面
+#1.分区
+Command (m for help): n
+Command action
+   e   extended
+   p   primary partition (1-4)
+p
+Partition number (1-4): 1
+First sector (2048-208895, default 2048): 
+Using default value 2048
+Last sector, +sectors or +size{K,M,G} (2048-208895, default 208895): 
+Using default value 208895
+
+Command (m for help): p
+
+Disk /dev/sdb: 106 MB, 106954752 bytes
+64 heads, 32 sectors/track, 102 cylinders, total 208896 sectors
+Units = sectors of 1 * 512 = 512 bytes
+Sector size (logical/physical): 512 bytes / 512 bytes
+I/O size (minimum/optimal): 512 bytes / 512 bytes
+Disk identifier: 0x6d033dc2
+
+   Device Boot      Start         End      Blocks   Id  System
+/dev/sdb1            2048      208895      103424   83  Linux
+
+Command (m for help): w
+The partition table has been altered!
+
+Calling ioctl() to re-read partition table.
+Syncing disks.
+
+#2.通知系统/dev/sdb硬盘的磁盘分区表变化了
+partprobe /dev/sdb
+
+#3.格式化创建文件系统
+[root@oldboyedu01-nb ~]# #make filesystem
+[root@oldboyedu01-nb ~]# mkfs.ext4 /dev/sdb1 
+mke2fs 1.41.12 (17-May-2010)
+Filesystem label=
+OS type: Linux
+Block size=1024 (log=0)
+Fragment size=1024 (log=0)
+Stride=0 blocks, Stripe width=0 blocks
+25896 inodes, 103424 blocks
+5171 blocks (5.00%) reserved for the super user
+First data block=1
+Maximum filesystem blocks=67371008
+13 block groups
+8192 blocks per group, 8192 fragments per group
+1992 inodes per group
+Superblock backups stored on blocks: 
+	8193, 24577, 40961, 57345, 73729
+
+Writing inode tables: done                            
+Creating journal (4096 blocks): done
+Writing superblocks and filesystem accounting information: done
+
+This filesystem will be automatically checked every 36 mounts or
+180 days, whichever comes first.  Use tune2fs -c or -i to override.
+
+#4.关闭磁盘分区的自动检查
+[root@oldboyedu01-nb ~]# tune2fs -c 0 -i 0 /dev/sdb1
+tune2fs 1.41.12 (17-May-2010)
+Setting maximal mount count to -1
+Setting interval between checks to 0 seconds
+
+#-c 0 count   关闭每挂载多少次进行磁盘检查的功能
+#-i 0 interval 关闭每个180天进行磁盘检查功能
+
+#5.进行磁盘分区挂载
+[root@oldboyedu01-nb ~]# df -h
+Filesystem      Size  Used Avail Use% Mounted on
+/dev/sda3       8.8G  8.8G     0 100% /
+tmpfs           1.9G     0  1.9G   0% /dev/shm
+/dev/sda1       190M   40M  141M  22% /boot
+[root@oldboyedu01-nb ~]# 
+[root@oldboyedu01-nb ~]# mount /dev/sdb1 /mnt/ 
+
+[root@oldboyedu01-nb ~]# df -h
+Filesystem      Size  Used Avail Use% Mounted on
+/dev/sda3       8.8G  8.8G     0 100% /
+tmpfs           1.9G     0  1.9G   0% /dev/shm
+/dev/sda1       190M   40M  141M  22% /boot
+/dev/sdb1        94M  1.6M   88M   2% /mnt
+
+#6.进行永久挂载（如何在开机的时候自动挂载）
+
+###方法 1./etc/rc.local 
+/bin/mount /dev/sdb1 /mnt/ 
+
+###方法 2./etc/fstab 
+
+UUID=6b8ba13d-2833-49be-8206-deb002d2d523 /          ext4    defaults        1 1
+UUID=e01d5cbd-b233-44b9-832d-15225cc4d8ff /boot      ext4    defaults        1 2
+UUID=7c5f5672-9c30-444c-a273-1350c6a06130 swap       swap    defaults        0 0
+
+#/dev/sdb1               /mnt                    ext4    defaults        0 0
+
+#man fstab
+
+
+
+[root@oldboyedu01-nb ~]# umount /mnt 
+[root@oldboyedu01-nb ~]# df -h
+Filesystem      Size  Used Avail Use% Mounted on
+/dev/sda3       8.8G  8.8G     0 100% /
+tmpfs           1.9G     0  1.9G   0% /dev/shm
+/dev/sda1       190M   40M  141M  22% /boot
+
+parted 
+
+p[rint] 显示磁盘分区表信息
+mklabel 创建磁盘分区表
+gpt
+msdos(mbr)
+mkpart 创建分区
+rm     删除分区 
+q      退出不保存
+
+创建30M 30M 
+
+(parted) p
+Error: /dev/sdc: unrecognised disk label                                  
+(parted) mklabel gpt
+(parted) p                                                                
+Model: VMware, VMware Virtual S (scsi)
+Disk /dev/sdc: 107MB
+Sector size (logical/physical): 512B/512B
+Partition Table: gpt
+
+Number  Start  End  Size  File system  Name  Flags
+
+(parted) mkpart primary  0 30
+Warning: The resulting partition is not properly aligned for best performance.
+Ignore/Cancel? I 
+(parted) p                                                                
+Model: VMware, VMware Virtual S (scsi)
+Disk /dev/sdc: 107MB
+Sector size (logical/physical): 512B/512B
+Partition Table: gpt
+
+Number  Start   End     Size    File system  Name     Flags
+ 1      17.4kB  30.0MB  30.0MB               primary
+(parted) mkpart primary  30  60
+(parted) p                                                                
+Model: VMware, VMware Virtual S (scsi)
+Disk /dev/sdc: 107MB
+Sector size (logical/physical): 512B/512B
+Partition Table: gpt
+
+Number  Start   End     Size    File system  Name     Flags
+ 1      17.4kB  30.0MB  30.0MB               primary
+ 2      30.4MB  59.8MB  29.4MB               primary
+
+parted /dev/sdc mklabel gpt
+parted /dev/sdc mkpart primary 0 30  Ignore
+parted /dev/sdc mkpart primary 30 60 
+parted /dev/sdc p
+
+ 
+企业案例：java环境内存不够导致swap
+
+创建一个文件让文件成为swap
+
+#1.创建一个文件块
+[root@oldboyedu01-nb ~]# dd if=/dev/zero of=/tmp/100m bs=1M count=100
+100+0 records in
+100+0 records out
+104857600 bytes (105 MB) copied, 0.935927 s, 112 MB/s
+[root@oldboyedu01-nb ~]# file /tmp/100m 
+/tmp/100m: data
+
+#2.变成swap
+[root@oldboyedu01-nb ~]# mkswap  /tmp/100m 
+mkswap: /tmp/100m: warning: don't erase bootbits sectors
+        on whole disk. Use -f to force.
+Setting up swapspace version 1, size = 102396 KiB
+no label, UUID=1b2aea27-a092-4345-806f-b95b8d33873a
+[root@oldboyedu01-nb ~]# file /tmp/100m 
+/tmp/100m: Linux/i386 swap file (new style) 1 (4K pages) size 25599 pages
+
+#3.swap生效
+[root@oldboyedu01-nb ~]# swapon /tmp/100m 
+[root@oldboyedu01-nb ~]# free -h
+             total       used       free     shared    buffers     cached
+Mem:          3.9G       398M       3.5G       248K        65M       134M
+-/+ buffers/cache:       198M       3.7G
+Swap:         867M         0B       867M
+
+[root@oldboyedu01-nb ~]# swapon -s
+Filename				Type		Size	Used	Priority
+/dev/sda2               partition	786428	0	    -1
+/tmp/100m               file		102396	0	    -2
+
+#4.swap永久生效
+
+###方法1. /etc/rc.local 
+swapon /tmp/100m 
+
+###方法2. /etc/fstab 
+#/tmp/100m               swap                    swap    defaults        0 0
+
+
+
+[root@oldboyedu01-nb ~]# free -h
+             total       used       free     shared    buffers     cached
+Mem:          3.9G       398M       3.5G       248K        65M       134M
+-/+ buffers/cache:       199M       3.7G
+Swap:         867M         0B       867M
+
+Linux特点会把使用过的命令和数据临时存放在内存中 cache和buffer
+
+https://www.linuxatemyram.com/
+
+
+
+命令
+	fdisk：磁盘分区工具                       ★★★★☆	 
+	parted：磁盘分区工具                      ★★★★☆	 
+	partprobe：通知系统磁盘的分区信息变化 更新内核的硬盘分区表信息            ★★★☆☆	 
+	tune2fs：调整ext2/ext3/ext4文件系统参数        ★★☆☆☆	 
+		-c 0 count    关闭每挂载多少次进行磁盘检查     
+		-i 0 interval 关闭每个多久进行磁盘检查
+		关闭磁盘分区的自动检查
+	mkfs：make filesystem 创建Linux文件系统                   ★★★☆☆	
+		-t 指定文件系统类型  
+		mkfs.ext4 == mkfs -t ext4          
+	dumpe2fs：显示文件系统信息       ★★☆☆☆	 
+	resize2fs：调整ext2/ext3/ext4文件系统大小                       ★★☆☆☆	 
+	fsck：检查并修复Linux文件系统                       ★★★☆☆	
+		-a   
+	dd：转换或复制文件                                   ★★★☆☆
+	od  查看二进制文件的内容
+		-xa 
+		dd if=/dev/sda  of=/tmp/512.bin  bs=512 count=1 
+		
+		od -xa /tmp/512.bin 
+		
+	mount：挂载文件系统                       ★★★★★
+	umount：卸载文件系统                       ★★★☆☆	 
+		umount /mnt   
+	df：报告文件系统磁盘空间的使用情况                       ★★★★★	 
+	mkswap：创建交换分区                       ★★☆☆☆	 
+	swapon：激活交换分区                       ★★☆☆☆	 
+	swapoff：关闭交换分区                       ★★★☆☆	 
+	sync：刷新文件系统缓冲区                      ★★☆☆☆	 
+	top 
+	iotop 查看系统的磁盘读写速度 显示出进程使用swap的情况  
+		io input/output 输入/输出 读写
+	htop  top升级版
+	iftop 查询网卡流量情况
+		-i 指定监视网卡
+
+
+
+
+
+###三剑客之sed
+1. sed语法格式
+
+sed [选项] [sed指令] [输入文件]
+
+2. sed命令执行流程
+
+
+3. 创建测试文件
+cat>person.txt<<EOF
+101,oldboy,CEO
+102,zhangyao,CTO
+103,Alex,COO
+104,yy,CFO
+105,feixue,CIO
+EOF
+
+EOF ==>end of file
+
+4. 查询单行文本
+
+p  sed指定，打印模式空间内容
+-n sed选项，取消默认输出
+
+[root@oldboyedu01-nb ~]# sed '1p' person.txt 
+101,oldboy,CEO
+101,oldboy,CEO
+102,zhangyao,CTO
+103,Alex,COO
+104,yy,CFO
+105,feixue,CIO
+[root@oldboyedu01-nb ~]# sed -n '1p' person.txt 
+101,oldboy,CEO
+[root@oldboyedu01-nb ~]# sed -n '3p' person.txt 
+103,Alex,COO
+
+5.查询连续多行文本
+
+指定p前面没有地址范围，那么默认匹配所有行
+
+数字地址范围--推荐
+# 2,4  显示第2行到第4行的内容，包含第2行和第4行
+
+[root@oldboyedu01-nb ~]# sed -n '2,4p' person.txt 
+102,zhangyao,CTO
+103,Alex,COO
+104,yy,CFO
+
+正则地址范围-模糊，容易找多了
+#显示出文件中包含oldboy的行到包含104的行。。
+[root@oldboyedu01-nb oldboy]# #sed -n '/oldboy/p' person.txt  ===== grep 'oldboy'
+[root@oldboyedu01-nb oldboy]# sed -n '/oldboy/p' person.txt 
+101,oldboy,CEO
+[root@oldboyedu01-nb oldboy]# sed -n '/oldboy/,/^104/p' person.txt 
+101,oldboy,CEO
+102,zhangyao,CTO
+103,Alex,COO
+104,yy,CFO
+
+
+
+6. 过滤多个字符串
+-r  sed选项，支持扩展正则表达式（|、()）
+
+默认情况，sed只支持基本正则表达式。
+
+[root@oldboyedu01-nb ~]# sed -n '/oldboy/p' person.txt 
+101,oldboy,CEO
+[root@oldboyedu01-nb ~]# egrep 'oldboy|yy' person.txt   ==egrep ==grep -E
+101,oldboy,CEO
+104,yy,CFO
+[root@oldboyedu01-nb ~]# sed -rn '/oldboy|yy/p' person.txt 
+101,oldboy,CEO
+104,yy,CFO
+
+sed里面的正则字符左右必须有“/”。/oldboy/
+
+
+
+重点：
+sed 查询单行文本
+查询多行文本  使用数字地址范围  sed -n '2,4p' person.txt 
+
+小结：
+1.查询某一行 查询某一个范围 1p  2,4p
+2.通过正则表达式查询范围
+sed -n '/oldboy/,/^104/p' person.txt 
+3.sed命令通过正则表达式进行过滤 ==== egrep 
+
+
+
+7. 查询指定多行
+使用分号
+[root@oldboyedu01-nb ~]# sed -n '2p;4p' person.txt 
+102,zhangyao,CTO
+104,yy,CFO
+[root@oldboyedu01-nb ~]# sed -n '2p;4p;10p;30p' person.txt 
+
+
+8.增加单行文本
+a 追加append，在指定行后添加一行或多行文本
+i 插入insert，在指定行前添加一行或多行文本
+
+[root@oldboyedu01-nb ~]# sed '2a 106,xiaoyu,CXO' person.txt 
+101,oldboy,CEO
+102,zhangyao,CTO
+106,xiaoyu,CXO
+103,Alex,COO
+104,yy,CFO
+105,feixue,CIO
+[root@oldboyedu01-nb ~]# sed '2i 106,xiaoyu,CXO' person.txt 
+101,oldboy,CEO
+106,xiaoyu,CXO
+102,zhangyao,CTO
+103,Alex,COO
+104,yy,CFO
+105,feixue,CIO
+
+
+9、增加多行文本
+\n 表示换行符
+
+106,xiaoyu,CXO\n107\n108\n109
+
+[root@oldboyedu01-nb ~]# sed '2a 106,xiaoyu,CXO\n107\n108\n109' person.txt 
+101,oldboy,CEO
+102,zhangyao,CTO
+106,xiaoyu,CXO
+107
+108
+109
+103,Alex,COO
+104,yy,CFO
+105,feixue,CIO
+
+
+cat >>person.txt<<EOF 
+new,new,new
+old,old,old
+EOF
+
+
+
+
+
+
+
+10. 删除文件内容
+d sed指令，删除文本内容
+$ 代表文件的最后一行
+
+
+[root@oldboyedu01-nb ~]# sed '2d' person.txt   # 删除单行
+101,oldboy,CEO
+103,Alex,COO
+104,yy,CFO
+105,feixue,CIO
+[root@oldboyedu01-nb ~]# sed '2,5d' person.txt # 删除多行
+101,oldboy,CEO
+[root@oldboyedu01-nb ~]# sed '2,$d' person.txt 
+101,oldboy,CEO
+
+企业案例：不显示文件中的空行
+[root@oldboyedu01-nb oldboy]# cat person.txt 
+101,oldboy,CEO
+
+102,zhangyao,CTO
+103,Alex,COO
+
+104,yy,CFO
+
+105,feixue,CIO
+
+
+[root@oldboyedu01-nb oldboy]# cat -A person.txt
+101,oldboy,CEO$
+$
+102,zhangyao,CTO$
+103,Alex,COO$
+$
+104,yy,CFO$
+$
+105,feixue,CIO$
+
+grep -v  '^$' person.txt 
+sed '/^$/d' person.txt 
+sed -n '/^$/!p' person.txt 
+awk '!/^$/' person.txt 
+
+sed '$d' person.txt 
+sed '$!d' person.txt 
+
+
+
+11.文本替换
+
+s/o/A/g
+s/\/usr\/local/\/etc\/sysconfig\//g
+s#/usr/local/#/etc/sysconfig#g
+
+s 单独使用→将每一行中第一处匹配的字符串进行替换
+g 每一行进行全部替换→sed指令s的替换标志之一(全局替换)
+
+[root@oldboyedu01-nb ~]# sed 's#o#A#' person.txt 
+101,Aldboy,CEO
+102,zhangyaA,CTO
+103,Alex,COO
+104,yy,CFO
+105,feixue,CIO
+[root@oldboyedu01-nb ~]# sed 's#o#A#g' person.txt 
+101,AldbAy,CEO
+102,zhangyaA,CTO
+103,Alex,COO
+104,yy,CFO
+105,feixue,CIO
+
+
+-i自动备份功能
+
+[root@oldboyedu01-nb ~]# sed -i.bak 's#o#A#g' person.txt 
+[root@oldboyedu01-nb ~]# cat person.txt
+101,AldbAy,CEO
+102,zhangyaA,CTO
+103,Alex,COO
+104,yy,CFO
+105,feixue,CIO
+[root@oldboyedu01-nb ~]# cat person.txt.bak 
+101,oldboy,CEO
+102,zhangyao,CTO
+103,Alex,COO
+104,yy,CFO
+105,feixue,CIO
+
+
+
+
+
+13.变量替换
+
+主要考察单引号、双引号的区别
+单引号
+所见即所得 
+
+双引号
+与单引号类似 特殊符号会被解析  $ $() `` ! 
+[root@oldboyedu01-nb oldboy]# x=oldboy
+[root@oldboyedu01-nb oldboy]# y=oldgirl
+[root@oldboyedu01-nb oldboy]# 
+[root@oldboyedu01-nb oldboy]# sed 's#$x#$y#g' person.txt 
+101,oldboy,CEO
+
+102,zhangyao,CTO
+103,Alex,COO
+
+104,yy,CFO
+
+105,feixue,CIO
+[root@oldboyedu01-nb oldboy]# sed "s#$x#$y#g" person.txt 
+101,oldgirl,CEO
+
+102,zhangyao,CTO
+103,Alex,COO
+
+104,yy,CFO
+
+105,feixue,CIO
+ 
+
+
+14. 反向引用
+
+()  扩展正则表达式  在sed中作用，能够记忆它包含的一段正则表达式，并可以通过\1 \2 \3 ... \9 调取出来
+
+sed -r  '()'
+
+
+15. 企业案例：系统开机启动项优化
+
+除了下面5个服务以外都关闭
+crond sshd network sysstat rsyslog
+
+
+chkconfig --list|grep 3:on|sed -r 's#(.*).*0.*#\1#'|egrep -v 'crond|sshd|network|sysstat|rsyslog'|sed -r 's#(.*)#chkconfig \1 off#'|bash
+
+
+总结：
+掌握sed选项
+  -n
+  -r
+  -i
+
+掌握sed指令
+  p
+  a
+  i
+  d
+  s     ==》g
+  
+
+  
+
+基本的awk执行过程
+#passwd文件的第二行的第一列和第二列
+[root@oldboyedu01-nb ~]# awk -F ":"  'NR==2{print $1,$2}' /etc/passwd
+bin x
+
+awk  参数  '模式{动作}'  文件 
+awk  参数  '条件（找谁）{干啥}'  文件 
+
+
+模式匹配:模式与动作
+
+    通过正则表达式作为模式
+	
+mkdir -p /server/files/
+cat >>/server/files/reg.txt<<EOF
+Zhang Dandan    41117397   :250:100:175
+Zhang Xiaoyu    390320151  :155:90:201
+Meng  Feixue    80042789   :250:60:50
+Wu    Waiwai    70271111   :250:80:75
+Liu   Bingbing  41117483   :250:100:175
+Wang  Xiaoai    3515064655 :50:95:135
+Zi    Gege      1986787350 :250:168:200
+Li    Youjiu    918391635  :175:75:300
+Lao   Nanhai    918391635  :250:100:175
+EOF
+
+
+
+显示Xiaoyu的姓氏和ID号码
+
+
+[root@oldboyedu01-nb files]# awk '/Xiaoyu/' reg.txt 
+Zhang Xiaoyu    390320151  :155:90:201
+[root@oldboyedu01-nb files]# awk '/Xiaoyu/{print $1,$2,$3}' reg.txt 
+Zhang Xiaoyu 390320151
+[root@oldboyedu01-nb files]# #awk '第2列中包含Xiaoyu' reg.txt 
+[root@oldboyedu01-nb files]# awk '$2~/Xiaoyu/' reg.txt 
+Zhang Xiaoyu    390320151  :155:90:201
+[root@oldboyedu01-nb files]# awk '$2~/Xiaoyu/{print $1,$2,$3}' reg.txt 
+Zhang Xiaoyu 390320151
+
+[root@oldboyedu01-nb files]# awk '/Xiaoyu/' reg.txt 
+Zhang Xiaoyu    390320151  :155:90:201
+[root@oldboyedu01-nb files]# awk '$0~/Xiaoyu/' reg.txt 
+Zhang Xiaoyu    390320151  :155:90:201
+[root@oldboyedu01-nb files]# awk '$2~/Xiaoyu/' reg.txt 
+Zhang Xiaoyu    390320151  :155:90:201
+
+
+显示所有以41开头的ID号码的人的全名和ID号码
+[root@oldboyedu01-nb files]# awk '$3~/^41/'  reg.txt 
+Zhang Dandan    41117397   :250:100:175
+Liu   Bingbing  41117483   :250:100:175
+[root@oldboyedu01-nb files]# awk '$3~/^41/{print $1,$2,$3}'  reg.txt 
+Zhang Dandan 41117397
+Liu Bingbing 41117483
+
+显示所有ID号码最后一位数字是1或5的人的全名
+[root@oldboyedu01-nb files]# awk '$3~/[15]$/' reg.txt 
+Zhang Xiaoyu    390320151  :155:90:201
+Wu    Waiwai    70271111   :250:80:75
+Wang  Xiaoai    3515064655 :50:95:135
+Li    Youjiu    918391635  :175:75:300
+Lao   Nanhai    918391635  :250:100:175
+[root@oldboyedu01-nb files]# awk '$3~/[15]$/{print $1,$2}' reg.txt 
+Zhang Xiaoyu
+Wu Waiwai
+Wang Xiaoai
+Li Youjiu
+Lao Nanhai
+
+
+
+
+显示Xiaoyu的捐款.每个值时都有以$开头.如$520$200$135
+gsub(/目标/,"替换为什么",第几列)
+gsub(/目标/,"替换为什么") == gsub(/目标/,"替换为什么",$0)
+
+[root@oldboyedu01-nb files]# awk '{gsub(/:/,"$",$4)}' reg.txt 
+[root@oldboyedu01-nb files]# awk '{gsub(/:/,"$",$4);print}' reg.txt 
+Zhang Dandan 41117397 $250$100$175
+Zhang Xiaoyu 390320151 $155$90$201
+Meng Feixue 80042789 $250$60$50
+Wu Waiwai 70271111 $250$80$75
+Liu Bingbing 41117483 $250$100$175
+Wang Xiaoai 3515064655 $50$95$135
+Zi Gege 1986787350 $250$168$200
+Li Youjiu 918391635 $175$75$300
+Lao Nanhai 918391635 $250$100$175
+
+
+[root@oldboyedu01-nb files]# awk '$2~/Xiaoyu/' reg.txt 
+Zhang Xiaoyu    390320151  :155:90:201
+[root@oldboyedu01-nb files]# awk '$2~/Xiaoyu/{gsub(/:/,"$");print}' reg.txt 
+Zhang Xiaoyu    390320151  $155$90$201
+
+
+特殊模式BEGIN和END
+BEGIN{} BEGIN里面的内容，会在awk读取文件内容之前运行。
+测试，计算。
+
+END{}*** END{}里面的内容，会在awk读取完文件的最后一行之后运行。
+用来显示最终结果。
+先计算，END显示结果。
+
+
+统计/etc/services文件里面的空行数量
+
+i=i+1 统计
+
+[root@oldboyedu01-nb files]# awk '/^$/{i=i+1}END{print i}' /etc/services 
+16
+[root@oldboyedu01-nb files]# #        先计算END{显示最终结果}
+
+统计出现多少次 计数
+i=i+1 == i++
+
+
+awk数组-统计与计算
+
+处理以下文件内容,将域名取出并根据域名进行计数排序处理:(百度和sohu面试题)
+http://www.etiantian.org/index.html
+http://www.etiantian.org/1.html
+http://post.etiantian.org/index.html
+http://mp3.etiantian.org/index.html
+http://www.etiantian.org/3.html
+http://post.etiantian.org/2.html
+
+
+[root@oldboyedu01-nb files]# awk 'BEGIN{h[110]="lee";h[114]="XO";print h[110],h[114]}'
+lee XO
+
+统计出现多少次 计数
+i=i+1 == i++
+h[$2]=h[$2]+1 == h[$2]++
+
+[root@oldboyedu01-nb files]# cat url.txt
+http://www.etiantian.org/index.html
+http://www.etiantian.org/1.html
+http://post.etiantian.org/index.html
+http://mp3.etiantian.org/index.html
+http://www.etiantian.org/3.html
+http://post.etiantian.org/2.html
+[root@oldboyedu01-nb files]# awk -F "[/.]+" '{print $2}' url.txt 
+www
+www
+post
+mp3
+www
+post
+[root@oldboyedu01-nb files]# awk -F "[/.]+" '{h[$2]=h[$2]+1;print h["www"]}' url.txt 
+1
+2
+2
+2
+3
+3
+
+[root@oldboyedu01-nb files]# awk -F "[/.]+" '{h[$2]=h[$2]+1}END{print h["www"],h["post"],h["mp3"]}' url.txt 
+3 2 1
+[root@oldboyedu01-nb files]# awk -F "[/.]+" '{h[$2]=h[$2]+1}END{for(pol in h) print pol,h[pol]  }' url.txt 
+www 3
+mp3 1
+post 2
+[root@oldboyedu01-nb files]# 
+
+
+
+总结：
+1.awk数组进行统计 
+i=i+1  == i++   统计次数 计数
+i=i+$n == i+=$n 累计相加 累加
+2.awk执行过程
+3.awk通过正则作为模式
+4.BEGIN和END特殊模式
+
+secure系统日志分析练习
+谁在破解你的密码（Failed password 每个ip地址出现的次数）
+分析系统的每个用户被破解的次数
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,658 @@
+=============================================================================================
+# 老男孩教育：                                                                            #
+# www.oldboyedu.com                                                                       #
+# 邮件：miaokm@oldboyedu.com(189 1048 1057)                                               #
+# 地址：北京市昌平区顺沙路8号院汇德商厦4F                                                 #
+# 资源老师   手机电话：		    QQ号码        资源老师： 手机电话：		    QQ号码        #
+# 飞雪		 135 5261 2571		80042789      小雨		 186 0046 2391      390320151     #
+# 歪歪		 189 1171 8229		70271111      丹丹		 158 1059 0206      41117397      #
+# 冰冰		 150 1078 5220		41117483												  #
+=============================================================================================
+
+
+
+sed  增加 修改 查找 删除  增删改查
+
+
+
+Sed命令介绍及语法格式
+
+Sed命令执行流程
+
+#查 
+Sed单行查询
+Sed多行查询（地址范围）
+Sed过滤功能
+
+#增
+Sed单行增加
+Sed多行增加
+Sed增加案例
+
+#删
+Sed删除功能及案例
+
+#改
+Sed文本替换
+Sed变量替换
+Sed反向引用
+Sed替换案例
+Sed执行多条语句
+获取文件行号
+
+
+
+#1. sed语法格式
+
+sed [选项] [sed指令] [输入文件]
+
+#2. sed命令执行流程
+
+
+#3. 创建测试文件
+cat>person.txt<<EOF
+101,oldboy,CEO
+102,zhangyao,CTO
+103,Alex,COO
+104,yy,CFO
+105,feixue,CIO
+EOF
+
+EOF ==>end of file
+
+#4. 查询单行文本 显示某一行 
+
+##p  sed指定，打印模式空间内容
+##-n sed选项，取消默认输出
+
+[root@oldboyedu38-nb ~]# sed '1p' person.txt 
+101,oldboy,CEO
+101,oldboy,CEO
+102,zhangyao,CTO
+103,Alex,COO
+104,yy,CFO
+105,feixue,CIO
+[root@oldboyedu38-nb ~]# sed -n '1p' person.txt 
+101,oldboy,CEO
+[root@oldboyedu38-nb ~]# sed -n '3p' person.txt 
+103,Alex,COO
+
+[root@oldboyedu-39-nb ~]# sed -n '2p' person.txt
+102,zhangyao,CTO
+[root@oldboyedu-39-nb ~]# sed -n '1p' person.txt
+101,oldboy,CEO
+[root@oldboyedu-39-nb ~]# ##显示文件的最后一行 
+[root@oldboyedu-39-nb ~]# sed -n '$p' person.txt
+105,feixue,CIO
+
+
+
+#5.查询连续多行文本 显示连续的多行，从哪里来到哪里去 '1,4p'
+
+指定p前面没有地址范围，那么默认匹配所有行
+
+###数字地址范围--推荐   行号
+# 2,4  显示第2行到第4行的内容，包含第2行和第4行
+
+[root@oldboyedu38-nb ~]# sed -n '2,4p' person.txt 
+102,zhangyao,CTO
+103,Alex,COO
+104,yy,CFO
+
+
+[root@oldboyedu-39-nb ~]# sed -n '1,4p' person.txt 
+101,oldboy,CEO
+102,zhangyao,CTO
+103,Alex,COO
+104,yy,CFO
+
+
+
+###正则地址范围-模糊，容易找多了
+[root@oldboyedu38-nb ~]# sed -n '/oldboy/p' person.txt 
+101,oldboy,CEO
+[root@oldboyedu38-nb ~]# sed -n '/o.*y/p' person.txt 
+101,oldboy,CEO
+[root@oldboyedu38-nb ~]# sed -n '/o.*y/,/105/p' person.txt 
+101,oldboy,CEO
+102,zhangyao,CTO
+103,Alex,COO
+104,yy,CFO
+105,feixue,CIO
+
+
+
+###显示这个文件的第1行到第4行 
+[root@oldboyedu-39-nb ~]# sed -n '1,4p' person.txt 
+101,oldboy,CEO
+102,zhangyao,CTO
+103,Alex,COO
+104,yy,CFO
+[root@oldboyedu-39-nb ~]# ##从包含101的这一行 显示到 包含104的这一行 
+[root@oldboyedu-39-nb ~]# sed -n '/101/,/104/p' person.txt 
+101,oldboy,CEO
+102,zhangyao,CTO
+103,Alex,COO
+104,yy,CFO
+
+
+
+
+##6. 过滤多个字符串
+-r  sed选项，支持扩展正则表达式（|、()）
+
+默认情况，sed只支持基本正则表达式。
+
+[root@oldboyedu38-nb ~]# sed -n '/oldboy/p' person.txt 
+101,oldboy,CEO
+[root@oldboyedu38-nb ~]# egrep 'oldboy|yy' person.txt   ==egrep ==grep -E
+101,oldboy,CEO
+104,yy,CFO
+[root@oldboyedu38-nb ~]# sed -rn '/oldboy|yy/p' person.txt 
+101,oldboy,CEO
+104,yy,CFO
+
+sed里面的正则字符左右必须有“/”。/oldboy/
+
+###显示出文件中包含oldboy或 yy的行 
+[root@oldboyedu-39-nb ~]# egrep "oldboy|yy" person.txt 
+101,oldboy,CEO
+104,yy,CFO
+[root@oldboyedu-39-nb ~]# sed -n '/oldboy/p' person.txt 
+101,oldboy,CEO
+[root@oldboyedu-39-nb ~]# sed -n '/oldboy|yy/p' person.txt 
+[root@oldboyedu-39-nb ~]# sed -nr '/oldboy|yy/p' person.txt 
+101,oldboy,CEO
+104,yy,CFO
+
+重点：
+sed 查询单行文本
+查询多行文本  使用数字地址范围  sed -n '2,4p' person.txt 
+
+
+#7. 查询指定多行
+使用分号
+[root@oldboyedu38-nb ~]# sed -n '2p;4p' person.txt 
+102,zhangyao,CTO
+104,yy,CFO
+[root@oldboyedu38-nb ~]# sed -n '2p;4p;10p;30p' person.txt 
+
+[root@oldboyedu-39-nb ~]# sed -n '1p;4p;5p' person.txt 
+101,oldboy,CEO
+104,yy,CFO
+105,feixue,CIO
+
+
+
+#8.增加单行文本
+我想向 person.txt 文件中追加 2行 
+106,lidao,UFO
+107,bingbing,CEO 
+
+##方法1-cat
+cat >>person.txt<<EOF 
+106,lidao,UFO
+107,bingbing,CEO 
+EOF
+
+##方法2-echo 
+echo "106,lidao,UFO"      >>person.txt 
+echo "107,bingbing,CEO "  >>person.txt 
+
+echo  "106,lidao,UFO回车107,bingbing,CEO"
+echo  "106,lidao,UFO\n107,bingbing,CEO"
+echo -e "106,lidao,UFO\n107,bingbing,CEO"
+
+##方法3-sed命令 
+####第一个里程碑-在第2行后面加入一个新行 内容是 oldboyedu.com 
+[root@oldboyedu-39-nb ~]# cat person.txt 
+101,oldboy,CEO
+102,zhangyao,CTO
+103,Alex,COO
+104,yy,CFO
+105,feixue,CIO
+[root@oldboyedu-39-nb ~]# sed '2a oldboyedu.com' person.txt 
+101,oldboy,CEO
+102,zhangyao,CTO
+oldboyedu.com
+103,Alex,COO
+104,yy,CFO
+105,feixue,CIO
+[root@oldboyedu-39-nb ~]# sed '2i oldboyedu.com' person.txt 
+101,oldboy,CEO
+oldboyedu.com
+102,zhangyao,CTO
+103,Alex,COO
+104,yy,CFO
+105,feixue,CIO
+
+a-======append 追加 
+i=======insert 插入 
+
+####第二个里程碑-最后一行后面追加1行内容 
+#106,lidao,UFO
+[root@oldboyedu-39-nb ~]# #106,lidao,UFO
+[root@oldboyedu-39-nb ~]# sed -n '$p' person.txt 
+105,feixue,CIO
+[root@oldboyedu-39-nb ~]# sed '$a 106,lidao,UFO' person.txt 
+101,oldboy,CEO
+102,zhangyao,CTO
+103,Alex,COO
+104,yy,CFO
+105,feixue,CIO
+106,lidao,UFO
+
+
+####第三个里程碑-最后一行后面追加2行内容 
+#106,lidao,UFO
+#107,bingbing,CEO 
+[root@oldboyedu-39-nb ~]# sed '$a 106,lidao,UFO\n107,bingbing,CEO' person.txt 
+101,oldboy,CEO
+102,zhangyao,CTO
+103,Alex,COO
+104,yy,CFO
+105,feixue,CIO
+106,lidao,UFO
+107,bingbing,CEO
+
+
+
+
+
+
+
+a 追加append，在指定行后添加一行或多行文本
+i 插入insert，在指定行前添加一行或多行文本
+
+[root@oldboyedu38-nb ~]# sed '2a 106,xiaoyu,CXO' person.txt 
+101,oldboy,CEO
+102,zhangyao,CTO
+106,xiaoyu,CXO
+103,Alex,COO
+104,yy,CFO
+105,feixue,CIO
+[root@oldboyedu38-nb ~]# sed '2i 106,xiaoyu,CXO' person.txt 
+101,oldboy,CEO
+106,xiaoyu,CXO
+102,zhangyao,CTO
+103,Alex,COO
+104,yy,CFO
+105,feixue,CIO
+
+
+
+
+#9. 删除文件内容
+d sed指令，删除文本内容
+$ 代表文件的最后一行
+
+###删除第一行
+[root@oldboyedu-39-nb ~]# sed '1d' person.txt 
+102,zhangyao,CTO
+103,Alex,COO
+104,yy,CFO
+105,feixue,CIO
+[root@oldboyedu-39-nb ~]# #显示文件内容但是不包含 oldboy 
+####方法1 
+[root@oldboyedu-39-nb ~]# grep -v "oldboy" person.txt
+102,zhangyao,CTO
+103,Alex,COO
+104,yy,CFO
+105,feixue,CIO
+
+####方法2
+[root@oldboyedu-39-nb ~]# sed '/oldboy/d' person.txt 
+102,zhangyao,CTO
+103,Alex,COO
+104,yy,CFO
+105,feixue,CIO
+
+####方法3 
+[root@oldboyedu-39-nb ~]# awk '/oldboy/' person.txt
+101,oldboy,CEO
+[root@oldboyedu-39-nb ~]# awk '!/oldboy/' person.txt
+102,zhangyao,CTO
+103,Alex,COO
+104,yy,CFO
+105,feixue,CIO
+
+####方法4 
+[root@oldboyedu-39-nb ~]# sed -n '1!p' person.txt 
+102,zhangyao,CTO
+103,Alex,COO
+104,yy,CFO
+105,feixue,CIO
+[root@oldboyedu-39-nb ~]# sed -n '1,3!p' person.txt 
+104,yy,CFO
+105,feixue,CIO
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+#1.文本替换
+
+'s###g'
+'s@@@g'
+
+s### 替换，只会替换每一行的第一个内容
+
+[root@oldboyedu-39-nb ~]# cat person.txt 
+101,oldboy,CEO
+102,zhangyao,CTO
+103,Alex,COO
+104,yy,CFO
+105,feixue,CIO
+[root@oldboyedu-39-nb ~]# sed 's#[0-9]#oldboy#' person.txt 
+oldboy01,oldboy,CEO
+oldboy02,zhangyao,CTO
+oldboy03,Alex,COO
+oldboy04,yy,CFO
+oldboy05,feixue,CIO
+[root@oldboyedu-39-nb ~]# sed 's#[0-9]#oldboy#g' person.txt 
+oldboyoldboyoldboy,oldboy,CEO
+oldboyoldboyoldboy,zhangyao,CTO
+oldboyoldboyoldboy,Alex,COO
+oldboyoldboyoldboy,yy,CFO
+oldboyoldboyoldboy,feixue,CIO
+
+
+s 单独使用→将每一行中第一处匹配的字符串进行替换
+g 每一行进行全部替换→sed指令s的替换标志之一(全局替换)
+
+
+
+
+###-i自动备份功能，先备份，再修改文件内容。
+###-i参数要放在sed所有参数最后面。
+
+
+[root@oldboyedu-39-nb ~]# cat person.txt 
+oldboyoldboyoldboy,oldboy,CEO
+102,zhangyao,CTO
+103,Alex,COO
+104,yy,CFO
+105,feixue,CIO
+[root@oldboyedu-39-nb ~]# sed -r 's#(oldboy)+#101#' person.txt 
+101,oldboy,CEO
+102,zhangyao,CTO
+103,Alex,COO
+104,yy,CFO
+105,feixue,CIO
+[root@oldboyedu-39-nb ~]# sed -ir.bak 's#(oldboy)+#101#' person.txt 
+[root@oldboyedu-39-nb ~]# cat person.txt
+oldboyoldboyoldboy,oldboy,CEO
+102,zhangyao,CTO
+103,Alex,COO
+104,yy,CFO
+105,feixue,CIO
+[root@oldboyedu-39-nb ~]# ls -l person.txt*
+-rw-r--r-- 1 root root 86 Aug 16 12:05 person.txt
+-rw-r--r-- 1 root root 86 Aug 16 12:03 person.txtr.bak
+
+
+[root@oldboyedu-39-nb ~]# sed -ri.bak 's#(oldboy)+#101#' person.txt 
+[root@oldboyedu-39-nb ~]# cat person.txt
+101,oldboy,CEO
+102,zhangyao,CTO
+103,Alex,COO
+104,yy,CFO
+105,feixue,CIO
+[root@oldboyedu-39-nb ~]# ls -l person.txt*
+-rw-r--r-- 1 root root 71 Aug 16 12:06 person.txt
+-rw-r--r-- 1 root root 86 Aug 16 12:05 person.txt.bak
+
+
+sed命令修改文件内容的过程。
+[root@oldboyedu-39-nb ~]# cat person.txt
+101,oldboy,CEO
+102,zhangyao,CTO
+103,Alex,COO
+104,yy,CFO
+105,feixue,CIO
+[root@oldboyedu-39-nb ~]# ls -li person.txt
+405241 -rw-r--r-- 1 root root 71 Aug 16 12:06 person.txt
+[root@oldboyedu-39-nb ~]# sed  's#101#666#g' person.txt
+666,oldboy,CEO
+102,zhangyao,CTO
+103,Alex,COO
+104,yy,CFO
+105,feixue,CIO
+[root@oldboyedu-39-nb ~]# sed  -i.ori 's#101#666#g' person.txt
+
+sed -i.bak 修改文件的内容的时候
+1.先把原来的文件移动、改名  person.txt.bak 
+2.把你修改后的东西 生成新的文件 person.txt 
+inotify
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+12. Ms# # #Ng的使用
+
+cat >num.txt <<EOF
+1 1 1 1 1
+1 1 1 1 1
+1 1 1 1 1
+1 1 1 1 1
+EOF
+
+
+[root@oldboyedu38-nb ~]# sed 's#1#0#g' num.txt 
+0 0 0 0 0
+0 0 0 0 0
+0 0 0 0 0
+0 0 0 0 0
+[root@oldboyedu38-nb ~]# sed '3s#1#0#g' num.txt 
+1 1 1 1 1
+1 1 1 1 1
+0 0 0 0 0
+1 1 1 1 1
+[root@oldboyedu38-nb ~]# sed '3,4s#1#0#g' num.txt 
+1 1 1 1 1
+1 1 1 1 1
+0 0 0 0 0
+0 0 0 0 0
+[root@oldboyedu38-nb ~]# sed '3s#1#0#3g' num.txt 
+1 1 1 1 1
+1 1 1 1 1
+1 1 0 0 0
+1 1 1 1 1
+[root@oldboyedu38-nb ~]# 
+[root@oldboyedu38-nb ~]# sed '3s#1#0#2g' num.txt 
+1 1 1 1 1
+1 1 1 1 1
+1 0 0 0 0
+1 1 1 1 1
+[root@oldboyedu38-nb ~]# sed 's#1#0#2g' num.txt 
+1 0 0 0 0
+1 0 0 0 0
+1 0 0 0 0
+1 0 0 0 0
+
+
+12.变量替换
+
+主要考察单引号、双引号的区别
+
+[root@oldboyedu38-nb ~]# x=1
+[root@oldboyedu38-nb ~]# y=2
+[root@oldboyedu38-nb ~]# sed 's#$x#$y#g' num.txt 
+1 1 1 1 1
+1 1 1 1 1
+1 1 1 1 1
+1 1 1 1 1
+[root@oldboyedu38-nb ~]# sed "s#$x#$y#g" num.txt 
+2 2 2 2 2
+2 2 2 2 2
+2 2 2 2 2
+2 2 2 2 2
+[root@oldboyedu38-nb ~]# sed "s#1#2#g" num.txt 
+2 2 2 2 2
+2 2 2 2 2
+2 2 2 2 2
+2 2 2 2 2
+[root@oldboyedu38-nb ~]# sed s#$x#$y#g num.txt 
+2 2 2 2 2
+2 2 2 2 2
+2 2 2 2 2
+2 2 2 2 2
+[root@oldboyedu38-nb ~]# sed 's#'$x'#'$y'#g' num.txt 
+2 2 2 2 2
+2 2 2 2 2
+2 2 2 2 2
+2 2 2 2 2
+
+
+14. 反向引用
+
+()  扩展正则表达式  在sed中作用，能够记忆它包含的一段正则表达式，并可以通过\1 \2 \3 ... \9 调取出来
+
+sed -r  '()'
+
+
+15. 企业案例：系统开机启动项优化
+
+除了下面5个服务以外都关闭
+crond sshd network sysstat rsyslog
+
+
+chkconfig --list|grep 3:on|sed -r 's#(.*).*0.*#\1#'|egrep -v 'crond|sshd|network|sysstat|rsyslog'|sed -r 's#(.*)#chkconfig \1 off#'|bash
+
+
+
+总结：
+掌握sed选项
+  -n
+  -r
+  -i
+
+掌握sed指令
+  p
+  a
+  i
+  d
+  s     ==》g
+
+
+
+
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  5组组长-丛中之
+sed -n '1,+3p' person.txt
+3组组长-温涛 2017/8/16 10:30:47
+[root@oldboyedu-39 ~]# sed -n /101/,/104/p person.txt 
+10:31:01
+2组组长-李谦 2017/8/16 10:31:01
+[root@oldboyedu-39 ~]# sed -n '1p;2p;3p;4p' txt.txt
+person.txt
+101,oldboy,CEO
+102,zhangyao,CTO
+103,Alex,COO
+8组-马明乐 2017/8/16 10:31:01
+[root@oldboyedu-39 ~]# sed -n '1,+3p' person.txt 
+101,oldboy,CEO
+102,zhangyao,CTO
+103,Alex,COO
+104,yy,CFO
+1组-杨佳楠 2017/8/16 10:31:13
+[root@oldboyedu-39 ~]# sed  '5d' person.txt
+1组-罗维良 2017/8/16 10:31:14
+
+为什么同样的方法 上边的做不出来 下面的却可以 
+班长-李阳 2017/8/16 10:31:31
+[root@oldboyedu-39 ~]# sed -n '/101/,/104/'p person.txt 
+101,oldboy,CEO
+102,zhangyao,CTO
+103,Alex,COO
+104,yy,CFO
+2组-黄冠铭 2017/8/16 10:31:46
+sed  '$d' person.txt
+8组-毕春明 2017/8/16 10:31:52
+[root@lainanhai-39 ~]# sed -nr '/[1234]/p' person.txt
+101,oldboy,CEO
+102,zhangyao,CTO
+103,Alex,COO
+104,yy,CFO
+105,feixue,CIO
+7组-徐贵聪 2017/8/16 10:31:54
+@1组-罗维良 空格
+4组组长-何海 2017/8/16 10:31:58
+[root@mylearn my-learn]# sed -nr '/^10[1-4]/p' person.txt 
+101,oldboy,CEO
+102,zhangyao,CTO
+103,Alex,COO
+104,yy,CFO
+
+8组-王国栋撤回了一条消息
+10:32:10
+3组组长-温涛 2017/8/16 10:32:10
+sed -n 1,/104/p person.txt 
+
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+创建Shell脚本
+执行Shell脚本
+什么是变量
+变量的分类
+变量的定义
+条件表达式
+if语句
+for语句
+case语句和while语句

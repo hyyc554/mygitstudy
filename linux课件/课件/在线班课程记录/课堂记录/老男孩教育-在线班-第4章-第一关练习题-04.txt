@@ -1,0 +1,418 @@
+=============================================================================================
+# 老男孩教育：                                                                            #
+# www.oldboyedu.com                                                                       #
+# 邮件：miaokm@oldboyedu.com(189 1048 1057)                                               #
+# 地址：北京市昌平区顺沙路8号院汇德商厦4F                                                 #
+# 资源老师   手机电话：		    QQ号码        资源老师： 手机电话：		    QQ号码        #
+# 飞雪		 135 5261 2571		80042789      小雨		 186 0046 2391      390320151     #
+# 歪歪		 189 1171 8229		70271111      丹丹		 158 1059 0206      41117397      #
+# 冰冰		 150 1078 5220		41117483												  #
+=============================================================================================
+
+作业：
+1.课堂讲解的知识点的总结--课堂记录+思维导图 
+2.命令总结-一定要有例子
+3.考试题与练习题总结---保证3 4个月之后 你可以根据你的笔记 看懂知识点
+
+
+
+第一关练习题
+0.命令  复制  移动  删除 
+1.别名
+2.管道
+3.find
+4.grep sed 
+
+
+##重定向符号
+>       输出重定向        ******
+>>      追加输出重定向    ******
+
+[root@oldboyedu-39 ~]# echo "oldboyedu.com"
+oldboyedu.com
+[root@oldboyedu-39 ~]# echo "oldboyedu.com">>/data/bingbing.txt
+[root@oldboyedu-39 ~]# echo "oldboyedu.com">>/data/bingbing.txt
+[root@oldboyedu-39 ~]# echo "oldboyedu.com">>/data/bingbing.txt
+[root@oldboyedu-39 ~]# cat /data/bingbing.txt
+oldboyedu.com
+oldboyedu.com
+oldboyedu.com
+[root@oldboyedu-39 ~]# echo "lidao.blog.51cto.com" >/data/oldboy.txt 
+[root@oldboyedu-39 ~]# cat /data/oldboy.txt 
+lidao.blog.51cto.com
+[root@oldboyedu-39 ~]# cat /data/bingbing.txt 
+oldboyedu.com
+oldboyedu.com
+oldboyedu.com
+[root@oldboyedu-39 ~]# echo "lidao.blog.51cto.com" >/data/bingbing.txt 
+[root@oldboyedu-39 ~]# cat /data/bingbing.txt
+lidao.blog.51cto.com
+
+
+2> 错误重定向:把错误信息输入到后面的文件中，会删除文件原有内容
+2>>错误追加重定向: 把前面错误信息追加到后边的文件中，不会清除文件原有内容
+
+
+[root@oldboyedu-39 ~]# echo "lidao.blog.51cto.com" >>/data/bingbing.txt 
+[root@oldboyedu-39 ~]# cat /data/bingbing.txt 
+lidao.blog.51cto.com
+lidao.blog.51cto.com
+[root@oldboyedu-39 ~]# ##我想让命令执行的结果 放到一个文件中
+[root@oldboyedu-39 ~]# cho "lidao.blog.51cto.com" 
+-bash: cho: command not found
+[root@oldboyedu-39 ~]# ##执行命令的时候 我想把错误的信息 放到一个文件中
+[root@oldboyedu-39 ~]# 
+[root@oldboyedu-39 ~]# cho "lidao.blog.51cto.com" >>/data/error.txt
+-bash: cho: command not found
+[root@oldboyedu-39 ~]# cat /data/error.txt 
+[root@oldboyedu-39 ~]# cat /data/error.txt 
+[root@oldboyedu-39 ~]# cat /data/error.txt 
+[root@oldboyedu-39 ~]# 
+
+[root@oldboyedu-39 ~]# #>>  >  标准输出重定向  标准追加输出重定向   会把前面命令执行正确的内容 放 到一个文件中
+[root@oldboyedu-39 ~]# #2> 错误重定向
+[root@oldboyedu-39 ~]# #2>> 错误追加重定向
+[root@oldboyedu-39 ~]# 
+[root@oldboyedu-39 ~]# 
+[root@oldboyedu-39 ~]# cho "lidao.blog.51cto.com" 2>>/data/error.txt
+[root@oldboyedu-39 ~]# cho "lidao.blog.51cto.com" 2>>/data/error.txt
+[root@oldboyedu-39 ~]# cat /data/error.txt 
+-bash: cho: command not found
+-bash: cho: command not found
+
+***
+#我想把执行对的结果放到文件中 /data/oldboy.txt 
+#我想把执行有错误的放到文件中 /data/oldboy.txt 
+cho "lidao.blog.51cto.com" 2>>/data/oldboy.txt >>/data/oldboy.txt
+
+[root@oldboyedu-39 ~]# cho "lidao.blog.51cto.com" 2>>/data/oldboy.txt >>/data/oldboy.txt
+[root@oldboyedu-39 ~]# echo "lidao.blog.51cto.com" 2>>/data/oldboy.txt >>/data/oldboy.txt
+[root@oldboyedu-39 ~]# cat /data/oldboy.txt 
+lidao.blog.51cto.com
+-bash: cho: command not found
+lidao.blog.51cto.com
+
+
+echo "lidao.blog.51cto.com" 2>>/data/oldboy.txt >>/data/oldboy.txt    ###/data/oldboy.txt 日志 
+echo "lidao.blog.51cto.com"  >>/data/oldboy.txt  2>&1
+
+
+
+
+[root@oldboyedu-39 ~]# echo  "1 2 3 4 5" >/data/oldboy.txt
+[root@oldboyedu-39 ~]# cat /data/oldboy.txt 
+1 2 3 4 5
+[root@oldboyedu-39 ~]# xargs -n2 </data/oldboy.txt 
+1 2
+3 4
+5
+[root@oldboyedu-39 ~]# xargs -n1 </data/oldboy.txt 
+1
+2
+3
+4
+5
+
+知识边界
+1.课上不断重复  必须要会掌握 
+2.讲解
+
+想一个文件中放入多行 
+
+cat >>/data/oldboy.txt<<EOF
+I 
+am 
+oldboy 
+teacher
+EOF
+
+标准输出重定向
+标准输出追加重定向
+
+###第四题
+
+[root@oldboyedu-39 ~]# cp /data/oldboy.txt /tmp/
+[root@oldboyedu-39 ~]# ls -l /tmp/
+total 4
+-rw-r--r--. 1 root root 46 Jul 14 18:19 oldboy.txt
+-rw-------. 1 root root  0 Jul 14 10:54 yum.log
+[root@oldboyedu-39 ~]# cp /data/ /tmp/
+cp: omitting directory `/data/'
+[root@oldboyedu-39 ~]# ls -l /tmp/
+total 4
+-rw-r--r--. 1 root root 46 Jul 14 18:19 oldboy.txt
+-rw-------. 1 root root  0 Jul 14 10:54 yum.log
+#linux下面很多命令 一般没有办法直接处理 目录 
+#cp 需要使用 -r  复制目录
+#-r  递归, 复制目录及目录的子孙后代
+[root@oldboyedu-39 ~]# cp -r /data/ /tmp/
+[root@oldboyedu-39 ~]# ls -l /tmp/
+total 8
+drwxr-xr-x. 2 root root 4096 Jul 14 18:23 data
+-rw-r--r--. 1 root root   46 Jul 14 18:19 oldboy.txt
+-rw-------. 1 root root    0 Jul 14 10:54 yum.log
+
+
+习惯:操作前备份，操作后检查
+
+[root@oldboyedu-39 ~]# cp /data/oldboy.txt /data/oldboy.txt.bak
+[root@oldboyedu-39 ~]# ls -l /data/
+total 24
+-rw-r--r--. 1 root root 42 Jul 14 17:14 bingbing.txt
+-rw-r--r--. 1 root root 60 Jul 14 17:20 error.txt
+-rw-r--r--. 1 root root 56 Jul 14 16:42 lidao.txt
+-rw-r--r--. 1 root root  7 Jul 14 17:37 liujiansong.txt
+-rw-r--r--. 1 root root 46 Jul 14 18:13 oldboy.txt
+-rw-r--r--. 1 root root 46 Jul 14 18:33 oldboy.txt.bak
+
+
+[root@oldboyedu-39 ~]# mv /data/ /root/
+[root@oldboyedu-39 ~]# ls -l /root/
+total 48
+-rw-------. 1 root root  1073 Jul 14 11:04 anaconda-ks.cfg
+drwxr-x---. 2 root root  4096 Jul 14 11:16 anaconda-screenshots
+drwxr-xr-x. 2 root root  4096 Jul 14 18:33 data
+-rw-r--r--. 1 root root 21736 Jul 14 11:04 install.log
+-rw-r--r--. 1 root root  5890 Jul 14 11:03 install.log.syslog
+[root@oldboyedu-39 ~]# ls -l /data
+ls: cannot access /data: No such file or directory
+
+
+
+###第六题 
+[root@oldboyedu-39 ~]# cd /root/data/
+[root@oldboyedu-39 data]# ls -l 
+total 24
+-rw-r--r--. 1 root root 42 Jul 14 17:14 bingbing.txt
+-rw-r--r--. 1 root root 60 Jul 14 17:20 error.txt
+-rw-r--r--. 1 root root 56 Jul 14 16:42 lidao.txt
+-rw-r--r--. 1 root root  7 Jul 14 17:37 liujiansong.txt
+-rw-r--r--. 1 root root 46 Jul 14 18:13 oldboy.txt
+-rw-r--r--. 1 root root 46 Jul 14 18:33 oldboy.txt.bak
+[root@oldboyedu-39 data]# cp oldboy.txt oldboy.txt.bak
+[root@oldboyedu-39 data]# rm oldboy.txt
+rm: remove regular file `oldboy.txt'? n  
+[root@oldboyedu-39 data]# rm -f oldboy.txt
+[root@oldboyedu-39 data]# ls -l
+total 20
+-rw-r--r--. 1 root root 42 Jul 14 17:14 bingbing.txt
+-rw-r--r--. 1 root root 60 Jul 14 17:20 error.txt
+-rw-r--r--. 1 root root 56 Jul 14 16:42 lidao.txt
+-rw-r--r--. 1 root root  7 Jul 14 17:37 liujiansong.txt
+-rw-r--r--. 1 root root 46 Jul 14 18:53 oldboy.txt.bak
+
+
+
+[root@oldboyedu-39 ~]# #删除 /root/下面的data 目录 
+[root@oldboyedu-39 ~]# cd /root/
+[root@oldboyedu-39 ~]# ls -l
+total 48
+-rw-------. 1 root root  1073 Jul 14 11:04 anaconda-ks.cfg
+drwxr-x---. 2 root root  4096 Jul 14 11:16 anaconda-screenshots
+drwxr-xr-x. 2 root root  4096 Jul 14 18:56 data
+-rw-r--r--. 1 root root 21736 Jul 14 11:04 install.log
+-rw-r--r--. 1 root root  5890 Jul 14 11:03 install.log.syslog
+[root@oldboyedu-39 ~]# rm data/
+rm: cannot remove `data/': Is a directory
+[root@oldboyedu-39 ~]# #rm命令 默认无法删除目录 
+[root@oldboyedu-39 ~]# rm -r data/
+rm: descend into directory `data'? y
+rm: remove regular file `data/bingbing.txt'? n
+rm: remove regular file `data/oldboy.txt.bak'? n
+rm: remove regular file `data/liujiansong.txt'? n
+rm: remove regular file `data/lidao.txt'? n
+rm: remove regular file `data/error.txt'? n
+rm: remove directory `data'? n
+[root@oldboyedu-39 ~]# rm -rf data/
+[root@oldboyedu-39 ~]# ls -l 
+total 44
+-rw-------. 1 root root  1073 Jul 14 11:04 anaconda-ks.cfg
+drwxr-x---. 2 root root  4096 Jul 14 11:16 anaconda-screenshots
+-rw-r--r--. 1 root root 21736 Jul 14 11:04 install.log
+-rw-r--r--. 1 root root  5890 Jul 14 11:03 install.log.syslog
+
+
+##工作中如何删除文件 --- 提高删除文件的门槛 
+
+#环境准备
+mkdir -p /data 
+cd /data/
+touch alex.txt lidao.txt oldboy.txt 
+
+#第一个里程碑-如何找到我们要删除的文件 oldboy.txt 
+
+# #find 在哪里找（目录） 找什么类型    找什么名字的
+# find /data/ -type f  -name "oldboy.txt"
+/data/oldboy.txt
+
+/data 在/data目录下面进行查找
+-type f ----file 普通文件 
+-name ""  找什么名字的文件 
+
+
+
+#第二个里程碑-找出以.txt结尾的文件 
+[root@oldboyedu-39 data]# find /data/ -type f  -name "*.txt"
+/data/oldboy.txt
+/data/alex.txt
+/data/lidao.txt
+
+#第三个里程碑-把找出来的文件删除
+[root@oldboyedu-39 ~]# find /data/ -type f  -name "*.txt"
+/data/oldboy.txt
+/data/alex.txt
+/data/lidao.txt
+[root@oldboyedu-39 ~]# find /data/ -type f  -name "*.txt"|xargs ls -l 
+-rw-r--r--. 1 root root 0 Jul 14 19:28 /data/alex.txt
+-rw-r--r--. 1 root root 0 Jul 14 19:28 /data/lidao.txt
+-rw-r--r--. 1 root root 0 Jul 14 19:28 /data/oldboy.txt
+
+
+
+find /data/ -type f  -name "*.txt"|xargs ls -l=======如果find命令找不到任何东西 就相当于运行了   ls -l 
+
+1)rm -rf
+2)find + |xargs 
+
+####第6题
+[root@oldboyedu-39 ~]# ls -l /root/data
+ls: cannot access /root/data: No such file or directory
+[root@oldboyedu-39 ~]# mkdir /root/data
+[root@oldboyedu-39 ~]# ls -l /root/data
+total 0
+[root@oldboyedu-39 ~]# cd /root/data/
+[root@oldboyedu-39 data]# pwd
+/root/data
+
+
+[root@oldboyedu-39 ~]# cd /root/data/
+[root@oldboyedu-39 data]# pwd
+/root/data
+[root@oldboyedu-39 data]# #进入到上一级目录
+[root@oldboyedu-39 data]# cd ..
+[root@oldboyedu-39 ~]# pwd
+/root
+[root@oldboyedu-39 ~]# ###.. 上一级目录  当前目录的上一级目录 
+[root@oldboyedu-39 ~]# cd ..
+[root@oldboyedu-39 /]# cd ../../../
+[root@oldboyedu-39 /]# cd ......
+-bash: cd: ......: No such file or directory
+
+
+linux三剑客--处理文字  文本 
+grep 
+sed 
+awk
+
+
+############第8题
+###第1种方法-grep ******
+[root@oldboyedu-39 ~]# cat /data/test.txt 
+test
+liyao
+oldboy
+[root@oldboyedu-39 ~]# grep "你要找什么"  /data/test.txt 
+[root@oldboyedu-39 ~]# grep "oldboy"  /data/test.txt 
+oldboy
+[root@oldboyedu-39 ~]# grep -v "oldboy"  /data/test.txt 
+test
+liyao
+[root@oldboyedu-39 ~]# #排除包含oldboy的这一行
+
+###第2种--取出这个文件的前两行******
+[root@oldboyedu-39 ~]# head -n2 /data/test.txt 
+test
+liyao
+[root@oldboyedu-39 ~]# head -2 /data/test.txt 
+test
+liyao
+
+[root@oldboyedu-39 ~]# tail -n2 /data/test.txt 
+liyao
+oldboy
+[root@oldboyedu-39 ~]# tail -2 /data/test.txt 
+liyao
+oldboy
+
+[root@oldboyedu-39 ~]# #方法3-sed
+[root@oldboyedu-39 ~]# sed '/oldboy/d' /data/test.txt 
+test
+liyao
+[root@oldboyedu-39 ~]# #方法4-awk 
+[root@oldboyedu-39 ~]# awk '/oldboy/' /data/test.txt 
+oldboy
+[root@oldboyedu-39 ~]# 
+[root@oldboyedu-39 ~]# awk '!/oldboy/' /data/test.txt 
+test
+liyao
+
+[root@oldboyedu-39 ~]# #方法5-sed
+[root@oldboyedu-39 ~]# cat /data/test.txt 
+test
+liyao
+oldboy
+[root@oldboyedu-39 ~]# sed '把第三行删除'  /data/test.txt 
+sed: -e expression #1, char 1: unknown command: `
+[root@oldboyedu-39 ~]# sed '3d' /data/test.txt 
+test
+liyao
+[root@oldboyedu-39 ~]# #d---delete
+
+
+###第9题 
+[root@oldboyedu-39 ~]# mkdir /oldboy/test
+mkdir: cannot create directory `/oldboy/test': No such file or directory
+[root@oldboyedu-39 ~]# mkdir -p /oldboy/test
+[root@oldboyedu-39 ~]# ls -l /oldboy/test/
+total 0
+[root@oldboyedu-39 ~]# mkdir -pv /oldboy/test/a/b/c/d/e/f/g/h
+mkdir: created directory `/oldboy/test/a'
+mkdir: created directory `/oldboy/test/a/b'
+mkdir: created directory `/oldboy/test/a/b/c'
+mkdir: created directory `/oldboy/test/a/b/c/d'
+mkdir: created directory `/oldboy/test/a/b/c/d/e'
+mkdir: created directory `/oldboy/test/a/b/c/d/e/f'
+mkdir: created directory `/oldboy/test/a/b/c/d/e/f/g'
+mkdir: created directory `/oldboy/test/a/b/c/d/e/f/g/h'
+
+###
+1.命令 cp mv rm 
+2.find *****
+3.管道  find + |xargs 
+4.grep 
+
+预习：
+1.取文件20-30行
+2.别名
+3.find+sed 
+4.linux基础优化
+
+
+下午:15:00
+word优化
+picpick 
+notepad++
+
+
+01、skip       跳过
+02、basic      基础的
+03、configure  配置 设置 
+04、system     系统 
+05、#os Operating System    操作系统
+06、password       密码 
+07、writing write  写 
+08、disk       磁盘 硬盘 
+09、correct    正确
+10、incorrect  错误 
+11、network    网络 
+12、save       保存
+13、quit       退出 
+14、group      组
+15、establish  创建 建立 连接上了
+16、directory  目录  
+17、command not found 命令找不到  没有这个命令
+18、No such file or directory 没有这个目录或文件 你要找的东西不存在 
+19、cp: omitting directory `/data/' 忽略这个目录 /data 因为cp 默认不能复制目录  
+20、is not a directory这不是目录
+21、overwrite 覆盖
+

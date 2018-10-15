@@ -1,0 +1,605 @@
+﻿=============================================================================================
+# 老男孩教育：                                                                            #
+# www.oldboyedu.com                                                                       #
+# 邮件：miaokm@oldboyedu.com(189 1048 1057)                                               #
+# 地址：北京市昌平区顺沙路8号院汇德商厦4F                                                 #
+# 资源老师   手机电话：		    QQ号码        资源老师： 手机电话：		    QQ号码        #
+# 飞雪		 135 5261 2571		80042789      小雨		 186 0046 2391      390320151     #
+# 歪歪		 189 1171 8229		70271111      丹丹		 158 1059 0206      41117397      #
+# 冰冰		 150 1078 5220		41117483												  #
+=============================================================================================
+
+回顾  
+[root@oldboyedu-39-nb ~]# echo stu{0..10}
+stu0 stu1 stu2 stu3 stu4 stu5 stu6 stu7 stu8 stu9 stu10
+[root@oldboyedu-39-nb ~]# echo stu{01..10}
+stu01 stu02 stu03 stu04 stu05 stu06 stu07 stu08 stu09 stu10
+[root@oldboyedu-39-nb ~]# echo stu{01..100}
+stu001 stu002 stu003 stu004 stu005 stu006 stu007 stu008 stu009 stu010 stu011 stu012 stu013 stu014 stu015 stu016 stu017 stu018 stu019 stu020 stu021 stu022 stu023 stu024 stu025 stu026 stu027 stu028 stu029 stu030 stu031 stu032 stu033 stu034 stu035 stu036 stu037 stu038 stu039 stu040 stu041 stu042 stu043 stu044 stu045 stu046 stu047 stu048 stu049 stu050 stu051 stu052 stu053 stu054 stu055 stu056 stu057 stu058 stu059 stu060 stu061 stu062 stu063 stu064 stu065 stu066 stu067 stu068 stu069 stu070 stu071 stu072 stu073 stu074 stu075 stu076 stu077 stu078 stu079 stu080 stu081 stu082 stu083 stu084 stu085 stu086 stu087 stu088 stu089 stu090 stu091 stu092 stu093 stu094 stu095 stu096 stu097 stu098 stu099 stu100
+
+
+
+单引号，双引号，不加引号区别
+单引号   吃啥吐啥 
+双引号   对特殊符号解释/运行    $ $() `` !
+不加引号 与双引号一样  支持通配符
+[root@oldboyedu-39-nb ~]# #1.单引号
+[root@oldboyedu-39-nb ~]# echo '$LANG $(which mkdir)  {a..z}'
+$LANG $(which mkdir)  {a..z}
+[root@oldboyedu-39-nb ~]# #2.双引号
+[root@oldboyedu-39-nb ~]# echo "$LANG $(which mkdir)  {a..z}"
+en_US.UTF-8 /bin/mkdir  {a..z}
+[root@oldboyedu-39-nb ~]# 
+[root@oldboyedu-39-nb ~]# #3.不加引号
+[root@oldboyedu-39-nb ~]# echo $LANG $(which mkdir)  {a..z}
+en_US.UTF-8 /bin/mkdir a b c d e f g h i j k l m n o p q r s t u v w x y z
+
+老男孩教育每日一题-2017-04-14-说一下单引号、双引号和不加引号区别
+http://lidao.blog.51cto.com/3388056/1916108
+
+
+正则表达式-方便过滤
+^ $ ^$  .*  [abc]  [a-z]  [^abc]
+
+##找出oldboy.txt 中 以m或n开头并且以.或m结尾的行。
+[root@oldboyedu-39-nb ~]# ##找出oldboy.txt 中 以m或n开头并且以.或m结尾的行。
+[root@oldboyedu-39-nb ~]# 
+[root@oldboyedu-39-nb ~]# cat oldboy.txt
+I am oldboy teacher!
+I teach linux.
+
+I like badminton ball ,billiard ball and chinese chess!
+my blog is http://oldboy.blog.51cto.com
+
+our site is http://www.etiantian.org
+
+my qq num is 49000448.
+
+not 4900000448.
+my god ,i am not oldbey,but OLDBOY!
+[root@oldboyedu-39-nb ~]# ###第一个里程碑-m或n开头的
+[root@oldboyedu-39-nb ~]# grep "^[mn]"   oldboy.txt
+my blog is http://oldboy.blog.51cto.com
+my qq num is 49000448.
+not 4900000448.
+my god ,i am not oldbey,but OLDBOY!
+[root@oldboyedu-39-nb ~]# ###第二个里程碑-找出以.或m结尾的
+[root@oldboyedu-39-nb ~]# 
+[root@oldboyedu-39-nb ~]# 
+[root@oldboyedu-39-nb ~]# 
+[root@oldboyedu-39-nb ~]# grep "[.m]$" oldboy.txt
+I teach linux.
+my blog is http://oldboy.blog.51cto.com
+my qq num is 49000448.
+not 4900000448.
+[root@oldboyedu-39-nb ~]# ####[]中 正则表达式里面的符号  特殊符号  没有特殊含义。
+[root@oldboyedu-39-nb ~]# #####$ .  * 
+[root@oldboyedu-39-nb ~]# grep ".$" oldboy.txt
+I am oldboy teacher!
+I teach linux.
+I like badminton ball ,billiard ball and chinese chess!
+my blog is http://oldboy.blog.51cto.com
+our site is http://www.etiantian.org
+my qq num is 49000448.
+not 4900000448.
+my god ,i am not oldbey,but OLDBOY!
+[root@oldboyedu-39-nb ~]# ####第三个里程碑-并且
+[root@oldboyedu-39-nb ~]# grep "^[mn].*[.m]$" oldboy.txt
+my blog is http://oldboy.blog.51cto.com
+my qq num is 49000448.
+not 4900000448.
+
+显示文件的内容但是不显示oldboy
+
+
+grep "[^oldboy]" /data/test.txt
+###有问题的。
+
+cat >test.txt<<EOF
+oldboy oldboy 
+lidao  lidao 
+bingbing bingbing 
+zhaolaoshi zhaolaoshi 
+EOF
+[root@oldboyedu-39-nb ~]# cat test.txt 
+oldboy oldboy 
+lidao  lidao 
+bingbing bingbing 
+zhaolaoshi zhaolaoshi 
+[root@oldboyedu-39-nb ~]# grep "[^oldboy]" test.txt 
+oldboy oldboy 
+lidao  lidao 
+bingbing bingbing 
+zhaolaoshi zhaolaoshi 
+
+
+###如何记录笔记----过去几个月之后 你还能看懂   可以很快的找到你要的东西 并执行
+
+1.纸和笔记录
+2.整理为以后任何时候都可以马上使用  word
+
+
+1.预习-笔记-截图
+2.课上听讲-必须要会的  经常使用的   不会你就不要做运维了 
+3.讨论-记录整理
+4.课下根据课堂记录和思维导图进行回顾
+
+核心：
+抓住重点
+
+
+基础正则 
+扩展正则表达式
++ | () {} ?
+egrep=======grep -E 
+
+
+
+#####扩展正则表达式------+
+加号前一个字符连续出现了一次或多次，可以取出连续出现的字母字符 文字
+
+
+
+
+连续出现---相同的东西 在一起 
+0
+00 
+000 
+0000000000000000000000000000000000000000000000000000000000000000000000000000000
+
+000
+000000000000000000000
+0000000000000000000000000000000000000000000000000000000000000
+00000000000000000a00000000000000000
+
+[root@oldboyedu-39-nb ~]# egrep "0+" oldboy.txt
+my qq num is 49000448.
+not 4900000448.
+[root@oldboyedu-39-nb ~]# egrep -o "0+" oldboy.txt
+000
+00000
+[root@oldboyedu-39-nb ~]# ###正则表达式表示 连续出现的时候  -----贪婪 
+
+
+
+#####通过 egrep "0"  与  egrep "0+" 解释连续出现 
+[root@oldboyedu-39-nb ~]# egrep "0" oldboy.txt
+my qq num is 49000448.
+not 4900000448.
+[root@oldboyedu-39-nb ~]# egrep -o "0" oldboy.txt
+0
+0
+0
+0
+0
+0
+0
+0
+[root@oldboyedu-39-nb ~]# egrep "0+" oldboy.txt
+my qq num is 49000448.
+not 4900000448.
+[root@oldboyedu-39-nb ~]# egrep -o "0+" oldboy.txt
+000
+00000
+
+
+######取出oldboy.txt文件中连续出现的小写字母。
+
+##grep  -o  表示显示出grep命令每次找到什么了？ grep找东西的过程
+
+[root@oldboyedu-39-nb ~]# ######取出oldboy.txt文件中连续出现的小写字母。
+[root@oldboyedu-39-nb ~]# ####第一个里程碑-取出文件中的小写字母
+[root@oldboyedu-39-nb ~]# egrep "[a-z]" oldboy.txt
+I am oldboy teacher!
+I teach linux.
+I like badminton ball ,billiard ball and chinese chess!
+my blog is http://oldboy.blog.51cto.com
+our site is http://www.etiantian.org
+my qq num is 49000448.
+not 4900000448.
+my god ,i am not oldbey,but OLDBOY!
+[root@oldboyedu-39-nb ~]# ####第二个里程碑-找出连续的小写字母
+[root@oldboyedu-39-nb ~]# egrep "[a-z]+" oldboy.txt
+I am oldboy teacher!
+I teach linux.
+I like badminton ball ,billiard ball and chinese chess!
+my blog is http://oldboy.blog.51cto.com
+our site is http://www.etiantian.org
+my qq num is 49000448.
+not 4900000448.
+my god ,i am not oldbey,but OLDBOY!
+[root@oldboyedu-39-nb ~]# egrep -o "[a-z]+" oldboy.txt
+am
+oldboy
+teacher
+teach
+linux
+like
+badminton
+ball
+billiard
+ball
+and
+chinese
+chess
+my
+blog
+is
+http
+oldboy
+blog
+cto
+com
+our
+site
+is
+http
+www
+etiantian
+org
+my
+qq
+num
+is
+not
+my
+god
+i
+am
+not
+oldbey
+but
+###取出 文件中连续出现的小写字母--------取出了文件中的单词。
+
+
+
+
+#######扩展正则表达式--------|  或者 
+3306|1521  3306或1521  
+[abc]  a或b或c  [3306|1521] 3或0或6或|（竖线）或1或5或2
+
+
+#######扩展正则表达式-------()   表示一个整体  反向引用（先保护起来，然后使用）
+
+
+[]  中括号
+()  小括号
+{}  大括号 花括号
+
+cat >a.log<<EOF
+good
+glad
+gd	
+god
+goood
+EOF
+
+[root@oldboyedu-39-nb ~]# cat a.log 
+good
+glad
+gd
+god
+goood
+[root@oldboyedu-39-nb ~]# #good或glad的行
+[root@oldboyedu-39-nb ~]# egrep "good|glad" a.log 
+good
+glad
+[root@oldboyedu-39-nb ~]# egrep "goo|lad" a.log 
+good
+glad
+goood
+[root@oldboyedu-39-nb ~]# egrep "g(oo|la)d" a.log 
+good
+glad
+
+
+
+#######扩展正则表达式-------{} 
+0{n,m} 前面一个字符连续出现至少n次，最多出现m次。>=n <=m
+0{n}   前面一个字符连续出现n次                   ==n
+
+#了解 
+0{n,}  前面一个字符连续出现至少n次               >=n
+0{,m}  前面一个字符连续出现最多m次               <=m
+
+
+*  											     >=0 
++  											     >=1 
+
+[root@oldboyedu-39-nb ~]# egrep "0{1,3}" oldboy.txt
+my qq num is 49000448.
+not 4900000448.
+[root@oldboyedu-39-nb ~]# egrep "0{1,3}" oldboy.txt -o
+000
+000
+00
+[root@oldboyedu-39-nb ~]# egrep "0{3,4}" oldboy.txt 
+my qq num is 49000448.
+not 4900000448.
+[root@oldboyedu-39-nb ~]# egrep "0{3,4}" oldboy.txt -o
+000
+0000
+
+[root@oldboyedu-39-nb ~]# egrep "0{3}" oldboy.txt 
+my qq num is 49000448.
+not 4900000448.
+[root@oldboyedu-39-nb ~]# egrep "0{3}" oldboy.txt  -o
+000
+000
+
+
+
+
+#######扩展正则表达式-------？ 前一个字符连续出现了0次或1次
+
+
+
+正则表达式里面表示连续出现  重复
+*     >=0 
+?     0或1
++     >=1        ***************
+{n,m}
+
+
+|        或者
+^      
+$ 
+^$ 
+.*       所有 
+[abc]
+[^abc]  
+
+######基础正则与扩展正则区别 
+基础正则：grep命令默认支持，sed,awk默认支持 
+扩展正则：egrep,sed -r,awk默认支持扩展正则
+
+
+[root@oldboyedu-39-nb ~]# grep "0\+" oldboy.txt
+my qq num is 49000448.
+not 4900000448.
+[root@oldboyedu-39-nb ~]# #####\转义字符 撬棍  脱去马甲 打回原形
+[root@oldboyedu-39-nb ~]# #####正则表达式中 让我们grep sed 直接使用扩展正则
+[root@oldboyedu-39-nb ~]# 
+[root@oldboyedu-39-nb ~]# grep "3306|1521"  /etc/services 
+[root@oldboyedu-39-nb ~]# grep "3306\|1521"  /etc/services 
+mysql           3306/tcp                        # MySQL
+mysql           3306/udp                        # MySQL
+ncube-lm        1521/tcp                # nCube License Manager
+ncube-lm        1521/udp                # nCube License Manager
+
+
+
+
+###########撬棍系列 转义字符系列
+\b 边界
+\n 回车换行
+ 
+
+
+oldboy   oldboy 
+hellooldboy hellooldboy
+awkoldboy   awkoldboy
+sedoldboy sedoldboy
+oldboyedu oldboyedu
+
+
+
+cat >q.txt<<EOF 
+oldboy   oldboy
+hellooldboy hellooldboy
+awkoldboy   awkoldboy
+sedoldboy sedoldboy
+oldboyedu oldboyedu
+EOF
+
+
+取出 只有oldboy的行
+[root@oldboyedu-39-nb ~]# cat q.txt 
+oldboy   oldboy 
+hellooldboy hellooldboy
+awkoldboy   awkoldboy
+sedoldboy sedoldboy
+oldboyedu oldboyedu
+[root@oldboyedu-39-nb ~]# grep "oldboy" q.txt 
+oldboy   oldboy 
+hellooldboy hellooldboy
+awkoldboy   awkoldboy
+sedoldboy sedoldboy
+oldboyedu oldboyedu
+[root@oldboyedu-39-nb ~]# grep "\boldboy" q.txt 
+oldboy   oldboy 
+oldboyedu oldboyedu
+[root@oldboyedu-39-nb ~]# grep "\boldboy\b" q.txt 
+oldboy   oldboy 
+
+
+
+2组-黄冠铭
+egrep -w "oldboy" q.txt 
+egrep "\boldboy\b" q.txt 
+3组组长-温涛  
+[root@oldboyedu-39 oldboy]# grep "\boldboy\b" oldboy.txt 
+班副-刘浩海  
+grep -w "oldboy" q.txt 
+ 
+grep "\boldboy\b" q.txt 
+2组组长-李谦  
+egrep "\boldboy\b" old
+8组--潘立府  
+[root@PLF LT]# grep "\boldboy\b" q.txt 
+oldboy   oldboy 
+
+
+
+####################第一题
+取出网卡的ip地址 
+eth0 
+ifconfig eth0 
+
+第一步定位
+[root@oldboyedu-39-nb ~]# ifconfig eth0 |sed -n '2p'
+          inet addr:10.0.0.200  Bcast:10.0.0.255  Mask:255.255.255.0
+[root@oldboyedu-39-nb ~]# ifconfig eth0 |awk 'NR==2'
+          inet addr:10.0.0.200  Bcast:10.0.0.255  Mask:255.255.255.0
+
+第二步取出ip地址
+
+
+#######方法一
+ifconfig eth0 |sed -n '2p'
+
+[root@oldboyedu-39-nb ~]# ifconfig eth0 |sed -n '2p'
+          inet addr:10.0.0.200  Bcast:10.0.0.255  Mask:255.255.255.0
+[root@oldboyedu-39-nb ~]# ifconfig eth0 |sed -n '2p'|sed 's#^.*dr:##g'
+10.0.0.200  Bcast:10.0.0.255  Mask:255.255.255.0
+[root@oldboyedu-39-nb ~]# ifconfig eth0 |sed -n '2p'|sed 's#^.*dr:##g'|sed 's#Bc.*$##g'
+10.0.0.200  
+
+#######方法二-sed 反向引用（先保护起来，然后使用）
+
+#####第一个里程碑-反向引用（先保护起来，然后使用）
+
+2组-李嘉豪  
+[root@oldboydeu data]# echo 123456|sed -r 's#..(..)..#\1#g'
+34
+9组-周武  
+[root@oldboyedu-39 20170118]# echo 123456 |sed -r 's#..(..)..#\1#g'
+34
+[root@oldboyedu-39 20170118]# 
+8组组长-黄建龙  
+echo 123456 | sed -nr 's#..(.*)..#\1#gp'
+
+
+[root@oldboyedu-39-nb ~]# echo 123456
+123456
+[root@oldboyedu-39-nb ~]# echo 123456|sed 's#..(..)..#\1#g'
+sed: -e expression #1, char 15: invalid reference \1 on `s' command's RHS
+[root@oldboyedu-39-nb ~]# echo 123456|sed -r 's#..(..)..#\1#g'
+34
+
+
+#####第二个里程碑-通过反向引用取出ip地址
+[root@oldboyedu-39-nb ~]# ifconfig eth0
+eth0      Link encap:Ethernet  HWaddr 00:0C:29:AA:0B:E9  
+          inet addr:10.0.0.200  Bcast:10.0.0.255  Mask:255.255.255.0
+          inet6 addr: fe80::20c:29ff:feaa:be9/64 Scope:Link
+          UP BROADCAST RUNNING MULTICAST  MTU:1500  Metric:1
+          RX packets:70675 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:64369 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:1000 
+          RX bytes:14668487 (13.9 MiB)  TX bytes:32083048 (30.5 MiB)
+
+[root@oldboyedu-39-nb ~]# ifconfig eth0|sed -n '2p'
+          inet addr:10.0.0.200  Bcast:10.0.0.255  Mask:255.255.255.0
+[root@oldboyedu-39-nb ~]# ifconfig eth0|sed -n '2p'|sed -r 's#^.*dr:##g'
+10.0.0.200  Bcast:10.0.0.255  Mask:255.255.255.0
+[root@oldboyedu-39-nb ~]# ifconfig eth0|sed -n '2p'|sed -r 's#^.*dr:(.*)Bc.*$#\1#g'
+10.0.0.200  
+
+
+
+
+#####第二题
+#取出/etc/hosts的权限644或0644.
+[root@oldboyedu-39-nb ~]# stat /etc/hosts 
+  File: `/etc/hosts'
+  Size: 216       	Blocks: 8          IO Block: 4096   regular file
+Device: 803h/2051d	Inode: 260126      Links: 2
+Access: (0644/-rw-r--r--)  Uid: (    0/    root)   Gid: (    0/    root)
+Access: 2017-07-30 00:02:05.983001919 +0800
+Modify: 2017-05-20 22:57:33.530934887 +0800
+Change: 2017-05-20 22:57:33.533934704 +0800
+
+
+
+班长-李阳 
+[root@oldboyedu-39 ~]# stat /etc/hosts | sed -nr '4s#^.* \((.*)/-.*$#\1#g'p
+0644
+3组组长-温涛  
+[root@oldboyedu-39 ~]# stat /etc/hosts|sed -nr '/^A.* \(/s#^.*\(0(.*)/-.*$#\1#gp'
+644
+
+
+
+
+####方法一 -去掉开头与结尾 留下权限部分
+[root@oldboyedu-39-nb ~]# stat /etc/hosts
+  File: `/etc/hosts'
+  Size: 216       	Blocks: 8          IO Block: 4096   regular file
+Device: 803h/2051d	Inode: 260126      Links: 2
+Access: (0644/-rw-r--r--)  Uid: (    0/    root)   Gid: (    0/    root)
+Access: 2017-07-30 00:02:05.983001919 +0800
+Modify: 2017-05-20 22:57:33.530934887 +0800
+Change: 2017-05-20 22:57:33.533934704 +0800
+[root@oldboyedu-39-nb ~]# stat /etc/hosts|awk 'NR==4'
+Access: (0644/-rw-r--r--)  Uid: (    0/    root)   Gid: (    0/    root)
+[root@oldboyedu-39-nb ~]# stat /etc/hosts|awk 'NR==4'|sed 's#^.*(0##g'
+644/-rw-r--r--)  Uid: (    0/    root)   Gid: (    0/    root)
+[root@oldboyedu-39-nb ~]# stat /etc/hosts|awk 'NR==4'|sed 's#^.*(0##g'|sed 's#/.*$##g'
+644
+
+
+###方法二 反向引用 
+
+[root@oldboyedu-39-nb ~]# stat /etc/hosts
+  File: `/etc/hosts'
+  Size: 216       	Blocks: 8          IO Block: 4096   regular file
+Device: 803h/2051d	Inode: 260126      Links: 2
+Access: (0644/-rw-r--r--)  Uid: (    0/    root)   Gid: (    0/    root)
+Access: 2017-07-30 00:02:05.983001919 +0800
+Modify: 2017-05-20 22:57:33.530934887 +0800
+Change: 2017-05-20 22:57:33.533934704 +0800
+[root@oldboyedu-39-nb ~]# stat /etc/hosts|awk 'NR==4'
+Access: (0644/-rw-r--r--)  Uid: (    0/    root)   Gid: (    0/    root)
+[root@oldboyedu-39-nb ~]# stat /etc/hosts|awk 'NR==4'|sed -r 's#^.*(0##g'
+sed: -e expression #1, char 10: Unmatched ( or \(
+[root@oldboyedu-39-nb ~]# #sed命令提示  不匹配的 不成对的 ( 
+[root@oldboyedu-39-nb ~]# stat /etc/hosts|awk 'NR==4'|sed -r 's#^.*\(0##g'
+644/-rw-r--r--)  Uid: (    0/    root)   Gid: (    0/    root)
+[root@oldboyedu-39-nb ~]# stat /etc/hosts|awk 'NR==4'|sed -r 's#^.*\(0(.*)/##g'
+    root)
+[root@oldboyedu-39-nb ~]# stat /etc/hosts|awk 'NR==4'|sed -r 's#^.*\(0(.*)/-##g'
+rw-r--r--)  Uid: (    0/    root)   Gid: (    0/    root)
+
+[root@oldboyedu-39-nb ~]# stat /etc/hosts|awk 'NR==4'|sed -r 's#^.*\(0(.*)/-.*$#\1#g'
+644
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+问题
+[root@oldboyedu-39 oldboy]# ifconfig eth0 |sed -n '2p'|sed "s#^.*dr:##g" |sed "s#Bc.*$##g"
+sed: -e expression #1, char 9: unterminated `s' command
+
+[root@oldboyedu-39-nb ~]# ifconfig eth0|awk "NR==2"|sed "s#^.*dr:##g"|sed "s#Bc.*$##g"
+
+
+
+[root@oldboyedu-39-nb ~]# ifconfig eth0 |sed -n '2p'|sed 's#^.*dr:##g' |sed 's#Bc.*$##g'
+10.0.0.200  
+
+
+
+
+取出网卡ip地址
+取出/etc/hosts的权限644或0644
+取出网卡的IP地址和10.0.0.255 
+
+1.awk方法
+2.第三关剩下题目
+
+

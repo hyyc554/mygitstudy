@@ -1,0 +1,259 @@
+=============================================================================================
+# 老男孩教育：                                                                            #
+# www.oldboyedu.com                                                                       #
+# 邮件：miaokm@oldboyedu.com(189 1048 1057)                                               #
+# 地址：北京市昌平区顺沙路8号院汇德商厦4F                                                 #
+# 资源老师   手机电话：		    QQ号码        资源老师： 手机电话：		    QQ号码        #
+# 飞雪		 135 5261 2571		80042789      小雨		 186 0046 2391      390320151     #
+# 歪歪		 189 1171 8229		70271111      丹丹		 158 1059 0206      41117397      #
+# 冰冰		 150 1078 5220		41117483												  #
+=============================================================================================
+
+
+
+屌丝坐地铁之路 
+1.看路是否通了 ping 
+2.看是否有人打劫 selinux  iptables
+
+3.是否有人卖票 telnet 
+
+
+/selinux /selinux /selinux /selinux /selinux /selinux /selinux 
+/selinux /selinux /selinux /selinux /selinux /selinux /selinux 
+/selinux /selinux /selinux /selinux /selinux /selinux /selinux 
+
+提问之前
+1.把你的错误 翻译过来 中文   
+
+提问的时候
+1.方便别人查看-截图+截图里面的文字
+find / xxxxxxxxxxxxxx |xargs sed '' 
+2.你在干什么的时候遇到了什么问题---问题的背景 
+3.我很着急，江湖救急-----多找几个人 
+
+提问之后---关键不是你认识多少人，是让多少人认识你
+1.总结好
+2.发给你问问题的问  无论他是否回复你
+3.我的问题解决了  下次遇到相同的问题的时候  你可以发送我的文档
+
+
+
+##找出/oldboy目录下面 所有以.txt 结尾的文件 把里面的oldboy 替换为oldgirl 
+
+狭路相逢，勇者胜。
+
+
+######1.查看系统版本 和内核版本 
+
+[root@oldboyedu-39 ~]# cat /etc/redhat-release 
+CentOS release 6.9 (Final)
+[root@oldboyedu-39 ~]# #uname 你的名字
+[root@oldboyedu-39 ~]# uname -r
+2.6.32-696.el6.x86_64
+[root@oldboyedu-39 ~]# #i686
+[root@oldboyedu-39 ~]# uname -m
+x86_64
+[root@oldboyedu-39 ~]# #你工作中使用的系统的版本  
+[root@oldboyedu-39 ~]# #centos 6.9 2.6.32  x86_64(64位)系统 
+
+######2.给系统添加一个用户 
+超级管理员(root)： root默认在unix/linux操作系统中拥有最高的管理权限。比喻：皇帝
+普通用户：管理员或者具备管理权限的用户创建的。权限：系统管理仅可以读、看，不能增、删、改。 
+
+
+#添加用户
+[root@oldboyedu-39 ~]# useradd oldboy
+
+#设置密码 
+#password
+[root@oldboyedu-39 ~]# passwd oldboy
+Changing password for user oldboy.
+New password: 
+BAD PASSWORD: it is too simplistic/systematic
+BAD PASSWORD: is too simple
+Retype new password: 
+passwd: all authentication tokens updated successfully.
+
+#
+[root@oldboyedu-39 ~]# #切换用户 root ----> oldboy 
+[root@oldboyedu-39 ~]# su - oldboy
+[oldboy@oldboyedu-39 ~]$ #我是谁
+[oldboy@oldboyedu-39 ~]$ whoami 
+oldboy
+[oldboy@oldboyedu-39 ~]$ #退出当前用户
+[oldboy@oldboyedu-39 ~]$ #ctrl+d
+[oldboy@oldboyedu-39 ~]$ whoami 
+oldboy
+[oldboy@oldboyedu-39 ~]$ logout
+[root@oldboyedu-39 ~]# whoami 
+root
+
+
+
+
+变量（放东西  查看变量的内容 ）
+PS1---变量的名字------藏经阁里面的武功秘籍（葵花宝典） 秘籍名字（书名）
+$PS1---查看变量里面的内容---手端着书（葵花宝典） 看书的内容（读书）
+PS1=新的内容 ---向变量里面放入东西----修改书的内容（升级书）
+
+
+#################3.selinxu关闭 
+######第一个脚印-永久关闭selinux 
+
+##第一个里程碑-操作前备份
+[root@oldboyedu37 ~]# cp /etc/selinux/config /etc/selinux/config.bak
+[root@oldboyedu37 ~]# 
+[root@oldboyedu37 ~]# 
+[root@oldboyedu37 ~]# 
+##第二个里程碑-通过vim 修改 /etc/selinux/config文件
+
+# This file controls the state of SELinux on the system.
+# SELINUX= can take one of these three values:
+#     enforcing - selinux 已经启动 已经开启 
+#     permissive  selinux 临时停用 会显示警告
+#     disabled -  selinux 彻底关闭 不再运行
+SELINUX=enforcing 修改为 disabled
+
+
+[root@oldboyedu-39 ~]# cat  /etc/selinux/config
+
+# This file controls the state of SELinux on the system.
+# SELINUX= can take one of these three values:
+#     enforcing - SELinux security policy is enforced.
+#     permissive - SELinux prints warnings instead of enforcing.
+#     disabled - No SELinux policy is loaded.
+SELINUX=disabled
+# SELINUXTYPE= can take one of these two values:
+#     targeted - Targeted processes are protected,
+#     mls - Multi Level Security protection.
+SELINUXTYPE=targeted 
+
+
+[root@oldboyedu-39 ~]# grep "disabled" /etc/selinux/config
+#     disabled - No SELinux policy is loaded.
+SELINUX=disabled
+
+
+
+##第三个里程碑-检查结果 
+[root@oldboyedu37 ~]# grep "disabled" /etc/selinux/config
+#     disabled - No SELinux policy is loaded.
+SELINUX=disabled
+
+##生效--修改selinux的配置文件 需要重启服务器  
+不要给自己任何理由 重启服务器
+
+
+
+
+
+##第二个脚印-临时关闭selinux
+[root@oldboyedu-39 ~]# ###第一个里程碑-查看selinux状态
+[root@oldboyedu-39 ~]# getenforce 
+Enforcing
+[root@oldboyedu-39 ~]# ###第二个里程碑-关闭selinux
+[root@oldboyedu-39 ~]# setenforce 
+usage:  setenforce [ Enforcing | Permissive | 1 | 0 ]
+[root@oldboyedu-39 ~]# setenforce 0
+[root@oldboyedu-39 ~]# getenforce 
+Permissive
+[root@oldboyedu-39 ~]# ###重启服务器之后失效
+
+
+
+getenforce 
+grep "=disabled" /etc/selinux/config
+
+
+如何关闭selinux
+1.永久
+备份
+cp /etc/selinux/config /etc/selinux/config.bak 
+
+修改/etc/selinux/config
+SELINUX=disabled
+
+2.临时 
+setenforce 0 
+getenforce 
+
+
+
+
+####4.关闭防火墙 iptables 
+
+
+#####1.临时关闭iptables
+[root@oldboyedu-39 ~]# /etc/init.d/iptables stop
+iptables: Setting chains to policy ACCEPT: filter          [  OK  ]
+iptables: Flushing firewall rules:                         [  OK  ]
+iptables: Unloading modules:                               [  OK  ]
+[root@oldboyedu-39 ~]# /etc/init.d/iptables stop
+[root@oldboyedu-39 ~]# 
+[root@oldboyedu-39 ~]# #查询防火墙是否正在运行---状态
+[root@oldboyedu-39 ~]# /etc/init.d/iptables status 
+iptables: Firewall is not running.
+
+##我们关闭掉了红蜘蛛  360软件 
+###我们刚刚 已经把 iptables /etc/init.d/iptables stop  关闭 
+
+
+
+####2.永久 --- 让防火墙在开机启动的时候也关闭 
+
+#开机自动   开机的时候自动运行 iptables 
+
+[root@oldboyedu-39 ~]# ####2.永久 --- 让防火墙在开机启动的时候也关闭 
+[root@oldboyedu-39 ~]# 
+[root@oldboyedu-39 ~]# #开机自动   开机的时候自动运行 iptables 
+[root@oldboyedu-39 ~]# 
+[root@oldboyedu-39 ~]# chkconfig iptables off
+[root@oldboyedu-39 ~]# ##检查结果
+[root@oldboyedu-39 ~]# chkconfig |grep ipt
+iptables       	0:off	1:off	2:off	3:off	4:off	5:off	6:off
+
+
+##1.查看防火墙当前是否正在运行 
+##2.查看防火墙是否开机自启动 
+
+
+
+su与su -区别
+
+
+
+
+01、skip       跳过
+02、basic      基础的
+03、configure config 配置 设置 
+04、system     系统 
+05、#os Operating System    操作系统
+06、password       密码 
+07、writing write  写 
+08、disk       磁盘 硬盘 
+09、correct    正确
+10、incorrect  错误 
+11、network    网络 
+12、save       保存
+13、quit       退出 
+14、group      组
+15、establish  创建 建立 连接上了
+16、directory  目录  
+17、command not found 		  命令找不到  没有这个命令
+18、No such file or directory 没有这个目录或文件 你要找的东西不存在 
+19、cp: omitting directory `/data/' 忽略这个目录 /data 因为cp 默认不能复制目录  
+20、is not a directory这不是目录
+21、overwrite 覆盖
+22、Changing  change  改变 修改 
+23、password  密码 
+24、user      用户 
+25、successfully   成功
+26、#switch   切换 
+27、hostname  主机名 
+28、table     表格 表 
+29、running   运行    
+30、status    状态 
+31、Usage     说明 使用说明  
+
+
+

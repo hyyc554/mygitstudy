@@ -1,0 +1,496 @@
+﻿1.mkdir   创建目录  make directory 
+   -p   一层一层创建目录 （递归）
+      
+2.ls      显示目录中的内容，列表 list 
+
+-l（小写字母L) 显示详细的信息     
+-d             表示把目录当做普通文件来对待   显示目录本身的信息 
+  ls -l   /tmp  ##显示 /tmp目录里面的详细信息 
+  ls -ld /tmp   ##显示/tmp 目录本身的详细信息 
+  
+-F 给不同类型的文件加上不同的标记  /----表示目录 
+
+-r  按照逆序（倒序，反过来）的顺序进行排列
+
+-t  按照文件的修改时间排序 
+
+ls -lrt 或   ll -rt 
+
+
+3.pwd  显示当前你所在的位置 路径 
+
+4.cd   改变当前你所在位置/路径/目录
+  -   表示回到上一次使用的工作目录（回到最近一次的位置）
+  
+  
+5.touch 摸 创建文件  修改文件的时间戳
+
+6.vi 文本编辑器 
+
+1）使用vi打开oldboy.txt
+vi /data/oldboy.txt
+默认是命令模式。
+2）i  ===>insert插入模式(编辑模式)  ====>然后输入文本
+I am studying linux.
+3）按esc键 我不想编辑了，退出编辑模式（插入模式），再次进入到命令模式
+
+4）保存并退出
+:wq
+w write 写入
+q quit  退出
+
+5）补充
+:q  表示的是退出 quit 
+
+:q!   q!表示强制退出  退出不保存 
+
+vi   windwows记事本
+vim  notepad++ emeditor 复杂
+
+
+vi/vim 命令（快捷键）
+gg   把光标移动到文件的第一行 
+G    把光标移动到文件的最后行
+
+
+:set nu      ##显示行号,临时给你看
+:set nonu    ##不显示行号
+
+x       #删除光标所在的字母
+
+批量删除
+1.选择好你要删除的内容
+ctrl+v  #批量操作 可是块模式 
+2.按x 删除 
+
+批量插入 添加内容 
+1.
+ctrl + v  选好范围
+2.
+shift+ i
+输入你想要批量添加的内容
+3.
+修改完成后，按esc
+
+
+
+
+7.cat   显示文件内容 
+  -n  显示文件内容并显示行号
+   
+
+   
+  
+  往文件中一次放入多行 
+  
+  
+  
+  
+cat >>/data/oldboy.txt<<EOF
+I am studying linux.
+I am studying linux.
+I am studying linux.
+I am studying linux.
+I am studying linux.
+I am studying linux.
+EOF
+
+8.echo  把后面的内容显示（输出，打印）到屏幕
+  -n    不不输出结尾的回车
+  -e    让echo命令支持 撬棍系列/转义符号系列   
+        \t  tab8个空格长的位置   
+		\n  回车换行
+
+		
+
+9.xargs 分组
+  -n 2  分成2组 每一行只显示2列。
+
+10.cp  复制文件或目录  默认不能复制目录 
+    -a  -pdr 
+	-r  递归 目录及目录的内容（子孙后代）
+    -p  复制的时候 保持文件或目录的属性不变。
+11.mv  移动（搬家）  
+mv /data /root
+
+12.rm  remove 删除 删除文件或目录 默认只能删除文件 
+   -r  递归 删除目录 及目录的内容（子孙后代）
+   -f  强制删除 不给任何提示
+   
+13.find  用来找文件或目录	linux四剑客
+   find /data/     -type f      -name "oldboy.txt"
+        找哪里的？ 找什么类型   找什么名字
+        -maxdepth   1    表示find命令 查找的最大的深度（最多查找几层目录）
+		
+		-type  f（file普通文件） 
+		       d(directory目录 )
+        
+		-name "*.txt"
+	    
+		-mtime +7   查找修改时间是7天以前的东西   修改时间
+		
+		-size +100k  根据大小查找东西   
+		-size +1M    
+		
+		 以.txt结尾的文件
+		 find /data -type f -name "*.txt"
+	
+
+	
+14.grep 三剑客老三，擅长过滤，在文件中找东西
+   
+   -v   排除，把grep找到的东西 排除掉。
+   -n   给显示到屏幕上的内容加上行号  给grep命令找到的东西 加上行号
+   -i   过滤的时候，不区分大小写
+   
+   -c # 统计行数，统计包含你想要的东西，一共有几行。
+   
+   
+   
+15.head 头，取文件的头几行，默认文件的前10行 
+   -num   取文件的头num行  ===== -n 数字 
+
+
+
+16.tail 尾，取文件的结尾的几行，默认文件的结尾的10行		 
+    -f  显示文件的实时更新  
+   tail -f  ====== tailf 
+
+17.alias  查看或配置linux别名
+   unalias 临时取消别名
+18.sed  三剑客老二，擅长取某一行 
+sed -n '20,30p' ett.txt
+   -n  取消默认输出  与 p配合 
+   
+   -i  修改文件的内容
+   
+   's#oldboy#oldgirl#g'
+
+19.awk  三剑客老大，擅长取某一列
+   NR    行号 number of record
+   $数字 某一列 
+   $NF   最后一列
+
+   显示   '{print $3,$NF}'
+   
+awk 'NR==20,NR==30' ett.txt
+
+   -F  指定菜刀 分隔符
+   -F ","    指定以逗号为菜刀 只有一把刀 
+   
+   -F "[ ,]" 指定多把菜刀
+[root@oldboyedu36-nb oldboy]# awk -F "[ ,]"  '{print $3,$NF}' oldboy.txt 
+oldboy 31333741
+    
+	
+
+
+
+20.ifup  启动某一块网卡
+   ifup eth0 
+21.ifdown 关闭某一块网卡
+    ifdown eth0 
+	
+	
+22.ifconfig  查看网卡的ip地址
+
+23.uname  显示系统内核信息
+   -r    显示的是内核版本 
+   -m    32位 64位 
+
+26.whoami  查看当前用户名字
+
+27.su   switch user  切换用户 
+su  -  oldboy
+
+
+
+30.df 查看磁盘使用情况 
+   -h  --human-readable
+
+31.yum linux里面安装软件的命令  软件包管理工具 ======= windows xxxx软件管家   
+   yum install tree -y 
+   
+   -y 表示 提示你 y/N   都选择y[es]
+   
+32.hostname  查看或修改主机名（临时修改 重启服务器之后失效）
+   
+   hostname  
+   hostname  oldboyedu36 
+   
+   
+33. uptime 显示当前系统负载及运行时间  
+
+34. w      谁登陆了你的系统 她们当前在干什么   同时也可以显示当前系统负载及运行时间
+
+35.nl   number  line  给文件的每一行加上行号并显示这一行的内容
+
+36.chkconfig 用来管理开机自启动软件/服务 
+
+   --list    查看指定服务的开机启动状态 
+   chkconfig |grep ipt 
+
+   --level   指定运行级别 
+   chkconfig --level 0123456  iptables   off
+   
+   
+   chkconfig iptables off 
+
+37.tar  linux里面打包压缩的工具    
+   zcvf ----- zcf     etc.tar.gz 
+                      etc.tar.bz
+z----gzip--   etc.tar.gz
+j----bzip--   etc.tar.bz
+   
+   z   --- gzip  压缩 
+   c       create  创建[压缩]包
+   v             显示过程 
+   f             指定压缩包(筐)的位置和名字
+   
+   x             解开压缩包
+   t       list   查看压缩包中的内容
+   
+   --exclude        打包压缩排除某个文件，使用相对路径 
+   -X --exclude-from   打包压缩根据一个清单(名单）来排除
+   
+   -C --directory    解压到指定的文件夹（目录）
+   
+38.cut   取列
+   -d  指定菜刀，一次只能指定一个菜刀 
+   
+   -f  取某一部分
+   -f1 取第一列
+   -f1,3  取第一列和第三列 
+   -f1-4  从哪里来到哪里去  取第一列到第四列   -f1,2,3,4 
+   
+39.wc  统计文件的内容 多少行 多大 
+   -l（小写字母L）  显示文件有多少行 
+
+40.source或.(点) 让一些配置生效 
+   /etc/sysconfig/i18n 
+   /etc/profile 
+   
+   
+41.file 查看文件到底是什么类型
+
+42.dumpe2fs  查看文件系统(分区)的信息
+43.ln   创建链接 默认创建硬链接
+    -s  创建软/符号链接 
+
+44.stat 查看文件详细信息
+
+
+46.tr   阉割版的sed sed小弟 
+
+#tr的特点是一个字母一个字母的替换
+#tr "abc" "def"  把a替换为d  b替换为e c替换为f 
+echo 123abcab |tr "abc" "def"
+123defde
+[root@oldboyedu37-nb 20170118]# echo 123abcab |tr "a-z" "A-Z" 
+123ABCAB
+47.lsof  list open files 显示所有被打开的文件 （日志）
+lsof |grep delete 
+
+48.date 显示/设置时间 日期 
+   
+   -d   根据你的描述显示指定的时间
+   3 day 3天以后 === +3 day 
+  -3 day 3天以前  
+   
+   day  天
+   
+   +%F  以指定的格式显示日期 +%Y-%m-%d
+   +%T  %H-%M-%S
+   
+   -s  修改/设置系统时间
+   ntpdate  ntp1.aliyun.com 
+   ntpdate  www.ntp.org
+49.which 查找命令的位置 绝对路径 全路径 
+
+50.locate 根据名字找文件
+ 根据一个库/表格（数据库来查找的）
+ /var/lib/mlocate/mlocate.db
+
+51.whereis 查找出命令的位置和帮助手册位置
+
+24.useradd  添加用户 
+   -u 指定用户的UID
+   -s 指定用户使用的shell  /bin/bash /sbin/nologin 
+   -M 创建用户的时候 不创建家目录 
+   -g 添加用户的时候 指定属于哪个用户组 
+   
+   
+25.passwd   给用户设置密码
+   --stdin从管道前面获取密码
+[root@oldboyedu36 ~]# 
+[root@oldboyedu36 ~]# echo 123456 |passwd --stdin oldboy
+Changing password for user oldboy.
+passwd: all authentication tokens updated successfully.
+
+52.userdel 删除用户 
+   -r 连窝端删除与用户有关的所有信息（家目录）
+   
+53.groupadd  创建用户组 
+   -g 指定用户组的gid 数字
+   
+54.usermod 修改用户信息
+   -u 指定用户的UID
+   -s 指定用户使用的shell  /bin/bash /sbin/nologin 
+   -g 添加用户的时候 指定属于哪个用户组 
+
+45.id   查看用户id信息
+
+55.last 哪个用户在什么时候 从哪里 远程登录你的系统 
+
+56.lastlog 显示linux中所有用户最近一次登录的信息
+
+57.fdisk   格式化工具 磁盘小于2TB(mbr)
+
+58.parted  格式化工具 磁盘大于2TB(gpt)
+
+59.mkfs    创建文件系统（格式化）
+   -t 指定文件系统 
+   mkfs.ext4   === mkfs -t ext4 
+
+60.tune2fs 修改调整文件系统信息
+   -c 40 在40次挂载之后 该文件系统会被磁盘检查 改为0 则关闭这个功能 
+   -i 检查的间隔 改为0 则关闭这个功能 
+  
+  
+28.mount 挂载 
+   mount /dev/sdb1 /mnt 
+ 
+29.umount 卸载 
+   umount /mnt  
+   
+   -lf  强制卸载 
+   
+   
+61.rpm  rpm包查询 安装
+-qa 查询所有
+-q query 查询 
+-a 所有 
+
+-ql 
+-l  list 列表 显示软件包里面的详细信息
+
+-qf 查询某一个命令或文件属于哪一个软件包 （使用绝对路径）
+
+
+-ivh 软件包.rpm  安装rpm软件包 
+
+
+##检查软件是否安装
+[root@backup ~]# rpm -qa |grep rsync
+rsync-3.0.6-12.el6.x86_64
+
+##查看软件包里面有什么内容
+[root@backup ~]# rpm -ql rsync
+/etc/xinetd.d/rsync
+/usr/bin/rsync
+[root@backup ~]# #在这个软件仓库里面 ssh这个软件没有 找不到
+[root@backup ~]# ##我想安装ssh命令
+[root@backup ~]# ##你必须安装对应的礼包
+[root@backup ~]# ##我想根据ssh命令 找到他属于的包
+[root@backup ~]# rpm -qf ssh
+error: file /root/ssh: No such file or directory
+[root@backup ~]# rpm -qf `which ssh`
+openssh-clients-5.3p1-122.el6.x86_64
+
+62.killall  杀掉进程 根据进程的名字
+
+
+63.kill     杀掉进程 根据进程的号码 pid
+   
+   -9      强制杀掉进程 尽量避免使用
+
+64.pkill    杀掉进程  根据进程名字 模糊 正则
+
+pkill sh
+##只要包含sh都会杀掉 
+/bin/sh 
+sshd
+
+65.scp 
+
+
+66.ssh 
+
+
+67.nc 
+
+68.telnet
+
+69.nmap 
+  -p 1-1024 
+  nmap  -p1-1024 10.0.0.0/24 172.16.1.0/24 
+
+70.curl 
+   -I 只显示相应头部
+   -v 显示请求与响应的过程
+   
+   -s 安静slient  不显示头部的统计信息  
+   -w 以指定格式显示
+      http_code
+   -o 把curl命令的额外的输出 定向到 xxx  
+   -L 根据重定向信息 访问原来的网站 
+   
+   
+
+71.wget 
+
+php-5.5.32.tar.gz 
+mysql-5.6.34-linux-glibc2.5-x86_64.tar.gz 
+libiconv xxxx
+
+
+linux下面查询帮助的方法：
+1.man 命令 
+
+http://linux.51yip.com
+http://man.linuxde.net
+2.命令 --help    -h(少数) 
+3.linux内置命令  help cd   ##
+
+4.vim 里面查询帮助的方法
+G  在vim里面查询G是什么意思？
+
+:h[elp] G
+
+:h[elp] :wq
+
+	
+linux下面的快捷键
+1.ctrl+c            取消当前的操作 
+2.ctrl+l(小写字母L)  清屏（清楚屏幕上的内容）
+
+
+特殊符号：
+1.>
+2.>>
+3.<
+4.<<
+5. *(星号)    表示所有东西（文本 文字） *.txt 
+6. | （管道） 把前一个命令的结果通过管道传递给后面一个命令
+7. .. (点点)  表示上一级目录 当前目录的上一级目录。
+8. . (点)     表示当前目录。
+9. $()   ``   先执行里面的命令，然后把结果留下来 风过留痕,雁过拔毛
+10. ~         当前用户的家目录
+    ~oldboy   oldboy用户的老家 
+
+
+正则表达式-三剑客
+1. ^（尖号）  正则表达式里面的内容，三剑客， ^d   以字母d开头的行 
+2. |          扩展正则（高级货），表示或者   egrep命令支持  
+
+	
+[root@oldboyedu36-nb ~]# #cd /home/oldboy/
+[root@oldboyedu36-nb ~]# cd ~oldboy
+[root@oldboyedu36-nb oldboy]# pwd
+/home/oldboy
+
+*****单引号：所见即所得，吃啥吐啥
+*****双引号：特殊符号有了原有的特殊含义，$LANG  $() `` 
+
+不加引号：和双引号类似，但是支持通配符（*）
+

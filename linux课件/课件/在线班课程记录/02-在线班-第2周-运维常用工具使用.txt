@@ -1,0 +1,48 @@
+####################################
+###在线班-随堂记录-第2周############
+####################################
+
+1.word-优化自动替换 
+2.notepad++ 
+3.picpick简单的绘图
+4.亿图
+5.everything 搜索工具
+
+临时缓存-临时保存
+e:\data\picpick
+e:\data\word
+e:\data\xshell
+
+
+
+1.word-优化自动替换 
+1).校对-自动更正
+2).自动保存
+
+2.notepad++ 编辑器 
+1)notepad++基础设置
+2)notepad++插件
+
+3.picpick简单的绘图
+
+4.亿图
+
+5.everything查找工具
+E:\iso\CentOS-6.9-x86_64-bin-DVD1.iso
+
+
+总结：
+1.word优化
+2.notepad++  Sublime  emeditor  ultraedit
+3.picpick 截图  亿图
+4.everything 
+
+
+
+
+
+
+
+
+
+

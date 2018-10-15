@@ -1,0 +1,314 @@
+=============================================================================================
+# 老男孩教育：                                                                            #
+# www.oldboyedu.com                                                                       #
+# 邮件：miaokm@oldboyedu.com(189 1048 1057)                                               #
+# 地址：北京市昌平区顺沙路8号院汇德商厦4F                                                 #
+# 资源老师   手机电话：		    QQ号码        资源老师： 手机电话：		    QQ号码        #
+# 飞雪		 135 5261 2571		80042789      小雨		 186 0046 2391      390320151     #
+# 歪歪		 189 1171 8229		70271111      丹丹		 158 1059 0206      41117397      #
+# 冰冰		 150 1078 5220		41117483												  #
+=============================================================================================
+
+
+1.剩余的知识点
+
+#####linux分区方法
+
+###通用的分区方法---没有什么重要的数据
+/boot  200M    存放系统的引导信息 内核
+swap   交换分区   防止内存用光了 临时的一个内存  
+如果你的内存小于8G swap是内存的1.5倍   如果你的内存大于8G swap给8G 
+/	   根分区  剩余多少给多少 
+目前只有一个c盘
+
+
+
+###分区方法---你有很多重要数据的时候 
+/boot  200M    存放系统的引导信息 内核
+swap   交换分区   防止内存用光了 临时的一个内存  
+如果你的内存小于8G swap是内存的1.5倍   如果你的内存大于8G swap给8G 
+/	   根分区  	      20G-200G 
+/data  存放重要的数据 剩余多少给多少 
+
+
+
+###分区方法---你不知道数据是否重要
+/boot  200M    存放系统的引导信息 内核
+swap   交换分区   防止内存用光了 临时的一个内存  
+如果你的内存小于8G swap是内存的1.5倍   如果你的内存大于8G swap给8G 
+/	   根分区  	      20G-200G 
+剩余空间不分 放着谁使用这台服务器谁来分区
+
+
+#####linux安装的时候 选择的是最小化安装 + 4个软件包 
+#yum groupinstall "Compatibility libraries" "Base" "Development tools"
+#yum groupinstall "debugging Tools" "Dial-up Networking Support"
+
+
+
+##学习方法的问题
+来到老男孩教育----发现大家的问题---解决
+
+真的会了？
+1.讲出来  给别人教会
+2.举一反三 
+
+
+5-6个月之后--面临的是找工作 
+1.能让面试官认为你会了-------I wanted you ----- 说出来 能给别人讲明白
+2.答题-笔试题
+
+
+
+1.能给面试官说明白---现在大家可以说出来 张开嘴
+2.把会了的内容 写出来 命令---勤动手 
+
+
+课前预习（简单的记录+截图）--知道了解下一次课程的内容 把自己认为是重点的记录好 
+课堂听讲(记录扩展预习的内容 ) 记录好 重点
+课堂讨论
+课下复习
+课下作业
+课下讨论
+
+
+
+
+
+2.远程连接拍错-屌丝坐地铁之路
+
+预备姿势
+
+远程连接----远程连接软件-Xshell/SecureCRT/putty
+
+ip地址------服务器的位置*******
+10.0.0.200 
+
+端口号码----服务的暗号*********
+一台主机上的不同服务功能，就是通过端口区分，然后让外部人员访问。
+远程连接服务（sshd） ===> 端口号22
+
+协议--------默认遵守的规则 
+
+屌丝坐地铁之路--远程连接拍错过程 
+
+第一个里程碑-路是否通了
+本地Shell运行命令 程序  -------windows运行命令或程序
+ping 10.0.0.200 
+
+###通畅
+[d:\~]$ ping 10.0.0.200 
+
+正在 Ping 10.0.0.200 具有 32 字节的数据:
+来自 10.0.0.200 的回复: 字节=32 时间<1ms TTL=64
+来自 10.0.0.200 的回复: 字节=32 时间<1ms TTL=64
+来自 10.0.0.200 的回复: 字节=32 时间<1ms TTL=64
+来自 10.0.0.200 的回复: 字节=32 时间<1ms TTL=64
+
+10.0.0.200 的 Ping 统计信息:
+    数据包: 已发送 = 4，已接收 = 4，丢失 = 0 (0% 丢失)，
+往返行程的估计时间(以毫秒为单位):
+    最短 = 0ms，最长 = 0ms，平均 = 0ms
+
+#############不通 
+[d:\~]$ ping 10.0.0.200 
+
+正在 Ping 10.0.0.200 具有 32 字节的数据:
+来自 10.0.0.200 的回复: 字节=32 时间<1ms TTL=64
+来自 10.0.0.200 的回复: 字节=32 时间<1ms TTL=64
+来自 10.0.0.200 的回复: 字节=32 时间<1ms TTL=64
+来自 10.0.0.200 的回复: 字节=32 时间<1ms TTL=64
+
+10.0.0.200 的 Ping 统计信息:
+    数据包: 已发送 = 4，已接收 = 4，丢失 = 0 (0% 丢失)，
+往返行程的估计时间(以毫秒为单位):
+    最短 = 0ms，最长 = 0ms，平均 = 0ms
+	
+	
+
+第二个里程碑-看看是否有人打劫
+
+第三个里程碑-是否有人卖票(sshd服务是否开启)
+telnet 10.0.0.200 22 
+#看linux的 22端口是否开启-----是否有人卖票
+
+[d:\~]$ telnet 10.0.0.200 22
+
+
+Connecting to 10.0.0.200:22...
+Connection established.
+To escape to local shell, press 'Ctrl+Alt+]'.
+SSH-2.0-OpenSSH_5.3
+
+Protocol mismatch.
+
+Connection closed by foreign host.
+
+Disconnected from remote host(10.0.0.200:22) at 10:10:07.
+
+Type `help' to learn how to use Xshell prompt.
+
+
+
+第一个里程碑-路是否通了
+ping 10.0.0.200 
+
+services.msc 
+
+
+
+
+第三个里程碑-是否有人卖票(sshd服务是否开启)
+telnet 10.0.0.200  22
+
+
+
+
+
+
+3.第一关课前练习题
+
+[root@oldboyedu-39 ~]#
+
+##第一题
+
+[root@oldboyedu-39 ~]# mkdir /data
+[root@oldboyedu-39 ~]# #显示目录里面的内容
+[root@oldboyedu-39 ~]# ls  /data/
+[root@oldboyedu-39 ~]# ls /
+bin   data  etc   lib    lost+found  mnt  proc  sbin     srv  tmp  var
+boot  dev   home  lib64  media       opt  root  selinux  sys  usr
+[root@oldboyedu-39 ~]# ls -l /data/
+total 0
+
+
+
+你如何找到你想要的文件/目录 之 相对路径与绝对路径: 
+
+
+
+绝对路径：从根开始的路径（位置） /data       
+
+C:\Program Files (x86)\Microsoft Office
+
+相对路径: 开头没有/,不是从根开始的路径/位置  相当于当前的路径/位置 
+
+
+etc/hosts
+
+
+
+
+
+
+
+
+从根开始的路径就是绝对路径。
+相对路径： etc/sysconfig/network-scripts/ifcfg-eth0
+cd /
+
+绝对路径 ： /etc/sysconfig/network-scripts/ifcfg-eth0
+
+
+
+
+##第二题
+[root@oldboyedu-39 data]# ls -l /data/
+total 0
+[root@oldboyedu-39 data]# touch /data/oldboy.txt
+[root@oldboyedu-39 data]# ls -l /data/
+total 0
+-rw-r--r--. 1 root root 0 Jul 14 15:57 oldboy.txt
+
+
+##第三题
+####方法一*********
+第一个里程碑-使用vi打开oldboy.txt
+vi /data/oldboy.txt
+默认是命令模式。
+第二个里程碑-编辑-按i  ===>insert插入模式(编辑模式)  ====>然后输入文本
+I am studying linux.
+第三个里程碑-按esc键 我不想编辑了，退出编辑模式（插入模式），再次进入到命令模式
+
+第四个里程碑-保存并退出
+:wq
+w write 写入
+q quit  退出
+
+
+#只退出不保存
+:q      
+
+:q!   强制退出不保存 
+
+
+vi   windows  记事本 
+vim  windows  notepad++ emeditor word 
+
+
+
+
+
+###方法二******
+[root@oldboyedu-39 ~]# echo "I am oldboyedu stu."
+I am oldboyedu stu.
+[root@oldboyedu-39 ~]# #echo 命令默认把内容显示到屏幕上面 ----标准输出到屏幕
+[root@oldboyedu-39 ~]# 
+[root@oldboyedu-39 ~]# echo "I am oldboyedu stu.">>/data/oldboy.txt 
+[root@oldboyedu-39 ~]# 
+[root@oldboyedu-39 ~]# cat /data/oldboy.txt 
+I am studying linux.
+love bingbing.
+I am oldboyedu stu.
+
+###方法三
+cat >>/data/lidao.txt <<EOF
+I am studying linux.
+love bingbing.
+I am oldboyedu stu.
+EOF
+
+
+
+问题：
+问题1：command not found 命令找不到  没有这个命令
+
+[root@yy nihaodiao]# cd~
+-bash: cd~: command not found
+
+[root@linux-39-01 data]# pws
+-bash: pws: command not found
+
+问题2：No such file or directory 没有这个目录或文件 你要找的东西不存在 
+[root@oldbayedu-39 tmp]# cd /data
+-bash: cd: /data: No such file or directory
+
+[root@oldboyedu-39 data]# cd /date
+-bash: cd: /date: No such file or directory
+[root@oldboyedu-39 data]# ls /date
+ls: cannot access /date: No such file or directory
+[root@oldboyedu-39 data]# ls /
+bin   data  etc   lib    lost+found  mnt  proc  sbin     srv  tmp  var
+boot  dev   home  lib64  media       opt  root  selinux  sys  usr
+
+
+
+
+作业：
+1.课堂讲解的知识点的总结--课堂记录+思维导图 
+2.命令总结-一定要有例子
+3.考试题与练习题总结---保证3 4个月之后 你可以根据你的笔记 看懂知识点
+预习
+1.别名
+2.管道
+3.find
+4.grep sed 
+
+
+
+
+
+
+3.linux基础优化
+4.目录结构
+ 

@@ -1,0 +1,390 @@
+﻿=============================================================================================
+# 老男孩教育：                                                                            #
+# www.oldboyedu.com                                                                       #
+# 邮件：miaokm@oldboyedu.com(189 1048 1057)                                               #
+# 地址：北京市昌平区顺沙路8号院汇德商厦4F                                                 #
+# 资源老师   手机电话：		    QQ号码        资源老师： 手机电话：		    QQ号码        #
+# 飞雪		 135 5261 2571		80042789      小雨		 186 0046 2391      390320151     #
+# 歪歪		 189 1171 8229		70271111      丹丹		 158 1059 0206      41117397      #
+# 冰冰		 150 1078 5220		41117483												  #
+=============================================================================================
+表演节目名单:
+
+苏义   表演节目 3次 
+刘朝旭 表演节目 1次
+刘朝旭 表演节目 1次
+徐铭阳 表演节目 1次
+王子凡 表演节目 1次
+
+
+
+1.linux运行级别
+1)一共几种 每种的含义 
+
+0 
+1 
+2 
+3
+4 
+5
+6 
+
+2) 如何永久修改 /etc/inittab 
+3) 如何查看 runlevel 
+4) 临时init 
+
+
+
+
+
+2.linux启动过程
+
+接通电源
+bios自检
+mbr引导
+grub菜单 选择内核
+加载内核
+启动init进程  init进程是linux启动的时候运行的第一个进程 
+/etc/inittab 运行级别 
+/etc/rc.d/rc.sysinit 初始化系统 设置主机名 ip地址  
+根据运行级别 /etc/rc?.d/ 开机自启动软件
+mingetty 显示登录界面
+
+
+
+
+
+第二关练习题 
+1.打包压缩 ---- 进行备份
+2.
+
+#####第9题 
+
+# chkconfig iptables off
+# chkconfig |grep ipt
+iptables       	0:off	1:off	2:off	3:off	4:off	5:off	6:off
+# chkconfig --level 3 iptables on
+# chkconfig |grep ipt
+iptables       	0:off	1:off	2:off	3:on	4:off	5:off	6:off
+# 
+# chkconfig --level 3 iptables off
+# chkconfig |grep ipt
+iptables       	0:off	1:off	2:off	3:off	4:off	5:off	6:off
+
+
+如何彻底关闭 iptables ?
+1./etc/init.d/iptables stop  临时 关闭正在运行的防火墙
+2.chkconfig iptables off     永久 让iptables不会在开机的时候自启动 
+3.检查 
+chkconfig |grep ipt 
+/etc/init.d/iptables status 
+
+
+
+##第10题 linux中显示中文乱码
+
+#第一步-排查 
+#第1个里程碑-看看linux系统的字符集 
+echo $LANG
+#第2个里程碑-远程连接工具 xshell/SecureCRT/putty 字符集
+
+#第二步-修改 修复 修改字符集 
+#第一个里程碑-修改xshell字符集（推荐）
+#第二个里程碑-修改linux系统的字符集
+###1.临时 
+export LANG=en_US.UTF-8
+###2.永久
+[root@oldboyedu-39-nb ~]# cat /etc/sysconfig/i18n
+LANG="en_US.UTF-8"
+SYSFONT="latarcyrheb-sun16"
+###3.生效
+source /etc/sysconfig/i18n
+
+
+###12题 
+windows压缩
+linux   打包(把文件放在筐里)及压缩（把这个框挤碎了） 
+
+####创建一个压缩包
+
+#tar zcvf /tmp/etc.tar.gz /etc/
+
+
+#z----压缩工具---gzip    最常用一种  压缩之后我们一般给 压缩包命名位 xxxx.tar.gz 
+#c----创建-------create  
+#v----显示压缩/解压过程 
+#f----file------指定压缩包的名字  
+
+
+###查看压缩包里面的内容
+tar ztf /tmp/etc.tar.gz
+
+#t---list------列表 显示 
+
+###解压----解压到当前目录
+# cd /tmp/
+# pwd
+/tmp
+# tar zxvf /tmp/etc.tar.gz 
+
+#x-----extract 解压 
+
+
+
+
+
+
+
+###创建压缩包 
+tar zcf /tmp/etc.tar.gz /etc/
+###查看压缩包
+tar tf /tmp/etc.tar.gz 
+#解压
+tar xf /tmp/etc.tar.gz 
+
+###问题:"创建压缩包"的时候会提示 
+tar: Removing leading `/' from member names   
+tar：把每个文件开头的/删除掉了。
+/etc/hosts ------>  etc/hosts 
+tar命令提示你：我在创建压缩包的时候 把压缩包中的文件 绝对路径----->相对路径
+
+tar: Removing leading `/' from hard link targets
+
+###小结:核心 为了安全----tar命令 把你使用的绝对路径----变化为-----相对路径
+
+
+
+
+
+
+
+[root@oldboyedu-39-nb tmp]# tar zcf /tmp/hosts.tar.gz /etc/hosts
+tar: Removing leading `/' from member names
+[root@oldboyedu-39-nb tmp]# tar tf /tmp/hosts.tar.gz 
+etc/hosts
+
+###在我们打包的时候 使用绝对路径  tar会自动的变为 相对路径 
+绝对路径----->相对路径
+
+
+
+
+
+
+
+####1.假设压缩包里面还是绝对路径
+[root@oldboyedu-39-nb tmp]# tar tf /tmp/hosts.tar.gz 
+/etc/hosts
+####2.解压 
+####3.解压后 会把里面的文件放在 /etc/hosts ----- 这会导致 原有的/etc/hosts被覆盖了。
+####4.所以tar命令为了安全  你在打包的时候  会把压缩包中的绝对路径---->相对路径
+tar: Removing leading `/' from member names
+
+
+##如何不提示这个警告------使用相对路径打包
+etc/hosts为例 
+
+[root@oldboyedu-39-nb tmp]# cd /
+[root@oldboyedu-39-nb /]# tar zcf /tmp/hosts.tar.gz  etc/hosts
+[root@oldboyedu-39-nb /]# tar tf /tmp/hosts.tar.gz 
+etc/hosts
+
+
+b.请用tar打包/etc整个目录（打包及压缩，但需要排除/etc/services文件）。
+
+[root@oldboyedu-39-nb /]# tar zcf /tmp/etc-pai.tar.gz  /etc/  --exclude=services   ###排除所有文件名叫services的文件 
+tar: Removing leading `/' from member names
+tar: Removing leading `/' from hard link targets
+[root@oldboyedu-39-nb /]# tar tf /tmp/etc-pai.tar.gz |grep services
+etc/init/readahead-disable-services.conf
+[root@oldboyedu-39-nb /]# tar tf /tmp/etc.tar.gz |grep services
+etc/services
+etc/init/readahead-disable-services.conf
+
+
+##排除---精确版本 加上位置 
+[root@oldboyedu-39-nb /]# tar zcf /tmp/etc-pai.tar.gz  /etc/  --exclude=etc/services
+tar: Removing leading `/' from member names
+tar: Removing leading `/' from hard link targets
+[root@oldboyedu-39-nb /]# tar tf /tmp/etc-pai.tar.gz |grep services
+etc/sysconfig/services
+etc/init/readahead-disable-services.conf
+
+
+#把你要排除的名单写到一个文件中 /tmp/paichu.txt（了解）
+#tar zcf /tmp/etc-pai.tar.gz  /etc/  --exclude-from=/tmp/paichu.txt
+
+
+c.请把a点命令的压缩包，解压到/tmp指定目录下（最好只用tar命令实现）。
+tar xf /tmp/etc-pai.tar.gz -C /opt
+
+
+把/etc/hosts /etc/sysconfig/network /etc/sysconfig/i18n /etc/init.d/  打包压缩 /tmp/conf.tar.gz 
+解压到/opt目录 
+
+
+[root@oldboyedu-39-nb /]# tar zcf /tmp/conf.tar.gz /etc/hosts /etc/sysconfig/network /etc/sysconfig/i18n /etc/init.d/ 
+tar: Removing leading `/' from member names
+[root@oldboyedu-39-nb /]# tar tf /tmp/conf.tar.gz 
+etc/hosts
+etc/sysconfig/network
+etc/sysconfig/i18n
+etc/init.d
+[root@oldboyedu-39-nb /]# tar xf /tmp/conf.tar.gz -C /opt/
+[root@oldboyedu-39-nb /]# ls  /opt/
+etc  rh
+
+
+
+####tar 
+
+#1.创建压缩包  
+tar zcf /tmp/oldboy.tar.gz   /oldboy 
+
+#2.查看压缩包中的内容
+tar tf /tmp/oldboy.tar.gz 
+
+#3.解压---解压到当前目录 
+tar xf  /tmp/oldboy.tar.gz 
+tar xf  /tmp/oldboy.tar.gz  -C /opt 
+
+#4.创建压缩包的时候 排除 
+tar zcf /tmp/etc-pai.tar.gz  /etc/  --exclude=etc/services
+
+
+###13题 
+[root@oldboyedu-39-nb /]# mkdir /oldboy ; echo "I am oldboy,myqq is 31333741">/oldboy/oldboy.txt
+mkdir: cannot create directory `/oldboy': File exists
+[root@oldboyedu-39-nb /]# cat /oldboy/oldboy.txt 
+I am oldboy,myqq is 31333741
+
+a．现在需要从文件中过滤出“oldboy”和“31333741”字符串，请给出命令.
+
+####方法1-sed -sed
+[root@oldboyedu-39-nb /]# cat /oldboy/oldboy.txt 
+I am oldboy,myqq is 31333741
+[root@oldboyedu-39-nb /]# sed 's#I am ##g' /oldboy/oldboy.txt
+oldboy,myqq is 31333741
+[root@oldboyedu-39-nb /]# sed 's#I am ##g' /oldboy/oldboy.txt|sed 's#,myqq is ##g'
+oldboy31333741
+[root@oldboyedu-39-nb /]# sed 's#I am ##g' /oldboy/oldboy.txt|sed 's#,myqq is##g'
+oldboy 31333741
+
+
+
+####方法2-awk-sed 
+[root@oldboyedu-39-nb /]# cat /oldboy/oldboy.txt 
+I am oldboy,myqq is 31333741
+[root@oldboyedu-39-nb /]# awk '{print $2}' /oldboy/oldboy.txt
+am
+[root@oldboyedu-39-nb /]# awk '{print $3}' /oldboy/oldboy.txt
+oldboy,myqq
+[root@oldboyedu-39-nb /]# awk '{print $1,$3}' /oldboy/oldboy.txt
+I oldboy,myqq
+[root@oldboyedu-39-nb /]# awk '{print $3,$5}' /oldboy/oldboy.txt
+oldboy,myqq 31333741
+[root@oldboyedu-39-nb /]# awk '{print $3,$5}' /oldboy/oldboy.txt|sed 's#,myqq##g'
+oldboy 31333741
+
+
+####方法3-awk
+
+####方法3-awk
+#####awk默认使用空格最为菜刀（分隔符） 
+#####awk指定一把菜刀（分隔符）
+ 
+#cat /oldboy/oldboy.txt 
+I am oldboy,myqq is 31333741
+
+# awk -F ","  '{print $1}' /oldboy/oldboy.txt
+I am oldboy
+
+[root@oldboyedu-39-nb ~]# cat /oldboy/oldboy.txt
+I am oldboy,myqq is 31333741
+[root@oldboyedu-39-nb ~]# awk -F "[, ]" '{print $3,$6}' /oldboy/oldboy.txt
+oldboy 31333741
+[root@oldboyedu-39-nb ~]# awk -F "[, ]" '{print $3,$NF}' /oldboy/oldboy.txt
+oldboy 31333741
+
+#####方法4-cut-阉割版的awk 
+[root@oldboyedu-39-nb ~]# cat /oldboy/oldboy.txt 
+I am oldboy,myqq is 31333741
+[root@oldboyedu-39-nb ~]# cut -f1 /oldboy/oldboy.txt 
+I am oldboy,myqq is 31333741
+[root@oldboyedu-39-nb ~]# cut -d " " -f1 /oldboy/oldboy.txt 
+I
+[root@oldboyedu-39-nb ~]# cut -d " " -f3,5 /oldboy/oldboy.txt 
+oldboy,myqq 31333741
+[root@oldboyedu-39-nb ~]# cut -d " " -f1,2,3,4 /oldboy/oldboy.txt 
+I am oldboy,myqq is
+[root@oldboyedu-39-nb ~]# cut -d " " -f1-4 /oldboy/oldboy.txt 
+I am oldboy,myqq is
+[root@oldboyedu-39-nb ~]# sed 's#,# #g' /oldboy/oldboy.txt 
+I am oldboy myqq is 31333741
+[root@oldboyedu-39-nb ~]# sed 's#,# #g' /oldboy/oldboy.txt |cut -d " " -f3,6
+oldboy 31333741
+
+cat /oldboy/oldboy.txt|sed
+cat /oldboy/oldboy.txt|awk
+cat /oldboy/oldboy.txt|grep 
+
+sed  /oldboy/oldboy.txt
+awk  /oldboy/oldboy.txt
+grep /oldboy/oldboy.txt
+
+###awk 指定多个分隔符（菜刀）
+###cut -d -f 
+###sed替换为空  删除  
+
+
+####14题 
+wc -l /etc/services
+
+
+查看sshd进程是否存在  是否有人卖票
+ps -ef |grep "sshd"
+
+
+####15题 
+[root@oldboyedu-39-nb ~]# egrep "3306|1521" /etc/services 
+mysql           3306/tcp                        # MySQL
+mysql           3306/udp                        # MySQL
+ncube-lm        1521/tcp                # nCube License Manager
+ncube-lm        1521/udp                # nCube License Manager
+[root@oldboyedu-39-nb ~]# #egrep === grep -E 
+
+
+
+
+不加引号、加单引号和加双引号
+#单引号：所见即所得，吃啥吐啥
+
+#双引号:对于一些特殊的符号 会对他们进行解析（运行） $ $()  `` 
+
+#不加引号:和双引号一样，支持{}
+
+[root@oldboyedu-39-nb ~]# echo '$LANG `hostname` {a..e}'
+$LANG `hostname` {a..e}
+[root@oldboyedu-39-nb ~]# echo "$LANG `hostname` {a..e}"
+en_US.UTF-8 oldboyedu-39-nb {a..e}
+[root@oldboyedu-39-nb ~]# echo $LANG `hostname` {a..e}
+en_US.UTF-8 oldboyedu-39-nb a b c d e
+
+
+老男孩教育每日一题-2017-04-14-说一下单引号、双引号和不加引号区别
+http://lidao.blog.51cto.com/3388056/1916108
+
+
+PATH环境变量 
+单引号-双引号-不加引号 
+运行级别 
+打包压缩 
+Linux启动过程 
+linux无法上网如何解决 
+
+回顾与扩展
+
+
+
+
+

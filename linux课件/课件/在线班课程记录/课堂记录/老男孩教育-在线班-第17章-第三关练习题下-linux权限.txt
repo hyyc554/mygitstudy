@@ -1,0 +1,578 @@
+﻿=============================================================================================
+# 老男孩教育：                                                                            #
+# www.oldboyedu.com                                                                       #
+# 邮件：miaokm@oldboyedu.com(189 1048 1057)                                               #
+# 地址：北京市昌平区顺沙路8号院汇德商厦4F                                                 #
+# 资源老师   手机电话：		    QQ号码        资源老师： 手机电话：		    QQ号码        #
+# 飞雪		 135 5261 2571		80042789      小雨		 186 0046 2391      390320151     #
+# 歪歪		 189 1171 8229		70271111      丹丹		 158 1059 0206      41117397      #
+# 冰冰		 150 1078 5220		41117483												  #
+=============================================================================================
+第三关 
+1.正则表达式题目 
+2.linux下PATH环境变量
+3.关机 重启
+4.linux下面快捷键
+
+linux权限体系
+
+
+
+1.取ip地址 取权限
+[root@oldboyedu-39-nb ~]# ifconfig eth0 
+eth0      Link encap:Ethernet  HWaddr 00:0C:29:AA:0B:E9  
+          inet addr:10.0.0.200  Bcast:10.0.0.255  Mask:255.255.255.0
+          inet6 addr: fe80::20c:29ff:feaa:be9/64 Scope:Link
+          UP BROADCAST RUNNING MULTICAST  MTU:1500  Metric:1
+          RX packets:78938 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:71064 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:1000 
+          RX bytes:15481573 (14.7 MiB)  TX bytes:32771788 (31.2 MiB)
+
+[root@oldboyedu-39-nb ~]# ifconfig eth0 |awk -F "addr:" 'NR==2{print $2}'
+10.0.0.200  Bcast:10.0.0.255  Mask:255.255.255.0
+[root@oldboyedu-39-nb ~]# ifconfig eth0 |awk -F "addr:|Bcast:" 'NR==2{print $2}'
+10.0.0.200  
+
+
+2.date命令
+
+每天创建一个文件access.log,要求每天创建的文件名不一样。
+
+touch access.log  #2017-05-20 
+touch access.log  #2017-05-21 
+touch access.log  #2017-05-22 
+touch access.log  #2017-05-23 
+
+touch access-2017-05-20.log
+
+
+[root@oldboyedu-39-nb ~]# #touch access-此处存放着 date +%F命令的结果.log
+[root@oldboyedu-39-nb ~]# 
+[root@oldboyedu-39-nb ~]# #touch access-$(date +%F).log
+[root@oldboyedu-39-nb ~]# touch access-$(date +%F).log
+[root@oldboyedu-39-nb ~]# ls -lrt
+total 80
+-rw-r--r--  2 root root   248 May 20 20:55 oldboy.txt-hard
+-rw-r--r--  2 root root   248 May 20 20:55 oldboy.txt
+-rw-r--r--. 1 root root  5890 Jul 14 11:03 install.log.syslog
+-rw-r--r--. 1 root root 21736 Jul 14 11:04 install.log
+-rw-------. 1 root root  1073 Jul 14 11:04 anaconda-ks.cfg
+drwxr-x---. 2 root root  4096 Jul 14 11:16 anaconda-screenshots
+drwxr-xr-x. 2 root root  4096 Jul 14 20:10 data
+-rw-r--r--. 1 root root   158 Jul 14 20:16 hosts
+drwxr-xr-x. 2 root root  4096 Jul 14 20:46 –p
+-rw-r--r--  1 root root    24 Jul 30 00:18 b.txt
+-rw-r--r--  1 root root    71 Jul 30 01:15 test.txt
+-rw-r--r--  1 root root    23 Jul 30 02:16 a.log
+-rw-r--r--  1 root root   103 Jul 30 02:56 q.txt
+-rw-r--r--  1 root root     0 Aug  3 13:10 access-2017-05-20.log
+-rw-r--r--  1 root root     0 Aug  3 13:10 access-2017-05-21.log
+-rw-r--r--  1 root root     0 Aug  3 13:10 access-2017-05-22.log
+-rw-r--r--  1 root root     0 Aug  3 13:12 access-2017-08-03.log
+
+
+####创建一个文件要求文件名是oldboy-2017-05-20.log 这种格式。
+[root@oldboyedu-39-nb ~]# date +%F
+2017-08-03
+[root@oldboyedu-39-nb ~]# touch oldboy-$(date +%F).log
+[root@oldboyedu-39-nb ~]# ls -lrt
+
+
+
+
+
+
+
+
+
+
+2组-何承鑫  
+touch access_$(date +%F).log
+
+2组-李嘉豪  
+touch access.$(date +%F).log
+
+
+
+
+
+
+#####第11题 ----如何修改PATH环境变量
+2.11 问题：【Centos 5.x】当从root用户切到普通用户oldboy时，执行ifconfig会提示。
+command not found.
+
+
+#######1.什么是环境变量
+1.linux里面哪里都可以使用 内容一般不会变化
+2.大写
+3.PATH LANG
+4.修改环境变量 的时候前面要加上export
+
+#######2.PATH含义 作用 
+PATH变量里面 存放的是linux下面命令的位置。
+
+#######3.linux下面运行命令的过程
+
+####1） 输入 ls 
+####2） ls是否在PATH这些路径/目录中 
+####3） 如果有就执行 解析
+####4）如果没有则提示 command not found 
+
+#######4.模拟环境
+##1.切换到root 
+
+##2.修改一下PATH
+
+
+[root@oldboyedu-39-nb ~]# whoami 
+root
+ ##2.修改一下PATH
+[root@oldboyedu-39-nb ~]# echo $PATH
+/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin:/root/bin
+[root@oldboyedu-39-nb ~]# export PATH=/usr/local/sbin:/usr/local/bin:/bin:/usr/sbin:/usr/bin:/root/bin
+[root@oldboyedu-39-nb ~]# 
+[root@oldboyedu-39-nb ~]# ifconfig
+-bash: ifconfig: command not found
+
+
+
+[root@oldboyedu-39-nb ~]# ls -l /sbin/ifconfig 
+-rwxr-xr-x. 1 root root 73960 Mar 22 07:52 /sbin/ifconfig
+
+
+######恢复 PATH ----临时
+[root@oldboyedu-39-nb ~]# export PATH=/usr/local/sbin:/usr/local/bin:/bin:/usr/sbin:/usr/bin:/root/bin:/sbin
+[root@oldboyedu-39-nb ~]# ifconfig 
+eth0      Link encap:Ethernet  HWaddr 00:0C:29:AA:0B:E9  
+          inet addr:10.0.0.200  Bcast:10.0.0.255  Mask:255.255.255.0
+          inet6 addr: fe80::20c:29ff:feaa:be9/64 Scope:Link
+          UP BROADCAST RUNNING MULTICAST  MTU:1500  Metric:1
+          RX packets:79761 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:71678 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:1000 
+          RX bytes:15562247 (14.8 MiB)  TX bytes:32844744 (31.3 MiB)
+
+lo        Link encap:Local Loopback  
+          inet addr:127.0.0.1  Mask:255.0.0.0
+          inet6 addr: ::1/128 Scope:Host
+          UP LOOPBACK RUNNING  MTU:65536  Metric:1
+          RX packets:64 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:64 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:0 
+          RX bytes:5154 (5.0 KiB)  TX bytes:5154 (5.0 KiB)
+
+[root@oldboyedu-39-nb ~]# 
+[root@oldboyedu-39-nb ~]# export PATH=/usr/local/sbin:/usr/local/bin:/bin:/usr/sbin:/usr/bin:/root/bin:/sbin
+
+ ####永久的方法
+ vim /etc/profile
+
+
+linux如何修改PATH环境变量
+1.临时 
+[root@oldboyedu-39-nb ~]# export PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin:/root/bin
+2.永久 
+把命令  export PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin:/root/bin 追加到/etc/profile 
+
+3.生效
+1）重新登录 
+2）source 
+
+
+
+
+######13题 
+
+[root@oldboyedu-39-nb oldboy]# cat test.txt
+oldboy
+
+xizi
+
+xiaochao
+[root@oldboyedu-39-nb oldboy]# cat -n test.txt
+     1	oldboy
+     2	
+     3	xizi
+     4	
+     5	xiaochao
+[root@oldboyedu-39-nb oldboy]# cat -A test.txt
+oldboy$
+$
+xizi$
+$
+xiaochao$
+
+
+[root@oldboyedu-39-nb oldboy]# grep -n "^$" test.txt 
+2:
+4:
+[root@oldboyedu-39-nb oldboy]# grep -v "^$" test.txt 
+oldboy
+xizi
+xiaochao
+[root@oldboyedu-39-nb oldboy]# ##2.awk
+[root@oldboyedu-39-nb oldboy]# #awk '/找啥/' test.txt 
+[root@oldboyedu-39-nb oldboy]# awk '/^$/' test.txt 
+
+
+[root@oldboyedu-39-nb oldboy]# awk '!/^$/' test.txt 
+oldboy
+xizi
+xiaochao
+
+[root@oldboyedu-39-nb oldboy]# ##3.sed
+[root@oldboyedu-39-nb oldboy]# cat test.txt
+oldboy
+
+xizi$$$$$$
+
+xiaochao
+[root@oldboyedu-39-nb oldboy]# sed '/^$/d' test.txt
+oldboy
+xizi$$$$$$
+xiaochao
+[root@oldboyedu-39-nb oldboy]# #sed 's#oldboy##g'
+
+
+
+7组-刘朝旭  
+[root@lcx001 20170118]# awk -v RS="" '{print  $0""}' oldboy.txt
+3组组长-温涛  
+[root@oldboy-39 /]# awk NF demo.txt
+oldboy 
+xizi
+xiaochao
+5组组长-丛中之  
+方法四：grep "^[a-z]" test.txt
+方法五：cat test.txt |xargs -n1
+方法六：grep "^[^.]" test.txt
+5组-马林  
+[root@malin ~]# grep . oldboy 
+oldboy
+xizi
+xiaochao
+4组–王孟男  
+[root@oldboyedu39 ~]# egrep  "[^$^]" /oldboy/test.txt   ##排除$符号或^
+oldboy
+xizi
+xiaochao
+
+2组-张哲瑜  
+sed '/^$/d' /oldboy/test.txt
+6组-郑京波  
+sed '/^[ \t]*$/d' b.txt
+
+
+显示文件的内容，排除空行。
+
+ 老男孩教育每日一题-第78天-如何不显示文件中的空行？
+
+http://lidao.blog.51cto.com/3388056/1941482
+
+
+
+###14题 
+oldboy
+olldboooy
+test
+
+[root@oldboyedu-39-nb oldboy]# cat ett.txt
+oldboy
+olldboooy
+test
+
+[root@oldboyedu-39-nb oldboy]# grep "^o" ett.txt
+oldboy
+olldboooy
+[root@oldboyedu-39-nb oldboy]# grep "y$" ett.txt
+oldboy
+olldboooy
+[root@oldboyedu-39-nb oldboy]# egrep "ol+dbo+y" ett.txt
+oldboy
+olldboooy
+
+
+###15题 
+请描述下列路径的内容是做什么的？
+/var/log/messages                #####系统默认的日志            
+/var/log/secure                  #####系统用户登录信息 
+/etc/fstab                       #####开机的时候自动挂载的列表  在开机的时候把哪个设备/分区 挂载到哪个目录
+/etc/profile                     #####系统环境变量 别名 配置文件
+
+###16题
+ 如何快速查到ifconfig的全路径，请给出命令。
+
+[root@oldboyedu-39-nb oldboy]# ###1.which
+[root@oldboyedu-39-nb oldboy]# which ifconfig 
+/sbin/ifconfig
+[root@oldboyedu-39-nb oldboy]# which ifconfig mkdir 
+/sbin/ifconfig
+/bin/mkdir
+[root@oldboyedu-39-nb oldboy]# ###2.find
+[root@oldboyedu-39-nb oldboy]# find /  -type f -name "ifconfig"
+/sbin/ifconfig
+
+[root@oldboyedu-39-nb oldboy]# ###3.whereis      ###找出命令相关的内容 命令的帮助 
+[root@oldboyedu-39-nb oldboy]# whereis ifconfig 
+ifconfig: /sbin/ifconfig /usr/share/man/man8/ifconfig.8.gz
+
+[root@oldboyedu-39-nb oldboy]# ###4.locate 根据名字找文件
+[root@oldboyedu-39-nb oldboy]# locate ifconfig
+/sbin/ifconfig
+/usr/sbin/pifconfig
+/usr/share/man/de/man8/ifconfig.8.gz
+/usr/share/man/fr/man8/ifconfig.8.gz
+/usr/share/man/man8/ifconfig.8.gz
+/usr/share/man/man8/pifconfig.8.gz
+/usr/share/man/pt/man8/ifconfig.8.gz
+
+[root@oldboyedu-39-nb oldboy]# locate oldboy.txt 
+/oldboy.txt
+/data/oldboy.txt
+/data/oldboyedu/oldboy.txt
+/etc/oldboy.txt
+/oldboy/oldboy.txt
+/oldboy/oldboy.txt.bak
+/oldboy/20170118/oldboy.txt
+/oldboy/20170118/oldboy.txt.bak
+/opt/etc/oldboy.txt
+/root/oldboy.txt
+/root/oldboy.txt-hard
+[root@oldboyedu-39-nb oldboy]# ###locate根据一个 系统中所有文件的位置的 文件的列表来查询
+[root@oldboyedu-39-nb oldboy]# touch lidao.awk
+[root@oldboyedu-39-nb oldboy]# locate lidao.awk
+
+####17题 
+3.4 请给出正确的关机和重起服务器的命令。
+
+
+关机  
+shutdown -h  10 
+shutdown -h now 
+
+halt 
+poweroff 
+init 0
+
+
+重启
+reboot   
+shutdown -r 10 
+shutdown -r now 
+
+
+shutdown -h 10   -h  ===== halt 
+shutdown -r 10   -r  ===== reboot 
+
+shutdown -c 
+
+
+
+#####18题 
+ctrl + a 
+ctrl + e 
+ctrl + u 
+ctrl + k
+ctrl + y 
+
+ctrl + d 
+ctrl + c 
+ctrl + l
+
+ctrl + r ===== history |grep awk 
+
+
+ history |grep awk
+ history |grep sed
+ 
+ 
+ 
+ 
+ 老男孩教育每日一题-2017年3月27日-请写出下面linux命令行快捷键的功能？
+ http://lidao.blog.51cto.com/3388056/1914569
+
+总结第三关题目：
+1.取出ip地址-取出权限 至少3种方法
+2.date 命令
+3.如何同步系统时间 
+4.linux无法上网如何解决 name resolution fail fialure  
+5.正则 
+6.开机关机
+7.linux下面快捷键
+8.如何修改PATH环境变量 
+
+
+
+
+回顾权限内容 
+###rwx含义 
+r ---- read    读取 
+w ---- write   写 修改文件内容
+x ---- execute 执行 运行  命令(脚本---命令大礼包 命令集合)
+
+##权限分为三个部分：主人  家人  陌生人
+[root@oldboyedu-39-nb ~]# ls -l /etc/hosts 
+-rw-r--r--. 2 root root 216 May 20 22:57 /etc/hosts
+ rw-			  r--				r--
+ 这个文件的所有者 这个文件的所有者  隔壁老王
+ 主人              家人             陌生人 
+
+ 
+ 
+#如何读取权限 你怎么指定你当前有什么权限
+
+###1.你是谁 显示当前用户
+whoami 
+###2.你和这个文件有什么关系  主人 家人  陌生人
+
+###3.根据你和这个文件的关系 找对应的权限
+
+
+[root@oldboyedu-39-nb ~]# ls -l /etc/hosts 
+-rw-r--r--. 2 root root 216 May 20 22:57 /etc/hosts
+[root@oldboyedu-39-nb ~]# #1.whoami 
+[root@oldboyedu-39-nb ~]# whoami 
+root
+[root@oldboyedu-39-nb ~]# #2.root与这个文件的关系  root用户是这个/etc/hosts文件的主人
+[root@oldboyedu-39-nb ~]# 
+[root@oldboyedu-39-nb ~]# #3.root用户对这个文件来说是 主人 拥有的权限是前3个 rw-
+[root@oldboyedu-39-nb ~]# 
+[root@oldboyedu-39-nb ~]# su - oldboy
+[oldboy@oldboyedu-39-nb ~]$ ls -l /etc/hosts 
+-rw-r--r--. 2 root root 216 May 20 22:57 /etc/hosts
+
+
+[oldboy@oldboyedu-39-nb ~]$ ls -l /etc/hosts 
+-rw-r--r--. 2 root root 216 May 20 22:57 /etc/hosts
+[oldboy@oldboyedu-39-nb ~]$ #1.
+[oldboy@oldboyedu-39-nb ~]$ whoami 
+oldboy
+[oldboy@oldboyedu-39-nb ~]$ #2.oldboy与 hosts文件什么关系  陌生人 
+[oldboy@oldboyedu-39-nb ~]$ #3. oldboy用户对于 hosts文件是陌生人  看最后3位 r--
+
+
+[oldboy@oldboyedu-39-nb ~]$ id oldboy
+uid=500(oldboy) gid=500(oldboy) groups=500(oldboy)
+[oldboy@oldboyedu-39-nb ~]$ id root
+uid=0(root) gid=0(root) groups=0(root)
+
+
+##如何计算权限
+r ======== 4 
+w ======== 2 
+x ======== 1 
+- ======== 0
+
+rw-r--r--
+420400400
+6  4  4 
+644 
+
+rwxr-xr-x
+421401401
+7  5  5 
+755
+
+
+rwxrwxrwx
+777
+
+rw-rw-rw-
+666
+
+rw-------
+420000000
+600
+
+
+
+
+##如何修改文件的权限 chmod  change mode 
+
+###预备知识
+权限分为三个部分：主人  家人  陌生人
+[root@oldboyedu-39-nb ~]# ls -l /etc/hosts 
+-rw-r--r--. 2 root root 216 May 20 22:57 /etc/hosts
+ rw-			  r--					r--
+ 这个文件的所有者 这个文件的属于的组  	隔壁老王
+ 主人             家人              	陌生人 
+ user            group                  other 
+ u（小写字母U）   g                     o(小写字母O)
+
+###给某一个部分加上 减去权限 （了解）
+[root@oldboyedu-39-nb oldboy]# chmod 所有者上面加上x权限 oldboy.txt
+chmod: invalid mode: `所有者上面加上x权限'
+Try `chmod --help' for more information.
+[root@oldboyedu-39-nb oldboy]# chmod u+x oldboy.txt
+[root@oldboyedu-39-nb oldboy]# ll oldboy.txt
+-rwxr--r-- 1 root root 31 May 20 10:35 oldboy.txt
+[root@oldboyedu-39-nb oldboy]# chmod u-wx oldboy.txt
+[root@oldboyedu-39-nb oldboy]# ll oldboy.txt
+-r--r--r-- 1 root root 31 May 20 10:35 oldboy.txt
+[root@oldboyedu-39-nb oldboy]# chmod u=x oldboy.txt
+[root@oldboyedu-39-nb oldboy]# ll oldboy.txt
+---xr--r-- 1 root root 31 May 20 10:35 oldboy.txt
+[root@oldboyedu-39-nb oldboy]# ##+ 增加权限
+[root@oldboyedu-39-nb oldboy]# ##- 去掉权限
+[root@oldboyedu-39-nb oldboy]# ##= 先清除权限 然后增加 
+
+###给所有的  主人 家人 陌生人 加上同样的权限 ******
+
+[root@oldboyedu-39-nb oldboy]# #给这个文件加上执行权限
+[root@oldboyedu-39-nb oldboy]# ll oldboy.txt
+-r--r--r-- 1 root root 31 May 20 10:35 oldboy.txt
+[root@oldboyedu-39-nb oldboy]# chmod +x oldboy.txt
+[root@oldboyedu-39-nb oldboy]# ll oldboy.txt
+-r-xr-xr-x 1 root root 31 May 20 10:35 oldboy.txt
+
+
+##给oldboy.txt权限设置为 644 
+
+[root@oldboyedu-39-nb oldboy]# chmod 644 oldboy.txt 
+[root@oldboyedu-39-nb oldboy]# ls -l oldboy.txt
+-rw-r--r-- 1 root root 31 May 20 10:35 oldboy.txt
+[root@oldboyedu-39-nb oldboy]# 
+[root@oldboyedu-39-nb oldboy]# chmod 755 oldboy.txt 
+[root@oldboyedu-39-nb oldboy]# ls -l oldboy.txt
+-rwxr-xr-x 1 root root 31 May 20 10:35 oldboy.txt
+[root@oldboyedu-39-nb oldboy]# 
+
+
+
+给oldboy目录及其子目录文件 都设置为755权限 （危险）
+
+
+chmod -R 755 oldboy
+修改目录及子目录里面的权限 
+
+rm -r 
+cp -r 
+
+
+
+本周：
+1.文件属性
+磁盘空间满了系列:1.inode满了 2.block 3.block满了  文件没有被彻底删除
+文件删除原理 
+软硬连接区别
+用户分类
+linux下面三种时间
+2.通配符 特殊符号 正则 
+* {} > >> $ $() `` . .. && # ~
+3.第三关 
+1).正则表达式题目 
+2).linux下PATH环境变量
+3).关机 重启
+4).linux下面快捷键
+5).取出ip地址-取出权限
+6).date 同步时间
+7).linux无法上网如何解决
+4.linux权限 
+1).rwx含义
+2).权限分为三个部分
+3).如何读取权限
+4).如何计算权限
+5).如何修改权限
+	1)符号 给文件加上执行权限 
+	2)数字  

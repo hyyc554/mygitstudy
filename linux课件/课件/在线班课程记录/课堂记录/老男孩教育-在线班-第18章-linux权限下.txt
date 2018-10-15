@@ -1,0 +1,801 @@
+﻿=============================================================================================
+# 老男孩教育：                                                                            #
+# www.oldboyedu.com                                                                       #
+# 邮件：miaokm@oldboyedu.com(189 1048 1057)                                               #
+# 地址：北京市昌平区顺沙路8号院汇德商厦4F                                                 #
+# 资源老师   手机电话：		    QQ号码        资源老师： 手机电话：		    QQ号码        #
+# 飞雪		 135 5261 2571		80042789      小雨		 186 0046 2391      390320151     #
+# 歪歪		 189 1171 8229		70271111      丹丹		 158 1059 0206      41117397      #
+# 冰冰		 150 1078 5220		41117483												  #
+=============================================================================================
+
+linux权限
+
+#1.rwx含义 
+#2.linux权限分为3个部分:  所有者（主人)-(属主）  所有者属于的组-家人（属组）   陌生人（其他人）
+rwxr--r--
+#3.如何读取权限 你怎么指定你当前有什么权限
+###1）看看你是谁
+###2）你与这个文件的关系  主人  家人  陌生人 
+###3）确定 你对这个文件或目录有什么权限
+#4.如何计算和修改权限
+chmod 
+-R 
+
+
+
+
+
+
+
+
+
+
+
+###rwx含义 
+r ---- read    读取 
+w ---- write   写 修改文件内容
+x ---- execute 执行 运行  命令(脚本---命令大礼包 命令集合)
+
+##权限分为三个部分：主人  家人  陌生人
+[root@oldboyedu-39-nb ~]# ls -l /etc/hosts 
+-rw-r--r--. 2 root root 216 May 20 22:57 /etc/hosts
+ rw-			  r--				r--
+ 这个文件的所有者 这个文件的所有者  隔壁老王
+ 主人              家人             陌生人 
+
+ 
+ 
+#如何读取权限 你怎么指定你当前有什么权限
+
+###1.你是谁 显示当前用户
+whoami 
+###2.你和这个文件有什么关系  主人 家人  陌生人
+
+###3.根据你和这个文件的关系 找对应的权限
+
+
+[root@oldboyedu-39-nb ~]# ls -l /etc/hosts 
+-rw-r--r--. 2 root root 216 May 20 22:57 /etc/hosts
+[root@oldboyedu-39-nb ~]# #1.whoami 
+[root@oldboyedu-39-nb ~]# whoami 
+root
+[root@oldboyedu-39-nb ~]# #2.root与这个文件的关系  root用户是这个/etc/hosts文件的主人
+[root@oldboyedu-39-nb ~]# 
+[root@oldboyedu-39-nb ~]# #3.root用户对这个文件来说是 主人 拥有的权限是前3个 rw-
+[root@oldboyedu-39-nb ~]# 
+[root@oldboyedu-39-nb ~]# su - oldboy
+[oldboy@oldboyedu-39-nb ~]$ ls -l /etc/hosts 
+-rw-r--r--. 2 root root 216 May 20 22:57 /etc/hosts
+
+
+[oldboy@oldboyedu-39-nb ~]$ ls -l /etc/hosts 
+-rw-r--r--. 2 root root 216 May 20 22:57 /etc/hosts
+[oldboy@oldboyedu-39-nb ~]$ #1.
+[oldboy@oldboyedu-39-nb ~]$ whoami 
+oldboy
+[oldboy@oldboyedu-39-nb ~]$ #2.oldboy与 hosts文件什么关系  陌生人 
+[oldboy@oldboyedu-39-nb ~]$ #3. oldboy用户对于 hosts文件是陌生人  看最后3位 r--
+
+
+[oldboy@oldboyedu-39-nb ~]$ id oldboy
+uid=500(oldboy) gid=500(oldboy) groups=500(oldboy)
+[oldboy@oldboyedu-39-nb ~]$ id root
+uid=0(root) gid=0(root) groups=0(root)
+
+
+##如何计算权限
+r ======== 4 
+w ======== 2 
+x ======== 1 
+- ======== 0
+
+rw-r--r--
+420400400
+6  4  4 
+644 
+
+rwxr-xr-x
+421401401
+7  5  5 
+755
+
+
+rwxrwxrwx
+777
+
+rw-rw-rw-
+666
+
+rw-------
+420000000
+600
+
+
+
+
+##如何修改文件的权限 chmod  change mode 
+
+###预备知识
+权限分为三个部分：主人  家人  陌生人
+[root@oldboyedu-39-nb ~]# ls -l /etc/hosts 
+-rw-r--r--. 2 root root 216 May 20 22:57 /etc/hosts
+ rw-			  r--					r--
+ 这个文件的所有者 这个文件的属于的组  	隔壁老王
+ 主人             家人              	陌生人 
+ user            group                  other 
+ u（小写字母U）   g                     o(小写字母O)
+
+###给某一个部分加上 减去权限 （了解）
+[root@oldboyedu-39-nb oldboy]# chmod 所有者上面加上x权限 oldboy.txt
+chmod: invalid mode: `所有者上面加上x权限'
+Try `chmod --help' for more information.
+[root@oldboyedu-39-nb oldboy]# chmod u+x oldboy.txt
+[root@oldboyedu-39-nb oldboy]# ll oldboy.txt
+-rwxr--r-- 1 root root 31 May 20 10:35 oldboy.txt
+[root@oldboyedu-39-nb oldboy]# chmod u-wx oldboy.txt
+[root@oldboyedu-39-nb oldboy]# ll oldboy.txt
+-r--r--r-- 1 root root 31 May 20 10:35 oldboy.txt
+[root@oldboyedu-39-nb oldboy]# chmod u=x oldboy.txt
+[root@oldboyedu-39-nb oldboy]# ll oldboy.txt
+---xr--r-- 1 root root 31 May 20 10:35 oldboy.txt
+[root@oldboyedu-39-nb oldboy]# ##+ 增加权限
+[root@oldboyedu-39-nb oldboy]# ##- 去掉权限
+[root@oldboyedu-39-nb oldboy]# ##= 先清除权限 然后增加 
+
+###给所有的  主人 家人 陌生人 加上同样的权限 ******
+
+[root@oldboyedu-39-nb oldboy]# #给这个文件加上执行权限
+[root@oldboyedu-39-nb oldboy]# ll oldboy.txt
+-r--r--r-- 1 root root 31 May 20 10:35 oldboy.txt
+[root@oldboyedu-39-nb oldboy]# chmod +x oldboy.txt
+[root@oldboyedu-39-nb oldboy]# ll oldboy.txt
+-r-xr-xr-x 1 root root 31 May 20 10:35 oldboy.txt
+
+
+##给oldboy.txt权限设置为 644 
+
+[root@oldboyedu-39-nb oldboy]# chmod 644 oldboy.txt 
+[root@oldboyedu-39-nb oldboy]# ls -l oldboy.txt
+-rw-r--r-- 1 root root 31 May 20 10:35 oldboy.txt
+[root@oldboyedu-39-nb oldboy]# 
+[root@oldboyedu-39-nb oldboy]# chmod 755 oldboy.txt 
+[root@oldboyedu-39-nb oldboy]# ls -l oldboy.txt
+-rwxr-xr-x 1 root root 31 May 20 10:35 oldboy.txt
+[root@oldboyedu-39-nb oldboy]# 
+
+
+
+给oldboy目录及其子目录文件 都设置为755权限 （危险）
+
+
+chmod -R 755 oldboy
+修改目录及子目录里面的权限 
+
+rm -r 
+cp -r 
+
+
+###@@测试 rwx对 文件来说的含义
+
+####环境准备 
+groupadd incahome
+useradd oldboy  -g incahome
+useradd oldgirl -g incahome
+usermod -g incahome oldboy 
+usermod -g incahome oldgirl 
+useradd test
+id oldboy 
+id oldgirl
+id test
+
+##[root@oldboyedu-39-nb ~]# id oldboy 
+##uid=500(oldboy) gid=502(incahome) groups=502(incahome)
+##[root@oldboyedu-39-nb ~]# id oldgirl
+##uid=502(oldgirl) gid=502(incahome) groups=502(incahome)
+##[root@oldboyedu-39-nb ~]# id test
+##uid=503(test) gid=503(test) groups=503(test)
+
+
+mv /oldboy   /tmp/oldboy_bak$(date +%F)
+mkdir /oldboy -p
+echo "echo oldboylinux" >/oldboy/test.sh
+chmod +x /oldboy/test.sh
+cat /oldboy/test.sh
+ls -l /oldboy/test.sh
+
+
+
+
+####简单查看  r w x 
+[oldboy@oldboyedu-39-nb oldboy]$ ls -l
+total 4
+-rwxr-xr-x 1 root root 17 Aug  3 17:26 test.sh
+[oldboy@oldboyedu-39-nb oldboy]$ #1.
+[oldboy@oldboyedu-39-nb oldboy]$ whoami 
+oldboy
+[oldboy@oldboyedu-39-nb oldboy]$ #2.关系 
+[oldboy@oldboyedu-39-nb oldboy]$ id 
+uid=500(oldboy) gid=502(incahome) groups=502(incahome)
+[oldboy@oldboyedu-39-nb oldboy]$ #3.oldboy用户对于 test.sh 文件属于 陌生人 
+[oldboy@oldboyedu-39-nb oldboy]$ cat test.sh 
+echo oldboylinux
+[oldboy@oldboyedu-39-nb oldboy]$ test.sh
+-bash: test.sh: command not found
+[oldboy@oldboyedu-39-nb oldboy]$ /oldboy/test.sh
+oldboylinux
+[oldboy@oldboyedu-39-nb oldboy]$ echo pwd >>/oldboy/test.sh
+-bash: /oldboy/test.sh: Permission denied
+
+
+###修改test.sh 属于的主人和家庭 
+[root@oldboyedu-39-nb ~]# chown oldboy.incahome /oldboy/test.sh 
+[root@oldboyedu-39-nb ~]# ls -l /oldboy/test.sh
+-rwxr-xr-x 1 oldboy incahome 17 Aug  3 17:26 /oldboy/test.sh
+
+
+######测试r 对于文件
+[root@oldboyedu-39-nb ~]# ##测试r对于文件
+[root@oldboyedu-39-nb ~]# chmod u=r /oldboy/test.sh
+[root@oldboyedu-39-nb ~]# ls -l /oldboy/test.sh
+-r--r-xr-x 1 oldboy incahome 17 Aug  3 17:26 /oldboy/test.sh
+
+[oldboy@oldboyedu-39-nb oldboy]$ ###oldboy 测试 r 
+[oldboy@oldboyedu-39-nb oldboy]$ ls -l 
+total 4
+-r--r-xr-x 1 oldboy incahome 17 Aug  3 17:26 test.sh
+[oldboy@oldboyedu-39-nb oldboy]$ cat test.sh 
+echo oldboylinux
+[oldboy@oldboyedu-39-nb oldboy]$ echo "pwd">>test.sh 
+-bash: test.sh: Permission denied
+[oldboy@oldboyedu-39-nb oldboy]$ /oldboy/test.sh
+-bash: /oldboy/test.sh: Permission denied
+
+
+
+######测试w 对于文件
+[root@oldboyedu-39-nb ~]# ##root 测试w对于文件
+[root@oldboyedu-39-nb ~]# chmod u=w /oldboy/test.sh 
+[root@oldboyedu-39-nb ~]# ls -l /oldboy/test.sh
+--w-r-xr-x 1 oldboy incahome 17 Aug  3 17:26 /oldboy/test.sh
+
+[oldboy@oldboyedu-39-nb oldboy]$ ###oldboy 测试文件的 w权限 
+  ldboy@oldboyedu-39-nb oldboy]$ ls -l test.sh 
+--w-r-xr-x 1 oldboy incahome 17 Aug  3 17:26 test.sh
+[oldboy@oldboyedu-39-nb oldboy]$ cat test.sh 
+cat: test.sh: Permission denied
+[oldboy@oldboyedu-39-nb oldboy]$ echo "pwd" >>test.sh 
+###vim强制 修改文件  
+[oldboy@oldboyedu-39-nb oldboy]$ vim test.sh 
+hostname
+pwd
+~                                                                                           
+~                                                                                           
+~                                                                                           
+                                                                                            
+~                                                                                           
+~                                                                                           
+~                                                                                           
+~                                                                                           
+~                                                                                           
+~                                                                                           
+~                                                                                           
+~                                                                                           
+~                                                                                           
+~                                                                                           
+~                                                                                           
+~                                                                                           
+"test.sh" 2L, 13C written
+[oldboy@oldboyedu-39-nb oldboy]$ ls -l
+total 4
+--w-r-xr-x 1 oldboy incahome 19 Aug  3 17:53 test.sh
+[oldboy@oldboyedu-39-nb oldboy]$ ###oldboy用户对这个文件是 所有者
+[oldboy@oldboyedu-39-nb oldboy]$ ##如果对这个文件只有w权限，如果强制修改会导致文件原来的内容消失
+[oldboy@oldboyedu-39-nb oldboy]$ ##对于文件来说只有w权限 不够
+[oldboy@oldboyedu-39-nb oldboy]$ ##对于文件来说 w权限需要r的配合。
+[oldboy@oldboyedu-39-nb oldboy]$ 
+[oldboy@oldboyedu-39-nb oldboy]$ /oldboy/test.sh
+-bash: /oldboy/test.sh: Permission denied
+
+
+###小结论:
+1.r读取 显示文件的内容 
+2.w修改文件的内容 ，需要r权限的配合
+
+
+
+
+
+
+######测试x 对于文件
+[root@oldboyedu-39-nb ~]# 
+[root@oldboyedu-39-nb ~]# ##root 
+[root@oldboyedu-39-nb ~]# ### 测试x权限
+[root@oldboyedu-39-nb ~]# chmod u=x /oldboy/test.sh 
+[root@oldboyedu-39-nb ~]# ls -l /oldboy/test.sh
+---xr-xr-x 1 oldboy incahome 19 Aug  3 17:53 /oldboy/test.sh
+[root@oldboyedu-39-nb ~]# cat /oldboy/test.sh
+echo oldboyedu.com
+
+[oldboy@oldboyedu-39-nb oldboy]$ ###oldboy
+[oldboy@oldboyedu-39-nb oldboy]$ ###测试 x权限
+[oldboy@oldboyedu-39-nb oldboy]$ ls -l 
+total 4
+---xr-xr-x 1 oldboy incahome 19 Aug  3 17:53 test.sh
+[oldboy@oldboyedu-39-nb oldboy]$ cat test.sh 
+cat: test.sh: Permission denied
+[oldboy@oldboyedu-39-nb oldboy]$ echo "pwd" >>test.sh 
+-bash: test.sh: Permission denied
+[oldboy@oldboyedu-39-nb oldboy]$ /oldboy/test.sh 
+bash: /oldboy/test.sh: Permission denied
+[oldboy@oldboyedu-39-nb oldboy]$ ###x权限需要 r权限的配合
+[oldboy@oldboyedu-39-nb oldboy]$ ll /oldboy/test.sh 
+-r-xr-xr-x 1 oldboy incahome 19 Aug  3 17:53 /oldboy/test.sh
+[oldboy@oldboyedu-39-nb oldboy]$ cat /oldboy/test.sh
+echo oldboyedu.com
+[oldboy@oldboyedu-39-nb oldboy]$ /oldboy/test.sh
+oldboyedu.com
+
+
+
+###小结论：
+#3.对于文件来说x权限表示执行，但是x权限需要r权限的配合
+
+
+#################################################
+####总结对于文件来说rwx的含义                   #
+#1.r表示读取文件的内容                          #
+#2.w表示修改文件内容的权限   需要r权限的配合    #
+#3.x表示执行/运行文件的权限  需要r权限的配合    #
+#################################################
+
+
+#为何会报错？
+[oldboy@oldboyedu-39-nb oldboy]$ echo "#oldboy" >>/etc/hosts 
+-bash: /etc/hosts: Permission denied
+[oldboy@oldboyedu-39-nb oldboy]$ echo "#oldboy" >>/etc/hosts 
+-bash: /etc/hosts: Permission denied
+[oldboy@oldboyedu-39-nb oldboy]$ #1.查看文件的权限
+[oldboy@oldboyedu-39-nb oldboy]$ ls -l /etc/hosts 
+-rw-r--r--. 2 root root 216 May 20 22:57 /etc/hosts
+[oldboy@oldboyedu-39-nb oldboy]$ #2.当前用户与这个文件是什么关系?
+[oldboy@oldboyedu-39-nb oldboy]$ id oldboy
+uid=500(oldboy) gid=502(incahome) groups=502(incahome)
+[oldboy@oldboyedu-39-nb oldboy]$ #oldboy 与/etc/hosts 文件是陌生人关系 
+[oldboy@oldboyedu-39-nb oldboy]$ #oldboy对 hosts 只有r权限 
+
+
+
+######目录的rwx权限含意 
+
+r（read）====>看书包里面的内容书的名字（目录里面的内容 文件，但是无法查看文件的属性信息）
+x(execute)===>人放到书包里面（进入到目录中权限 cd）  
+w(write )===>往里面添加书 拿出来书（目录 对目录里面的内容进行 删除/创建/修改文件名）
+
+
+###root 
+mkdir -p /oldboy/oldboydir 
+chown oldboy.incahome  /oldboy/oldboydir 
+ls -ld /oldboy/oldboydir
+touch /oldboy/oldboydir/stu{0..5}.txt
+
+
+######测试r 对于目录的含意 
+
+[root@oldboyedu-39-nb oldboy]# #root 
+[root@oldboyedu-39-nb oldboy]# #测试r对于目录
+[root@oldboyedu-39-nb oldboy]# chmod u=r oldboydir/
+[root@oldboyedu-39-nb oldboy]# ls -ld oldboydir/
+dr--r-xr-x 2 oldboy incahome 4096 Aug  3 18:50 oldboydir/
+
+
+
+[oldboy@oldboyedu-39-nb oldboy]$ ###oldboy
+[oldboy@oldboyedu-39-nb oldboy]$ ###测试目录的r权限
+[oldboy@oldboyedu-39-nb oldboy]$ pwd
+/oldboy
+[oldboy@oldboyedu-39-nb oldboy]$ ls -l
+total 8
+dr--r-xr-x 2 oldboy incahome 4096 Aug  3 18:50 oldboydir
+-r-xr-xr-x 1 oldboy incahome   19 Aug  3 17:53 test.sh
+[oldboy@oldboyedu-39-nb oldboy]$ ls  oldboydir/
+ls: cannot access oldboydir/stu3.txt: Permission denied
+ls: cannot access oldboydir/stu4.txt: Permission denied
+ls: cannot access oldboydir/stu1.txt: Permission denied
+ls: cannot access oldboydir/stu0.txt: Permission denied
+ls: cannot access oldboydir/stu5.txt: Permission denied
+ls: cannot access oldboydir/stu2.txt: Permission denied
+stu0.txt  stu1.txt  stu2.txt  stu3.txt  stu4.txt  stu5.txt
+[oldboy@oldboyedu-39-nb oldboy]$ ls -l oldboydir/
+ls: cannot access oldboydir/stu3.txt: Permission denied
+ls: cannot access oldboydir/stu4.txt: Permission denied
+ls: cannot access oldboydir/stu1.txt: Permission denied
+ls: cannot access oldboydir/stu0.txt: Permission denied
+ls: cannot access oldboydir/stu5.txt: Permission denied
+ls: cannot access oldboydir/stu2.txt: Permission denied
+total 0
+-????????? ? ? ? ?            ? stu0.txt
+-????????? ? ? ? ?            ? stu1.txt
+-????????? ? ? ? ?            ? stu2.txt
+-????????? ? ? ? ?            ? stu3.txt
+-????????? ? ? ? ?            ? stu4.txt
+-????????? ? ? ? ?            ? stu5.txt
+[oldboy@oldboyedu-39-nb oldboy]$ ###对于目录来说 r需要有人配合。
+[oldboy@oldboyedu-39-nb oldboy]$ 
+[oldboy@oldboyedu-39-nb oldboy]$ ###假设对于目录来说 r需要w的配合
+[oldboy@oldboyedu-39-nb oldboy]$ ls -l
+total 8
+drw-r-xr-x 2 oldboy incahome 4096 Aug  3 18:50 oldboydir
+-r-xr-xr-x 1 oldboy incahome   19 Aug  3 17:53 test.sh
+[oldboy@oldboyedu-39-nb oldboy]$ ls -l oldboydir/
+ls: cannot access oldboydir/stu3.txt: Permission denied
+ls: cannot access oldboydir/stu4.txt: Permission denied
+ls: cannot access oldboydir/stu1.txt: Permission denied
+ls: cannot access oldboydir/stu0.txt: Permission denied
+ls: cannot access oldboydir/stu5.txt: Permission denied
+ls: cannot access oldboydir/stu2.txt: Permission denied
+total 0
+-????????? ? ? ? ?            ? stu0.txt
+-????????? ? ? ? ?            ? stu1.txt
+-????????? ? ? ? ?            ? stu2.txt
+-????????? ? ? ? ?            ? stu3.txt
+-????????? ? ? ? ?            ? stu4.txt
+-????????? ? ? ? ?            ? stu5.txt
+[oldboy@oldboyedu-39-nb oldboy]$ ls -l
+total 8
+dr-xr-xr-x 2 oldboy incahome 4096 Aug  3 18:50 oldboydir
+-r-xr-xr-x 1 oldboy incahome   19 Aug  3 17:53 test.sh
+[oldboy@oldboyedu-39-nb oldboy]$ ls -l oldboydir/
+total 0
+-rw-r--r-- 1 root root 0 Aug  3 18:50 stu0.txt
+-rw-r--r-- 1 root root 0 Aug  3 18:50 stu1.txt
+-rw-r--r-- 1 root root 0 Aug  3 18:50 stu2.txt
+-rw-r--r-- 1 root root 0 Aug  3 18:50 stu3.txt
+-rw-r--r-- 1 root root 0 Aug  3 18:50 stu4.txt
+-rw-r--r-- 1 root root 0 Aug  3 18:50 stu5.txt
+
+小结：
+1）对于目录来说r表示查看目录里面的内容  但是需要x权限的配合
+
+
+
+
+
+
+######测试w 对于目录的含意 
+[root@oldboyedu-39-nb oldboy]# #root
+[root@oldboyedu-39-nb oldboy]# #对于目录w权限
+[root@oldboyedu-39-nb oldboy]# chmod u=w oldboydir/
+[root@oldboyedu-39-nb oldboy]# ls -ld oldboydir/
+d-w-r-xr-x 2 oldboy incahome 4096 Aug  3 18:50 oldboydir/
+
+[oldboy@oldboyedu-39-nb oldboy]$ ##oldboy
+[oldboy@oldboyedu-39-nb oldboy]$ #测试目录的w权限
+[oldboy@oldboyedu-39-nb oldboy]$ ls -l
+total 8
+d-w-r-xr-x 2 oldboy incahome 4096 Aug  3 18:50 oldboydir
+-r-xr-xr-x 1 oldboy incahome   19 Aug  3 17:53 test.sh
+[oldboy@oldboyedu-39-nb oldboy]$ touch oldboydir/oldboy.txt
+touch: cannot touch `oldboydir/oldboy.txt': Permission denied
+[oldboy@oldboyedu-39-nb oldboy]$ touch /oldboy/oldboydir/oldboy.txt
+touch: cannot touch `/oldboy/oldboydir/oldboy.txt': Permission denied
+[oldboy@oldboyedu-39-nb oldboy]$ ##目录的w权限需要配合 
+[oldboy@oldboyedu-39-nb oldboy]$ #w与r
+[oldboy@oldboyedu-39-nb oldboy]$ ls -l
+total 8
+drw-r-xr-x 2 oldboy incahome 4096 Aug  3 18:50 oldboydir
+-r-xr-xr-x 1 oldboy incahome   19 Aug  3 17:53 test.sh
+[oldboy@oldboyedu-39-nb oldboy]$ touch /oldboy/oldboydir/oldboy.txt
+touch: cannot touch `/oldboy/oldboydir/oldboy.txt': Permission denied
+[oldboy@oldboyedu-39-nb oldboy]$ ls -l
+total 8
+d-wxr-xr-x 2 oldboy incahome 4096 Aug  3 18:50 oldboydir
+-r-xr-xr-x 1 oldboy incahome   19 Aug  3 17:53 test.sh
+[oldboy@oldboyedu-39-nb oldboy]$ touch /oldboy/oldboydir/oldboy.txt
+[oldboy@oldboyedu-39-nb oldboy]$ touch /oldboy/oldboydir/oldboy2.txt
+[oldboy@oldboyedu-39-nb oldboy]$ pwd
+/oldboy
+[oldboy@oldboyedu-39-nb oldboy]$ ls -l
+total 8
+d-wxr-xr-x 2 oldboy incahome 4096 Aug  3 19:07 oldboydir
+-r-xr-xr-x 1 oldboy incahome   19 Aug  3 17:53 test.sh
+[oldboy@oldboyedu-39-nb oldboy]$ ls -l oldboydir/
+ls: cannot open directory oldboydir/: Permission denied
+[oldboy@oldboyedu-39-nb oldboy]$ rm -f /oldboy/oldboydir/oldboy.txt 
+do not use rm -f /oldboy/oldboydir/oldboy.txt
+[oldboy@oldboyedu-39-nb oldboy]$ \rm -f /oldboy/oldboydir/oldboy.txt 
+
+
+
+#小结论： 
+2.对于目录来说 w表示可以在这个目录里面进行 创建 删除 修改文件名（重命名）  同时w需要与x权限配合
+3.删除一个文件要看这个文件所在目录的权限 ，是否有wx
+
+
+
+
+[oldboy@oldboyedu-39-nb oldboy]$ \rm -f /etc/hosts 
+rm: cannot remove `/etc/hosts': Permission denied
+[oldboy@oldboyedu-39-nb oldboy]$ #1.查看文件所在目录的权限
+[oldboy@oldboyedu-39-nb oldboy]$ ls -ld /etc
+drwxr-xr-x. 78 root root 4096 Aug  3 18:38 /etc
+[oldboy@oldboyedu-39-nb oldboy]$ #2.oldboy对/etc目录 什么关系: 陌生人
+[oldboy@oldboyedu-39-nb oldboy]$ 
+[oldboy@oldboyedu-39-nb oldboy]$ #3.oldboy用户对/etc有的权限是 rx ls ;cd 
+[oldboy@oldboyedu-39-nb oldboy]$ 
+[oldboy@oldboyedu-39-nb oldboy]$ #4.删除一个文件 需要对这个文件所在的目录拥有 wx权限
+[oldboy@oldboyedu-39-nb oldboy]$ 
+[oldboy@oldboyedu-39-nb oldboy]$ #5.报错 
+
+[oldboy@oldboyedu-39-nb oldboy]$ touch /etc/lidao.txt
+touch: cannot touch `/etc/lidao.txt': Permission denied
+
+
+
+
+
+
+######测试x 对于目录的含意 
+
+
+[root@oldboyedu-39-nb oldboy]# ###root
+[root@oldboyedu-39-nb oldboy]# ##测试x权限 
+[root@oldboyedu-39-nb oldboy]# chmod u=x oldboydir/
+[root@oldboyedu-39-nb oldboy]# ll
+total 8
+d--xr-xr-x 2 oldboy incahome 4096 Aug  3 19:07 oldboydir
+-r-xr-xr-x 1 oldboy incahome   19 Aug  3 17:53 test.sh
+
+[oldboy@oldboyedu-39-nb oldboy]$ ##oldboy
+[oldboy@oldboyedu-39-nb oldboy]$ ##测试目录的 x权限
+[oldboy@oldboyedu-39-nb oldboy]$ ls -l
+total 8
+d--xr-xr-x 2 oldboy incahome 4096 Aug  3 19:07 oldboydir
+-r-xr-xr-x 1 oldboy incahome   19 Aug  3 17:53 test.sh
+[oldboy@oldboyedu-39-nb oldboy]$ cd oldboydir/
+[oldboy@oldboyedu-39-nb oldboydir]$ pwd
+/oldboy/oldboydir
+[oldboy@oldboyedu-39-nb oldboydir]$ ls 
+ls: cannot open directory .: Permission denied
+[oldboy@oldboyedu-39-nb oldboydir]$ logout
+
+
+小结：
+4.表示进入到目录的权限  cd 
+
+
+
+#####################################################################
+####总结对于目录来说rwx的含义                   					#
+#1.r表示显示目录里面的内容，需要x的配合         					#
+#2.w表示可以在这个目录里面创建 删除 重命名文件   需要x权限的配合    #
+#3.x进入到目录的权限 cd  										    #
+#####################################################################
+
+
+#####文件与目录rwx总结 ##############
+
+####总结对于目录来说rwx的含义                   				
+#1.r表示显示目录里面的内容，需要x的配合         				
+#2.w表示可以在这个目录里面创建 删除 重命名文件   需要x权限的配合 
+#3.x进入到目录的权限 cd  		
+
+####总结对于文件来说rwx的含义               
+#1.r表示读取文件的内容                      
+#2.w表示修改文件内容的权限   需要r权限的配合
+#3.x表示执行/运行文件的权限  需要r权限的配合
+####################################
+								 
+Permission denied
+
+#1.目录或文件
+#2.查看目录或文件的权限 
+#3.你与这个文件或目录的关系 ： 主人 家人 陌生人 
+#4.你对这个文件有什么权限
+
+
+
+
+
+
+
+###@@@文件删除原理  
+#1.硬链接数为零   rm 
+#2.进程调用数为零 重启对应的服务 一个文件没有被彻底删除(硬链接数0 进程调用数不为零）: lsof|grep delete
+
+###linux中的文件名是存在于文件所在目录的block里面。
+删除一个文件要看这个文件所在目录的权限。
+ls -l /etc/hosts 
+
+
+
+
+
+
+
+
+
+###@@@文件访问过程
+
+
+
+
+####@@@@@网站权限-通过控制权限让网站安全
+
+
+######
+文件 ---------
+rw-r--r--  644 
+多一点权限危险，少一点权限不够
+
+
+
+目录 
+rwxr-xr-x  755
+
+####比较安全的权限
+file 644 root root 
+dir  755 root root 
+
+
+
+
+
+
+#####如何让网站安全 
+#创建测试环境 (了解)
+mkdir -p /app/blog/chengxu /app/blog/upload
+
+#upload 存放 用户用户上传的图片 附件
+
+useradd www 
+[root@oldboyedu-39-nb /]# mkdir -p /app/blog /app/blog/upload
+[root@oldboyedu-39-nb /]# 
+[root@oldboyedu-39-nb /]# 
+[root@oldboyedu-39-nb /]# ll /app/blog/
+total 4
+drwxr-xr-x 2 root root 4096 Aug  3 20:32 upload
+[root@oldboyedu-39-nb /]# mkdir -p /app/blog/chengxu /app/blog/upload
+[root@oldboyedu-39-nb /]# 
+[root@oldboyedu-39-nb /]# ll /app/blog/
+total 8
+drwxr-xr-x 2 root root 4096 Aug  3 20:33 chengxu
+drwxr-xr-x 2 root root 4096 Aug  3 20:32 upload
+[root@oldboyedu-39-nb /]# useradd www 
+[root@oldboyedu-39-nb /]# 
+[root@oldboyedu-39-nb /]# su - www 
+[www@oldboyedu-39-nb ~]$ 
+[www@oldboyedu-39-nb ~]$ #我们是一个用户
+[www@oldboyedu-39-nb ~]$ ls /app/blog/
+chengxu/ upload/  
+[www@oldboyedu-39-nb ~]$ ls /app/blog/chengxu/
+[www@oldboyedu-39-nb ~]$ ls /app/blog/chengxu/ -l
+total 0
+[www@oldboyedu-39-nb ~]$ 
+[www@oldboyedu-39-nb ~]$ #上传一个图片 
+[www@oldboyedu-39-nb ~]$ #上传一个图片=====在upload目录中创建一个文件
+[www@oldboyedu-39-nb ~]$ touch /app/blog/upload/bingbing.jpg
+touch: cannot touch `/app/blog/upload/bingbing.jpg': Permission denied
+[www@oldboyedu-39-nb ~]$ ###在一个目录中创建文件 
+[www@oldboyedu-39-nb ~]$ ###看这个文件所在的目录的权限
+[www@oldboyedu-39-nb ~]$ 
+[www@oldboyedu-39-nb ~]$ ls -ld /app/blog/upload/
+drwxr-xr-x 2 root root 4096 Aug  3 20:32 /app/blog/upload/
+[www@oldboyedu-39-nb ~]$ logout
+[root@oldboyedu-39-nb /]# #1.给upload目录的其他人上面加上一个w权限
+[root@oldboyedu-39-nb /]# #2.让这个目录upload属于www用户
+[root@oldboyedu-39-nb /]# chown www.www /app/blog/upload/
+[root@oldboyedu-39-nb /]# su - www
+[www@oldboyedu-39-nb ~]$ cd /app/blog/upload/
+[www@oldboyedu-39-nb upload]$ pwd
+/app/blog/upload
+[www@oldboyedu-39-nb upload]$ touch /app/blog/upload/bingbing.jpg
+#创建测试环境 (了解)
+
+
+
+
+###得出结论****
+
+1.通过普通用户（傀儡）运行网站 www
+2.blog网站目录下面
+file  644 root root 
+dir   755 root root 
+3.blog网站下面 upload目录（用户上传）
+file  644 www www   
+dir   755 www www 
+
+
+###默认权限分配的命令umask，umask控制着linux里面默认的权限
+
+file  644 root root 
+dir   755 root root 
+
+##如果我修改了umask 如何计算linux默认的权限 （面试题 给你一个umask值）
+
+###1.linux里面 我们可以给一个文件  一个目录最大的权限是什么？
+一个文件  666 
+一个目录  777 
+ 
+umask 
+022 
+
+####计算当前系统中文件的默认权限 
+###666 
+##-022 
+##=644
+
+####计算当前系统中目录的默认权限 
+###777
+##-022 
+##=755 
+
+umask 025 
+####计算当前系统中文件的默认权限 
+###666 
+##-025 
+##=641
+##+001
+##=642 
+##642
+
+####计算当前系统中目录的默认权限 
+###777
+##-025 
+##=752 
+
+
+
+
+小结：
+1.修改了umask之后 计算系统默认的权限
+2.文件的默认权限需要 先减去umask 然后在奇数位上面 加上1 
+3.目录的默认的权限   直接减去umask即可 
+
+umask 035
+file 
+dir 
+
+##file-035 
+##666
+#-035 
+#=631
+#+011
+#=642 
+
+##dir-035
+##777
+#-035
+#=742
+
+
+总结：
+1.修改权限
+2.对于目录 文件来说rwx含义
+3.题目 
+[oldboy@show ~]$ whoami 
+oldboy
+[oldboy@show ~]$ ls /root/
+ls: cannot open directory /root/: Permission denied
+
+[oldboy@show ~]$ rm -f /etc/passwd
+rm: cannot remove `/etc/passwd': Permission denied
+
+[oldboy@show ~]$ ls -l /tmp/oldboy.txt 
+-rw-r--r-- 1 root root 6 Jun 26 22:32 /tmp/oldboy.txt
+[oldboy@show ~]$ echo hello oldboy >>/tmp/oldboy.txt 
+-bash: /tmp/oldboy.txt: Permission denied
+4.如何让网站安全
+1）以普通用户（傀儡）运行网站
+2）网站中 文件  目录权限的设置
+
+5.linux默认权限通过umask控制，给你一个umask的值 你能算出file dir默认的权限
+
+预习：
+定时任务 
+
+ 
+
+问题21：
+如果有多级目录 应该看哪个目录的权限呢
+查看文件所在目录的权限

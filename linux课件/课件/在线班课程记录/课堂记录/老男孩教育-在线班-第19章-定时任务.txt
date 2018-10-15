@@ -1,0 +1,409 @@
+﻿=============================================================================================
+# 老男孩教育：                                                                            #
+# www.oldboyedu.com                                                                       #
+# 邮件：miaokm@oldboyedu.com(189 1048 1057)                                               #
+# 地址：北京市昌平区顺沙路8号院汇德商厦4F                                                 #
+# 资源老师   手机电话：		    QQ号码        资源老师： 手机电话：		    QQ号码        #
+# 飞雪		 135 5261 2571		80042789      小雨		 186 0046 2391      390320151     #
+# 歪歪		 189 1171 8229		70271111      丹丹		 158 1059 0206      41117397      #
+# 冰冰		 150 1078 5220		41117483												  #
+=============================================================================================
+
+回顾：
+[oldboy@show ~]$ whoami 
+oldboy
+[oldboy@show ~]$ ls /root/
+ls: cannot open directory /root/: Permission denied
+
+[oldboy@show ~]$ rm -f /etc/passwd
+rm: cannot remove `/etc/passwd': Permission denied
+
+[oldboy@show ~]$ ls -l /tmp/oldboy.txt 
+-rw-r--r-- 1 root root 6 Jun 26 22:32 /tmp/oldboy.txt
+[oldboy@show ~]$ echo hello oldboy >>/tmp/oldboy.txt 
+-bash: /tmp/oldboy.txt: Permission denied
+报错的原因
+
+umask是 045 则文件和目录的默认权限是什么？
+
+
+
+
+[root@oldboyedu-39-nb ~]# su - oldboy
+[oldboy@oldboyedu-39-nb ~]$ ls /root/
+ls: cannot open directory /root/: Permission denied
+[oldboy@oldboyedu-39-nb ~]$ ls -d /root/
+/root/
+[oldboy@oldboyedu-39-nb ~]$ ls -ld /root/
+dr-xr-x---. 5 root root 4096 Aug  3 21:28 /root/
+[oldboy@oldboyedu-39-nb ~]$ 
+[oldboy@oldboyedu-39-nb ~]$ #1.查看文件或目录的权限
+[oldboy@oldboyedu-39-nb ~]$ #2.查看当前用户与这个文件或目录的关系
+[oldboy@oldboyedu-39-nb ~]$ #3.当前用户对 这个文件或目录有什么权限
+[oldboy@oldboyedu-39-nb ~]$ #因为查看目录里面的内容 需要对这个目录拥有 rx权限
+
+
+[root@oldboyedu-39-nb ~]# cp /etc/hosts{,.bak}
+[oldboy@show ~]$ rm -f /etc/asswd
+rm: cannot remove `/etc/passwd': Permission denied
+
+[oldboy@oldboyedu-39-nb ~]$ \rm -f /etc/hosts 
+rm: cannot remove `/etc/hosts': Permission denied
+[oldboy@oldboyedu-39-nb ~]$ \rm -f /etc/hosts 
+rm: cannot remove `/etc/hosts': Permission denied
+[oldboy@oldboyedu-39-nb ~]$ ls -l /etc/hosts 
+-rwxrwxrwx. 2 root root 216 May 20 22:57 /etc/hosts
+[oldboy@oldboyedu-39-nb ~]$ ##linux删除一个文件的权限 要看 文件所在目录的权限 
+[oldboy@oldboyedu-39-nb ~]$ ##文件名存放在 文件所在目录的block中。
+[oldboy@oldboyedu-39-nb ~]$ 
+[oldboy@oldboyedu-39-nb ~]$ #1.查看文件或目录的权限
+[oldboy@oldboyedu-39-nb ~]$ ls -ld /etc/
+drwxr-xr-x. 78 root root 4096 Aug  3 21:44 /etc/
+[oldboy@oldboyedu-39-nb ~]$ #2.查看当前用户与这个文件或目录的关系
+[oldboy@oldboyedu-39-nb ~]$ #3.当前用户对 这个文件或目录有什么权限
+[oldboy@oldboyedu-39-nb ~]$ #oldboy对 /etc目录 有rx权限
+[oldboy@oldboyedu-39-nb ~]$ #删除一个文件的权限  你需要对这个目录拥有w权限 
+
+
+[oldboy@oldboyedu-39-nb ~]$ echo hello >>/tmp/oldboy.txt
+-bash: /tmp/oldboy.txt: Permission denied
+
+[oldboy@oldboyedu-39-nb ~]$ echo hello >>/tmp/oldboy.txt
+-bash: /tmp/oldboy.txt: Permission denied
+[oldboy@oldboyedu-39-nb ~]$ ls -l /tmp/oldboy.txt
+-rw-r--r-- 1 root root 0 Aug  3 21:54 /tmp/oldboy.txt
+
+
+小结:
+1.修改文件 查看文件的内容 需要对文件有 rw 
+2.删除 创建一个文件       需要对文件所在目录拥有 wx  rwx 
+
+常见的permission denied 原因
+http://lidao.blog.51cto.com/3388056/1948913
+
+
+umask 045 
+
+###file-045  
+###666 
+##-045 
+##=621
+##+001 
+##=622 
+
+###dir-045  
+###777 
+##-045 
+##=732 
+
+#######linux文件系统的权限（隐藏权限）
+
+[root@oldboyedu-39-nb ~]# chattr +a  /tmp/oldboy.txt
+[root@oldboyedu-39-nb ~]# lsattr /tmp/oldboy.txt
+-----a-------e- /tmp/oldboy.txt
+[root@oldboyedu-39-nb ~]# #a=====append 追加  只能追加 
+[root@oldboyedu-39-nb ~]# echo pwd >/tmp/oldboy.txt
+-bash: /tmp/oldboy.txt: Operation not permitted
+[root@oldboyedu-39-nb ~]# \rm -f /tmp/oldboy.txt
+rm: cannot remove `/tmp/oldboy.txt': Operation not permitted
+
+
+[root@oldboyedu-39-nb ~]# chattr +i  /tmp/oldboy.txt
+[root@oldboyedu-39-nb ~]# #i===
+[root@oldboyedu-39-nb ~]# echo pwd >>/tmp/oldboy.txt
+-bash: /tmp/oldboy.txt: Permission denied
+[root@oldboyedu-39-nb ~]# ls -l /tmp/oldboy.txt
+-rw-r--r-- 1 root root 0 Aug  3 21:54 /tmp/oldboy.txt
+[root@oldboyedu-39-nb ~]# lsattr /tmp/oldboy.txt
+----i--------e- /tmp/oldboy.txt
+[root@oldboyedu-39-nb ~]# 
+[root@oldboyedu-39-nb ~]# >/tmp/oldboy.txt
+-bash: /tmp/oldboy.txt: Permission denied
+[root@oldboyedu-39-nb ~]# rm -f /tmp/oldboy.txt
+do not use rm -f /tmp/oldboy.txt
+[root@oldboyedu-39-nb ~]# \rm -f /tmp/oldboy.txt
+rm: cannot remove `/tmp/oldboy.txt': Operation not permitted
+
+a (append 只能追加) 如果设置了这个权限 只能追加 不能删除 不能修改 
+i( immutable 无敌) 无法修改 无法删除 
+授予文件或目录隐藏的权限 
+
+对于系统的一些需要包含的文件 
+/etc/inittab    /etc/passwd /etc/shadow 
+
+中毒
+1.感染你系统-让你常用命令
+2.给系统常用的命令 +i  文件+a
+3.给修改权限的命令改名
+
+
+[root@oldboyedu-39-nb ~]# ls -ld /usr/bin/passwd /tmp/ /bin/ls 
+-rwxr-xr-x. 1 root root 117048 Mar 23 02:52 /bin/ls
+drwxrwxrwt. 5 root root   4096 Aug  3 22:26 /tmp/
+-rwsr-xr-x. 1 root root  30768 Nov 24  2015 /usr/bin/passwd
+[root@oldboyedu-39-nb ~]# stat /tmp/
+  File: `/tmp/'
+  Size: 4096      	Blocks: 8          IO Block: 4096   directory
+Device: 803h/2051d	Inode: 390146      Links: 5
+Access: (1777/drwxrwxrwt)  Uid: (    0/    root)   Gid: (    0/    root)
+Access: 2017-08-03 21:54:36.509210930 +0800
+Modify: 2017-08-03 22:26:22.184209527 +0800
+Change: 2017-08-03 22:26:22.184209527 +0800
+[root@oldboyedu-39-nb ~]# stat /usr/bin/passwd 
+  File: `/usr/bin/passwd'
+  Size: 30768     	Blocks: 64         IO Block: 4096   regular file
+Device: 803h/2051d	Inode: 10301       Links: 1
+Access: (4755/-rwsr-xr-x)  Uid: (    0/    root)   Gid: (    0/    root)
+Access: 2017-07-30 03:24:46.820989703 +0800
+Modify: 2015-11-24 00:30:08.000000000 +0800
+Change: 2017-07-14 11:01:56.196998580 +0800
+
+
+#####特殊权限-了解 
+[root@oldboyedu-39-nb ~]# ls -ld /usr/bin/passwd /tmp/ /bin/ls 
+-rwxr-xr-x. 1 root root 117048 Mar 23 02:52 /bin/ls
+drwxrwxrwt. 5 root root   4096 Aug  3 22:26 /tmp/
+-rwsr-xr-x. 1 root root  30768 Nov 24  2015 /usr/bin/passwd
+[root@oldboyedu-39-nb ~]# stat /tmp/
+  File: `/tmp/'
+  Size: 4096      	Blocks: 8          IO Block: 4096   directory
+Device: 803h/2051d	Inode: 390146      Links: 5
+Access: (1777/drwxrwxrwt)  Uid: (    0/    root)   Gid: (    0/    root)
+Access: 2017-08-03 21:54:36.509210930 +0800
+Modify: 2017-08-03 22:26:22.184209527 +0800
+Change: 2017-08-03 22:26:22.184209527 +0800
+[root@oldboyedu-39-nb ~]# stat /usr/bin/passwd 
+  File: `/usr/bin/passwd'
+  Size: 30768     	Blocks: 64         IO Block: 4096   regular file
+Device: 803h/2051d	Inode: 10301       Links: 1
+Access: (4755/-rwsr-xr-x)  Uid: (    0/    root)   Gid: (    0/    root)
+Access: 2017-07-30 03:24:46.820989703 +0800
+Modify: 2015-11-24 00:30:08.000000000 +0800
+Change: 2017-07-14 11:01:56.196998580 +0800
+
+
+
+###suid 
+
+
+
+
+[root@oldboyedu-39-nb ~]# chmod u+s /bin/rm
+[root@oldboyedu-39-nb ~]# ls -l /bin/rm
+-rwsr-xr-x. 1 root root 57440 Mar 23 02:52 /bin/rm
+
+[oldboy@oldboyedu-39-nb ~]$ ls -l /bin/rm
+-rwsr-xr-x. 1 root root 57440 Mar 23 02:52 /bin/rm
+[oldboy@oldboyedu-39-nb ~]$ ##1.因为/bin/rm命令 被加上了 特殊权限 suid 
+[oldboy@oldboyedu-39-nb ~]$ ##2.如果命令有了suid 运行这个命令的时候就相当于是root
+[oldboy@oldboyedu-39-nb ~]$ ls -l /bin/rm
+-rwsr-xr-x. 1 root root 57440 Mar 23 02:52 /bin/rm
+
+
+[root@oldboyedu-39-nb ~]# ls -l /bin/rm
+-rwsr-xr-x. 1 root root 57440 Mar 23 02:52 /bin/rm
+[root@oldboyedu-39-nb ~]# chmod u-s /bin/rm
+[root@oldboyedu-39-nb ~]# ls -l /bin/rm
+-rwxr-xr-x. 1 root root 57440 Mar 23 02:52 /bin/rm
+
+
+###/tmp 临时目录 谁都可以在里面创建文件 
+###但是我希望 自己只能管理自己的文件。
+####粘滞位t
+
+drwxrwxrwt. 5 root root 4096 Aug  3 22:55 /tmp/
+[oldboy@oldboyedu-39-nb tmp]$ stat /tmp/
+  File: `/tmp/'
+  Size: 4096      	Blocks: 8          IO Block: 4096   directory
+Device: 803h/2051d	Inode: 390146      Links: 5
+Access: (1777/drwxrwxrwt)  Uid: (    0/    root)   Gid: (    0/    root)
+Access: 2017-08-03 22:59:29.043208586 +0800
+Modify: 2017-08-03 22:55:25.071208139 +0800
+Change: 2017-08-03 22:57:18.925207952 +0800
+
+
+###########定时任务 #########
+[root@oldboyedu-39-nb tmp]# ls -ld /etc/cron*
+drwxr-xr-x. 2 root root 4096 Jul 14 11:03 /etc/cron.d
+drwxr-xr-x. 2 root root 4096 Jul 14 11:03 /etc/cron.daily
+-rw-------. 1 root root    0 Aug 24  2016 /etc/cron.deny
+drwxr-xr-x. 2 root root 4096 Jul 14 11:02 /etc/cron.hourly
+drwxr-xr-x. 2 root root 4096 Jul 14 11:03 /etc/cron.monthly
+-rw-r--r--. 1 root root  457 Sep 27  2011 /etc/crontab
+drwxr-xr-x. 2 root root 4096 Sep 27  2011 /etc/cron.weekly
+
+
+####用户定时任务 
+[root@oldboyedu-39-nb tmp]# crontab -l 
+no crontab for root
+[root@oldboyedu-39-nb tmp]# ##当前用户root 没有定时任务
+
+
+查看定时任务 crontab -l 
+修改定时任务 crontab -e 
+
+
+#crontab -l   ===== cat /var/spool/cron/root 
+#crontab -e   ===== vi /var/spool/cron/root 
+
+
+
+###定时任务依赖的软件（服务）-是否能用
+	#1.查看当前是否正在运行
+		/etc/init.d/crond status
+		ps -ef|grep crond
+	#2.查看crond是否开机自启动
+		chkconfig |grep crond
+	
+	
+###1.查看定时任务是否正在运行
+[root@oldboyedu-39-nb tmp]# /etc/init.d/crond status
+crond (pid  1628) is running...
+[root@oldboyedu-39-nb tmp]# ps -ef|grep crond
+root       1628      1  0 Aug01 ?        00:00:00 crond
+root      49821  49576  0 23:29 pts/1    00:00:00 grep --color=auto crond
+
+###2.查看crond是否开机自启动
+[root@oldboyedu-39-nb tmp]# chkconfig |grep crond
+crond          	0:off	1:off	2:on	3:on	4:on	5:on	6:off
+
+###查看sshd是否正在运行。
+ps -ef |grep sshd 
+chkconfig |grep sshd 
+
+进程:正在运行的程序   
+
+守护进程-服务:一直在运行的程序
+crond 
+sshd 
+network 
+
+
+
+crontab怎么使用 
+	crontab命令使用 
+	-e edit 编辑当前用户的定时任务 
+		vi /var/spool/cron/root 
+	-l list显示当前用户的定时任务 
+		cat /var/spool/cron/root 
+	为何使用crontab命令 
+		1.有语法检查功能 格式不对 
+		2.方便 
+
+
+定时任务相关的文件 
+	/var/spool/cron/  定时任务的配置文件所在的目录 
+	/var/log/cron  定时任务的日志文件  运行过程的一个记录 
+		
+	/etc/cron.deny  哪些用户禁止使用定时任务 
+
+
+分时日月周 
+
+
+定时任务中常用符号 
+	* 每  
+		* * * * * 命令 
+	/n  
+		*/10 * * * * 每隔/每十分钟
+		每五分钟同步一下系统的时间 
+	- 从哪里来到哪里去 07-08 
+		每天的上午7点到上午11点 每一个小时运行CMD命令 
+	, 分隔 00 17,19,20 * * * 
+
+
+
+
+每天的上午7点到上午11点 每一个小时运行CMD命令 
+* 07-11 * * *  CMD 
+
+##表示整点的时候  没几个小时运行一次的时间 
+##分钟写上00 
+
+00 07-11 * * * CMD 
+00 07,08,09,10,11 * * * CMD 
+
+
+
+
+
+
+
+
+##每五分钟同步一下系统的时间 
+
+###每五分钟同步一下系统的时间 
+##第一个里程碑-什么命令
+[root@oldboyedu-39-nb tmp]# /usr/sbin/ntpdate ntp1.aliyun.com 
+ 8 Aug 11:26:33 ntpdate[49881]: step time server 182.92.12.11 offset 385306.847668 sec
+[root@oldboyedu-39-nb tmp]# date
+Tue Aug  8 11:26:39 CST 2017
+
+##第二个里程碑-定时任务
+#sync time by lidao 2017
+* * * * * /usr/sbin/ntpdate ntp1.aliyun.com 
+
+[root@oldboyedu-39-nb tmp]# tail /var/log/cron
+Aug  8 11:37:01 oldboyedu-39-nb CROND[49893]: (root) CMD (/usr/sbin/ntpdate ntp1.aliyun.com )
+Aug  8 11:38:01 oldboyedu-39-nb CROND[49903]: (root) CMD (/usr/sbin/ntpdate ntp1.aliyun.com )
+
+
+#第三个里程碑-让定时任务按照要求的时间执行
+#sync time by lidao 2017
+*/5 * * * * /usr/sbin/ntpdate ntp1.aliyun.com 
+
+
+
+
+每分钟把自己的名字 追加到 /oldboy/oldboy.txt
+
+#每分钟把自己的名字 追加到 /oldboy/oldboy.txt
+###第一个里程碑-什么命令
+echo oldboy >>/oldboy/oldboy.txt
+###检查
+[root@oldboyedu-39-nb tmp]# tail /oldboy/oldboy.txt 
+oldboy
+[root@oldboyedu-39-nb tmp]# 
+###第二个里程碑-写定时任务
+[root@oldboyedu-39-nb tmp]# /bin/echo oldboy >>/oldboy/oldboy.txt
+[root@oldboyedu-39-nb tmp]# tail /oldboy/oldboy.txt 
+oldboy
+oldboy
+[root@oldboyedu-39-nb tmp]# 
+[root@oldboyedu-39-nb tmp]# crontab -l 
+#sync time by lidao 2017
+*/5 * * * * /usr/sbin/ntpdate ntp1.aliyun.com
+
+#print name by lidao 2017 
+* * * * *  /bin/echo oldboy >>/oldboy/oldboy.txt
+##第三个里程碑-检查
+[root@oldboyedu-39-nb tmp]# tail /oldboy/oldboy.txt 
+oldboy
+oldboy
+[root@oldboyedu-39-nb tmp]# tail /oldboy/oldboy.txt 
+oldboy
+oldboy
+oldboy
+
+
+定时任务书写流程 
+	第一个里程碑-命令行测试-把你的名字显示到文件中 
+	第二个里程碑-把命令放入到脚本中 
+	第三个里程碑-测试下脚本是否可以用 
+	第四个里程碑-写定时任务 
+	第五个里程碑-检查结果 
+
+
+1.怎么写定时任务
+每分钟把自己名字追加到/oldboy/oldboy.txt 
+每5分钟同步一次系统的时间。
+2.写定时任务的流程
+
+预习：
+3.定时任务中的坑
+4.定时任务的练习题 
+
+
+
+
+

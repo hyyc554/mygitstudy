@@ -1,0 +1,383 @@
+=============================================================================================
+# 老男孩教育：                                                                            #
+# www.oldboyedu.com                                                                       #
+# 邮件：miaokm@oldboyedu.com(189 1048 1057)                                               #
+# 地址：北京市昌平区顺沙路8号院汇德商厦4F                                                 #
+# 资源老师   手机电话：		    QQ号码        资源老师： 手机电话：		    QQ号码        #
+# 飞雪		 135 5261 2571		80042789      小雨		 186 0046 2391      390320151     #
+# 歪歪		 189 1171 8229		70271111      丹丹		 158 1059 0206      41117397      #
+# 冰冰		 150 1078 5220		41117483												  #
+=============================================================================================
+
+###################
+#######总结########
+###################
+
+
+/etc/sysconfig/network-scripts/ifcfg-eth0		  第一块网卡的配置文件
+/etc/resolv.conf 								  223.5.5.5  223.6.6.6 dns客户端的配置文件
+/etc/hosts                                        主机名解析为ip地址   ip地址与主机名的对应关系 
+
+/etc/sysconfig/network                            主机名
+/etc/fstab                                        服务器开机自动挂载    在linux启动的时候 哪个磁盘分区挂载到哪个目录
+/etc/rc.local                                     开机自启动软件/命令/脚本
+                            
+/etc/inittab                                      系统运行级别配置文件
+/etc/init.d       							      管理软件/服务的命令
+/etc/profile       								  系统的环境变量和别名
+                               
+/etc/bashrc           						      别名
+/usr/local            							  编译安装的时候默认的安装位置 
+/var/log/message                                  普通日志文件
+                              
+/var/log/secure       							  记录用户的登录信息
+/var/spool/cron/root                              定时任务的配置文件
+/proc/cpuinfo                                     cpu的信息
+                         
+/proc/meminfo									  内存信息
+/proc/loadavg                                     系统平均负载  系统的繁忙程度
+/proc/mounts       								  系统挂载信息
+
+
+
+###
+第二关练习题 
+1.awk sed 
+2.打包压缩
+
+
+
+
+
+[root@oldboyedu-39-nb ~]# w
+ 11:07:41 up  8:01,  3 users,  load average: 0.00, 0.00, 0.00
+USER     TTY      FROM              LOGIN@   IDLE   JCPU   PCPU WHAT
+root     pts/0    10.0.0.1         09:28   24:26   0.03s  0.03s -bash
+root     pts/1    10.0.0.1         10:06    1:00m  0.00s  0.00s -bash
+root     pts/2    10.0.0.1         10:50    0.00s  0.02s  0.02s w
+
+
+#####linux开机启动的过程 *******
+
+
+
+#####PATH是什么？
+PATH里面存放的是 linux中命令的位置/路径。
+不通的路径之间通过冒号分割。
+
+#####第一题
+mkdir /oldboy -p
+cd /oldboy
+mkdir ext/oldboy test xiaodong xiaofan xingfujie -p
+touch jeacen oldboy wodi.gz yingsui.gz
+
+
+####方法1
+[root@oldboyedu-39-nb oldboy]# tree -dL 1 /oldboy/
+/oldboy/
+├── ext
+├── test
+├── xiaodong
+├── xiaofan
+└── xingfujie
+
+5 directories
+
+###方法2
+[root@oldboyedu-39-nb oldboy]# find  -maxdepth 1 -type d 
+.
+./xiaodong
+./xiaofan
+./ext
+./test
+./xingfujie
+
+[root@oldboyedu-39-nb oldboy]# find  -maxdepth 1 -type d  ! -name "."
+./xiaodong
+./xiaofan
+./ext
+./test
+./xingfujie
+
+###方法3 ls + grep
+[root@oldboyedu-39-nb oldboy]# ls -l|grep "以d开头的行"
+[root@oldboyedu-39-nb oldboy]# ls -l|grep "^d"
+drwxr-xr-x  3 root root 4096 Jul 20 01:22 ext
+drwxr-xr-x. 2 root root 4096 Jul 14 23:35 test
+drwxr-xr-x  2 root root 4096 Jul 20 01:22 xiaodong
+drwxr-xr-x  2 root root 4096 Jul 20 01:22 xiaofan
+drwxr-xr-x  2 root root 4096 Jul 20 01:22 xingfujie
+
+
+###方法4 ls + sed （看一眼）
+ls -l|sed -n '2p'
+ls -l|sed -n '/^d/p'
+
+###方法5 ls + awk  （看一眼）
+ls -l |awk '/^d/'
+
+###方法6 通过ls给不同的文件加上不同的标记（了解）
+[root@oldboyedu-39-nb oldboy]# ls  -F
+alex.txt  jeacen  oldboy.txt  test.sh  wodi.gz    xiaofan/    yingsui.gz
+ext/      oldboy  test/       t.sh     xiaodong/  xingfujie/
+[root@oldboyedu-39-nb oldboy]# ls  -F|grep "/"
+ext/
+test/
+xiaodong/
+xiaofan/
+xingfujie/
+
+###小结 
+1.yum安装软件
+2.linux无法上网 (排查DNS的配置是否有问题) 都是在linux下面
+1）ping www.baidu.com 
+2）ping 223.5.5.5 
+3）修改网卡里面的dns的设置
+4）重启网卡
+
+http://lidao.blog.51cto.com/3388056/1940340
+
+3.tree find  ls  grep 
+
+#####参考版本的 网卡配置文件 
+cp /etc/sysconfig/network-scripts/ifcfg-eth0 /tmp/ifcfg-eth0.bak
+cat > /etc/sysconfig/network-scripts/ifcfg-eth0 <<EOF
+DEVICE=eth0
+TYPE=Ethernet
+ONBOOT=yes
+NM_CONTROLLED=yes
+BOOTPROTO=none
+IPADDR=10.0.0.200
+NETMASK=255.255.255.0
+GATEWAY=10.0.0.2
+USERCTL=no
+PEERDNS=yes
+DNS1=223.5.5.5
+DNS2=223.6.6.6
+EOF
+
+###第二题
+cd .    #进入当前目录
+cd ..   #进入当前目录的上一级的目录
+cd -    #进入上一次的工作目录,回到刚才的位置 （刚才从哪里来的，回到那里去）
+cd ~    #回老家--当前用户的家目录
+cd      #回老家--当前用户的家目录
+
+进入到/etc/sysconfig/network-scripts/目录，并查看你所在位置
+进入到上一级目录，并查看你所在位置
+进入到/root目录下面，并显示你所在位置
+快速返回到/你上一次的位置
+回到老家
+
+###第三题
+ls -lrt 
+
+
+###第五题
+###数据模拟命令
+mkdir -p /app/logs
+cd /app/logs
+for  time in  {01..20};do  date -s "201705$time"; touch access_www_$(date +%F).log ;done
+date -s "20170520"
+
+[root@oldboyedu-39-nb logs]# find /app/logs/ -type f  -name "*.log"  -mtime +7
+/app/logs/access_www_2017-05-09.log
+/app/logs/access_www_2017-05-12.log
+/app/logs/access_www_2017-05-10.log
+/app/logs/access_www_2017-05-06.log
+/app/logs/access_www_2017-05-04.log
+/app/logs/access_www_2017-05-05.log
+/app/logs/access_www_2017-05-08.log
+/app/logs/access_www_2017-05-07.log
+/app/logs/access_www_2017-05-01.log
+/app/logs/access_www_2017-05-11.log
+/app/logs/access_www_2017-05-03.log
+/app/logs/access_www_2017-05-02.log
+
+find /app/logs/ -type f  -name "*.log"  -mtime +7 找到的文件给ls -l 两种方法 只给出命令即可
+
+##方法1 
+find /app/logs/ -type f  -name "*.log"  -mtime +7|xargs ls -l 
+##方法2 
+ls -l $(find /app/logs/ -type f  -name "*.log"  -mtime +7)
+##方法3 
+[root@oldboyedu-39-nb logs]# find /app/logs/  -mtime +7 -exec ls -l {}  \;
+-rw-r--r-- 1 root root 0 May  9 00:00 /app/logs/access_www_2017-05-09.log
+-rw-r--r-- 1 root root 0 May 12 00:00 /app/logs/access_www_2017-05-12.log
+-rw-r--r-- 1 root root 0 May 10 00:00 /app/logs/access_www_2017-05-10.log
+-rw-r--r-- 1 root root 0 May  6 00:00 /app/logs/access_www_2017-05-06.log
+-rw-r--r-- 1 root root 0 May  4 00:00 /app/logs/access_www_2017-05-04.log
+-rw-r--r-- 1 root root 0 May  5 00:00 /app/logs/access_www_2017-05-05.log
+-rw-r--r-- 1 root root 0 May  8 00:00 /app/logs/access_www_2017-05-08.log
+-rw-r--r-- 1 root root 0 May  7 00:00 /app/logs/access_www_2017-05-07.log
+-rw-r--r-- 1 root root 0 May  1 00:00 /app/logs/access_www_2017-05-01.log
+-rw-r--r-- 1 root root 0 May 11 00:00 /app/logs/access_www_2017-05-11.log
+-rw-r--r-- 1 root root 0 May  3 00:00 /app/logs/access_www_2017-05-03.log
+-rw-r--r-- 1 root root 0 May  2 00:00 /app/logs/access_www_2017-05-02.log
+
+
+##小结
+1.find命令找出 几天以前的文件
+2.find找出文件 交给ls rm sed 要有3种方法
+
+
+
+####第7题 
+
+[root@oldboyedu-39-nb logs]# echo {1..5}
+1 2 3 4 5
+[root@oldboyedu-39-nb logs]# echo {a..f}
+a b c d e f
+[root@oldboyedu-39-nb logs]# echo {1..5}
+1 2 3 4 5
+[root@oldboyedu-39-nb logs]# #stu1 stu2 stu3 ... stu5
+[root@oldboyedu-39-nb logs]# echo stu{1..5}
+stu1 stu2 stu3 stu4 stu5
+[root@oldboyedu-39-nb logs]# echo stu{1..5}|xargs -n1
+stu1
+stu2
+stu3
+stu4
+stu5
+[root@oldboyedu-39-nb logs]# echo stu{1..5}|xargs -n1 >/oldboy/nginx.conf
+[root@oldboyedu-39-nb logs]# cat /oldboy/nginx.conf 
+stu1
+stu2
+stu3
+stu4
+stu5
+
+
+###方法1 
+[root@oldboyedu-39-nb oldboy]# cat -n nginx.conf 
+     1	stu1
+     2	stu2
+     3	stu3
+     4	stu4
+     5	stu5
+	 
+###方法2 vi /vim 
+:set nu   #显示行号
+:set nonu #取消显示行号 
+
+
+###方法3 grep 
+
+[root@oldboyedu-39-nb oldboy]# grep -n "." nginx.conf 
+1:stu1
+2:stu2
+3:stu3
+4:stu4
+5:stu5
+
+####. 正则表达式里面的  表示任意一个字符 
+
+###方法4 sed 
+[root@oldboyedu-39-nb oldboy]# sed '=' nginx.conf |xargs -n2
+1 stu1
+2 stu2
+3 stu3
+4 stu4
+5 stu5
+
+
+###方法5 awk 
+[root@oldboyedu-39-nb oldboy]# awk '显示行号' nginx.conf 
+awk: 显示行号
+awk: ^ invalid char '?in expression
+[root@oldboyedu-39-nb oldboy]# awk '{print NR}' nginx.conf 
+1
+2
+3
+4
+5
+[root@oldboyedu-39-nb oldboy]# awk '{print NR,$0}' nginx.conf 
+1 stu1
+2 stu2
+3 stu3
+4 stu4
+5 stu5
+
+###方法6 
+[root@oldboyedu-39-nb oldboy]# nl nginx.conf 
+     1	stu1
+     2	stu2
+     3	stu3
+     4	stu4
+     5	stu5
+
+	 
+###小结： 
+1.显示文件的行号 cat vi/vim 
+2.其他扩展 了解	 
+	 
+	 
+####第8题
+1.每个运行级别的含义
+2.怎么配置
+3.怎么查看当前系统的运行级别
+4.临时切换运行级别
+
+
+总结 
+1.linux无法上网或联网怎么办？
+2.find命令根据修改时间找出文件   rm sed  3种方法
+3.ls cat vi/vim  tail 
+
+预习：
+1.压缩
+2.初战 单引号 双引号 不加引号
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+[root@oldboyedu-39 oldboy]# yum install tree -y
+Loaded plugins: fastestmirror, security
+Setting up Install Process
+Loading mirror speeds from cached hostfile
+Could not retrieve mirrorlist http://mirrorlist.centos.org/?release=6&arch=x86_64&repo=os&infra=stock  error was
+14: PYCURL ERROR 6 - "Couldn't resolve host 'mirrorlist.centos.org '"Error: Cannot find a valid baseurl for repo: base
+
+
+
+###远程连接拍错的过程  xshell 、crt 无法连接到服务器
+
+###服务器无法上网 
+linux无法上网或联网怎么办？
+http://lidao.blog.51cto.com/3388056/1940340
+
+
+#yum常见错误
+                   resolv.conf
+##1.ERROR Couldn't resolve host 'mirrorlist.centos.org 
+    错误  无法 解析 域名/主机 mirrorlist.centos.org 
+	无法与这个网站连接  
+	无法上网
+  
+  #1.ping www.baidu.com  ##验证你是否能上网
+  
+  #2.ping 223.5.5.5      ##ping百度不通，ping 外网ip地址通了， 说明你的DNS配置有问题
+  
+  #3.修改dns 修改网卡的配置文件
+cat >>/etc/sysconfig/network-scripts/ifcfg-eth0<<EOF
+DNS1=223.5.5.5
+DNS2=223.6.6.6 
+EOF
+  #4.配置生效  
+  /etc/init.d/network restart 
+  
+
+

@@ -1,0 +1,944 @@
+在线班课程-第5周
+李老师-easy
+微信:lidao996
+QQ号码:918391635
+
+备份一个文件
+cp /etc/hosts /etc/hosts.bak 
+cp /etc/hosts{,.bak}
+
+备份一个目录 
+打包+时间
+
+[root@oldboyedu01-nb ~]# rpm -qa |grep cronie
+cronie-1.4.4-16.el6_8.2.x86_64
+cronie-anacron-1.4.4-16.el6_8.2.x86_64
+[root@oldboyedu01-nb ~]# rpm -qa cronie
+cronie-1.4.4-16.el6_8.2.x86_64
+[root@oldboyedu01-nb ~]# #查询这个软件包里面有什么内容
+[root@oldboyedu01-nb ~]# rpm -ql cronie
+/etc/cron.d
+/etc/cron.d/0hourly
+/etc/cron.deny
+/etc/pam.d/crond
+/etc/rc.d/init.d/crond
+/etc/sysconfig/crond
+/usr/bin/crontab
+/usr/sbin/crond
+/usr/share/doc/cronie-1.4.4
+/usr/share/doc/cronie-1.4.4/AUTHORS
+/usr/share/doc/cronie-1.4.4/COPYING
+/usr/share/doc/cronie-1.4.4/ChangeLog
+/usr/share/doc/cronie-1.4.4/INSTALL
+/usr/share/doc/cronie-1.4.4/README
+/usr/share/man/man1/crontab.1.gz
+/usr/share/man/man5/crontab.5.gz
+/usr/share/man/man8/cron.8.gz
+/usr/share/man/man8/crond.8.gz
+/var/spool/cron
+
+
+[root@oldboyedu01-nb ~]# #找出ifconfig属于哪个软件包？
+[root@oldboyedu01-nb ~]# rpm -qf ifconfig 
+error: file /root/ifconfig: No such file or directory
+[root@oldboyedu01-nb ~]# rpm -qf `which ifconfig`
+net-tools-1.60-114.el6.x86_64
+[root@oldboyedu01-nb ~]# rpm -ql net-tools
+/bin/dnsdomainname
+/bin/domainname
+/bin/hostname
+/bin/netstat
+/bin/nisdomainname
+/bin/ypdomainname
+/etc/ethers
+/sbin/arp
+/sbin/ether-wake
+/sbin/ifconfig
+/sbin/ipmaddr
+/sbin/iptunnel
+/sbin/mii-diag
+/sbin/mii-tool
+/sbin/nameif
+/sbin/plipconfig
+/sbin/route
+/sbin/slattach
+/usr/share/doc/net-tools-1.60
+/usr/share/doc/net-tools-1.60/COPYING
+/usr/share/locale/cs/LC_MESSAGES/net-tools.mo
+/usr/share/locale/de/LC_MESSAGES/net-tools.mo
+/usr/share/locale/et_EE/LC_MESSAGES/net-tools.mo
+/usr/share/locale/fr/LC_MESSAGES/net-tools.mo
+/usr/share/locale/pt_BR/LC_MESSAGES/net-tools.mo
+/usr/share/man/de/man1/dnsdomainname.1.gz
+/usr/share/man/de/man1/domainname.1.gz
+/usr/share/man/de/man1/hostname.1.gz
+/usr/share/man/de/man1/nisdomainname.1.gz
+/usr/share/man/de/man1/ypdomainname.1.gz
+/usr/share/man/de/man5/ethers.5.gz
+/usr/share/man/de/man8/arp.8.gz
+/usr/share/man/de/man8/ifconfig.8.gz
+/usr/share/man/de/man8/netstat.8.gz
+/usr/share/man/de/man8/plipconfig.8.gz
+/usr/share/man/de/man8/route.8.gz
+/usr/share/man/de/man8/slattach.8.gz
+/usr/share/man/fr/man1/dnsdomainname.1.gz
+/usr/share/man/fr/man1/domainname.1.gz
+/usr/share/man/fr/man1/hostname.1.gz
+/usr/share/man/fr/man1/nisdomainname.1.gz
+/usr/share/man/fr/man1/ypdomainname.1.gz
+/usr/share/man/fr/man5/ethers.5.gz
+/usr/share/man/fr/man8/arp.8.gz
+/usr/share/man/fr/man8/ifconfig.8.gz
+/usr/share/man/fr/man8/netstat.8.gz
+/usr/share/man/fr/man8/plipconfig.8.gz
+/usr/share/man/fr/man8/route.8.gz
+/usr/share/man/fr/man8/slattach.8.gz
+/usr/share/man/man1/dnsdomainname.1.gz
+/usr/share/man/man1/domainname.1.gz
+/usr/share/man/man1/hostname.1.gz
+/usr/share/man/man1/nisdomainname.1.gz
+/usr/share/man/man1/ypdomainname.1.gz
+/usr/share/man/man5/ethers.5.gz
+/usr/share/man/man8/arp.8.gz
+/usr/share/man/man8/ether-wake.8.gz
+/usr/share/man/man8/ifconfig.8.gz
+/usr/share/man/man8/ipmaddr.8.gz
+/usr/share/man/man8/iptunnel.8.gz
+/usr/share/man/man8/mii-diag.8.gz
+/usr/share/man/man8/mii-tool.8.gz
+/usr/share/man/man8/nameif.8.gz
+/usr/share/man/man8/netstat.8.gz
+/usr/share/man/man8/plipconfig.8.gz
+/usr/share/man/man8/route.8.gz
+/usr/share/man/man8/slattach.8.gz
+/usr/share/man/pt/man1/dnsdomainname.1.gz
+/usr/share/man/pt/man1/domainname.1.gz
+/usr/share/man/pt/man1/hostname.1.gz
+/usr/share/man/pt/man1/nisdomainname.1.gz
+/usr/share/man/pt/man1/ypdomainname.1.gz
+/usr/share/man/pt/man8/arp.8.gz
+/usr/share/man/pt/man8/ifconfig.8.gz
+/usr/share/man/pt/man8/netstat.8.gz
+/usr/share/man/pt/man8/route.8.gz
+
+
+用户定时任务 
+	crontab -l （list）列表 查看用户的定时任务 cron table 
+	crontab -e  (edit) 编辑用户的定时任务 
+	/var/spool/cron/root  （root是用户名 root用户的定时任务） 
+
+#crontab -l === cat /var/spool/cron/root
+#crontab -e === vi  /var/spool/cron/root
+
+	
+	
+	
+
+
+#确定定时任务是否在运行
+##1.确定定时任务当前正在运行
+[root@oldboyedu01-nb ~]# ps -ef |grep crond
+root       1546      1  0 05:59 ?        00:00:00 crond
+root       3323   1588  0 13:11 pts/0    00:00:00 grep --color=auto crond
+	
+##2.确保定时任务 开机自启动
+[root@oldboyedu01-nb ~]# chkconfig |grep crond
+crond          	0:off	1:off	2:on	3:on	4:on	5:on	6:off
+
+	
+定时任务格式。
+	
+	2月28日 周六
+	
+eg:	
+每五分钟同步一下系统的时间 	
+##第1个里程碑-使用什么命令
+[root@oldboyedu01-nb ~]# ntpdate  ntp1.aliyun.com
+28 Nov 18:43:48 ntpdate[3391]: step time server 182.92.12.11 offset 189170.190991 sec
+[root@oldboyedu01-nb ~]# which ntpdate 
+/usr/sbin/ntpdate	
+
+[root@oldboyedu01-nb ~]# /usr/sbin/ntpdate ntp1.aliyun.com
+28 Nov 18:46:20 ntpdate[3396]: adjust time server 182.92.12.11 offset 0.012217 sec
+	
+##第2个里程碑-写入定时任务
+[root@oldboyedu01-nb ~]# crontab -l
+#sync time by liyy at 20171111
+*/5 * * * *  /usr/sbin/ntpdate ntp1.aliyun.com
+
+	
+##第3个里程碑-检查结果
+[root@oldboyedu01-nb ~]# date -s "20170101"
+Sun Jan  1 00:00:00 CST 2017
+[root@oldboyedu01-nb ~]# date 
+Sun Jan  1 00:00:01 CST 2017
+[root@oldboyedu01-nb ~]# tail /var/log/cron
+Nov 28 18:50:01 oldboyedu01-nb CROND[3402]: (root) CMD (/usr/sbin/ntpdate ntp1.aliyun.com)
+
+* * * * *	
+*/1 * * * *
+	
+	
+	
+每天的上午7点到上午11点 每一个小时运行CMD命令 
+	
+	
+	
+每分钟把自己的名字 追加到 /oldboy/oldboy.txt 	
+##第1个里程碑-什么命令
+[root@oldboyedu01-nb ~]# echo oldboy >>/oldboy/oldboy.txt
+[root@oldboyedu01-nb ~]# cat /oldboy/oldboy.txt
+oldboy
+
+##第2个里程碑-命令写入到定时任务中
+#echo name to file
+* * * * *    /bin/echo oldboy >>/oldboy/oldboy.txt
+	
+#第3个里程碑-检查
+1.查看定时任务日志
+2.查看命令是否运行 
+	
+	
+	
+#每分钟显示当前系统的时间为2017-11-11_6 追加到 /oldboy/time.log 
+
+#第1个里程碑-命令
+[root@oldboyedu01-nb ~]# date +%F_%w
+2017-11-29_3
+[root@oldboyedu01-nb ~]# date +%F_%w >>/oldboy/time.log
+[root@oldboyedu01-nb ~]# cat /oldboy/time.log
+2017-11-29_3
+
+#第2个里程碑-写入脚本中
+mkdir -p /server/scripts
+[root@oldboyedu01-nb ~]# cat /server/scripts/show.sh
+date +%F_%w
+[root@oldboyedu01-nb ~]# sh /server/scripts/show.sh
+2017-11-29_3
+[root@oldboyedu01-nb ~]# sh /server/scripts/show.sh >>/oldboy/time.log 
+[root@oldboyedu01-nb ~]# cat /oldboy/time.log
+2017-11-29_3
+2017-11-29_3
+
+#第3个里程碑-书写定时任务
+#print time to file by xxxx at xxxxxx
+* * * * *    /bin/sh /server/scripts/show.sh >>/oldboy/time.log
+
+#第4个里程碑-检查
+
+Nov 29 12:13:01 oldboyedu01-nb CROND[4484]: (root) CMD (/bin/sh /server/scripts/show.sh >>/oldboy/time.log)
+
+
+[root@oldboyedu01-nb ~]# cat /oldboy/time.log 
+2017-11-29_3
+2017-11-29_3
+2017-11-29_3
+
+
+
+
+05.定时任务中-命令或脚本结果(正确及错误)定向到黑洞(>/dev/null 2>&1)或追加到文件中 >>/tmp/oldboy.txt 2>&1 
+
+##sync time by liyy at 20171111
+*/5 * * * *   /usr/sbin/ntpdate ntp1.aliyun.com >/dev/null           2>&1
+#echo name to file
+#* * * * *    /bin/echo oldboy                  >>/oldboy/oldboy.txt 2>&1
+
+#* * * * *    /bin/sh /server/scripts/show.sh   >>/oldboy/time.log   2>&1
+
+/dev/null 黑洞
+cat /dev/null >oldboy.txt 
+>oldboy.txt 
+
+>/dev/null           2>&1  ==== >/dev/null            2>/dev/null 
+
+>>/oldboy/oldboy.txt 2>&1  ==== >>/oldboy/oldboy.txt  2>>/oldboy/oldboy.txt
+
+在定时任务中运行的命令或脚本，都要定向到空(>/dev/null 2>&1)或追加到文件(>>/tmp/time.log 2>&1)
+
+
+磁盘空间满了，df -h还有剩余的空间，df -i inode用光了。
+
+
+	【企业案例】如果定时任务规则结尾不加>/dev/null 2>&1或者追加到文件中>>/tmp/oldboy 2>&1，很容易导致硬盘inode空间被占满，从而系统服务不正常。 
+	
+	###定时任务中 命令或脚本的结果 没有定向到空或文件中
+	#1.邮件的软件没有开启-----大量小文件堆积在/var/spool/postfix/maildrop/ ---inode满了  
+	#2.邮件软件开启了---------定时任务会不断的给root用户发邮件 
+	#you have new mail in /var/spool/mail/root  
+
+企业案例模拟：
+关闭postfix服务
+[root@oldboyedu01-nb ~]# /etc/init.d/postfix stop 
+[root@oldboyedu01-nb ~]# chkconfig postfix off 
+[root@oldboyedu01-nb ~]# chkconfig |grep post
+postfix        	0:off	1:off	2:off	3:off	4:off	5:off	6:off
+udev-post      	0:off	1:on	2:on	3:on	4:on	5:on	6:off
+
+多些几个错误的定时任务 
+
+盯着
+/var/spool/postfix/maildrop/目录变化
+
+每天晚上12点把/etc/services文件打包备份到 /backup下面 
+##第1个里程碑-命令
+cd /
+tar zcf /backup/etc.tar.gz etc/services 
+
+mkdir -p /backup 
+[root@oldboyedu01-nb /]# ls -l /backup/
+total 128
+-rw-r--r-- 1 root root 127314 Nov 29 15:16 etc.tar.gz
+[root@oldboyedu01-nb /]# tar tf /backup/etc.tar.gz 
+etc/services
+
+cd /
+tar zcf /backup/etc-$(date +%F).tar.gz etc/services 
+
+##第2个里程碑-书写脚本
+[root@oldboyedu01-nb /]# cat /server/scripts/bak-ser.sh
+cd / && tar zcf /backup/etc-$(date +%F).tar.gz etc/services 
+[root@oldboyedu01-nb /]# sh /server/scripts/bak-ser.sh
+[root@oldboyedu01-nb /]# ll /backup/
+total 128
+-rw-r--r-- 1 root root 127314 Nov 29 15:22 etc-2017-11-29.tar.gz
+
+##第3个里程碑-书写定时任务-每分钟执行
+#backup services by xxxx   at xxxxxxx
+* * * * * /bin/sh /server/scripts/bak-ser.sh  >/dev/null 2>&1
+
+
+Nov 29 15:26:01 oldboyedu01-nb CROND[21693]: (root) CMD (/bin/sh /server/scripts/bak-ser.sh  >/dev/null 2>&1)
+[root@oldboyedu01-nb /]# 
+[root@oldboyedu01-nb /]# ll /backup/
+total 128
+-rw-r--r-- 1 root root 127314 Nov 29 15:26 etc-2017-11-29.tar.gz
+[root@oldboyedu01-nb /]# tar tf /backup/etc-2017-11-29.tar.gz 
+etc/services
+
+##第4个里程碑-书写定时任务-按照要求
+[root@oldboyedu01-nb /]# crontab -l
+#backup services by xxxx   at xxxxxxx
+00 00 * * * /bin/sh /server/scripts/bak-ser.sh  >/dev/null 2>&1
+
+
+每分钟显示当前时间2017-11-11_6 和当前服务的ip地址到/backup/ip.log
+
+
+#第1个里程碑-命令和书写脚本
+[root@oldboyedu01-nb /]# date +%F_%w
+2017-11-29_3
+[root@oldboyedu01-nb /]# ifconfig eth0 |awk -F "[ :]+" 'NR==2{print $4}'
+10.0.0.200
+[root@oldboyedu01-nb /]# cat  /server/scripts/ip.sh
+date +%F_%w
+/sbin/ifconfig eth0 |awk -F "[ :]+" 'NR==2{print $4}'
+[root@oldboyedu01-nb /]# /bin/sh   /server/scripts/ip.sh
+2017-11-29_3
+10.0.0.200
+[root@oldboyedu01-nb /]# /bin/sh   /server/scripts/ip.sh >>/backup/ip.log
+[root@oldboyedu01-nb /]# cat /backup/ip.log
+2017-11-29_3
+10.0.0.200
+
+#第2个里程碑-写入定时任务
+#print ip time   by xxxx   at xxxxxxx
+* * * * *    /bin/sh   /server/scripts/ip.sh >>/backup/ip.log 2>&1
+
+
+#定时任务运行脚本的时候PATH里面 有很少的目录 /usr/bin和/bin
+##1.使用命令的绝对路径 
+##2.在脚本的开头重新定义一下PATH
+export PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
+
+1.总结磁盘空间满了系列的排查过程及常见原因
+2.因为定时任务脚本中环境变量的问题导致的故障
+linux定时任务生产java服务无法执行问题群友案例
+http://oldboy.blog.51cto.com/2561410/1541515 
+3.每5分钟同步系统时间
+4.每天晚上12点把/etc/services文件打包备份到
+5.每天晚上12点把/etc/services /var/spool/cron /etc/fstab /etc/rc.local 打包备份到/backup目录下面
+6.每天晚上12点把/etc/services /var/spool/cron /etc/fstab /etc/rc.local 打包备份到/backup目录下面，并保留最近7天的备份
+
+
+
+
+
+
+
+
+
+
+#1.使用命令的绝对路径
+#2.在脚本的开头重新定义一下PATH
+export PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
+
+
+###第13章-用户管理内容
+面试题:让一个命令或脚本开机自启动有什么方法？ 
+方法1.命令或脚本放入到 /etc/rc.local 中
+
+方法2.通过chkconfig进行管理
+
+如何让一个脚本被chkconfig管理。
+第1个里程碑-脚本要放在/etc/init.d目录中
+[root@oldboyedu01-nb ~]# cat /etc/init.d/oldboyd
+echo oldboyedu.com
+ 
+第2个里程碑-脚本要有执行权限
+[root@oldboyedu01-nb ~]# chmod +x /etc/init.d/oldboyd
+[root@oldboyedu01-nb ~]# ll /etc/init.d/oldboyd
+-rwxr-xr-x 1 root root 19 Dec 13 17:06 /etc/init.d/oldboyd
+
+第3个里程碑-脚本符合chkconfig管理的格式
+# chkconfig: 2345 98 99
+2345表示默认在哪个运行级别上开机自启动
+98  表示开机的顺序
+99  表示关机的顺序
+
+[root@oldboyedu01-nb ~]# cat /etc/init.d/oldboyd
+# chkconfig: 2345 98 99
+echo oldboyedu.com
+
+第4个里程碑-加入chkconfig管理列表中并检查
+[root@oldboyedu01-nb ~]# chkconfig --add oldboyd
+[root@oldboyedu01-nb ~]# chkconfig |grep oldboyd
+oldboyd        	0:off	1:off	2:on	3:on	4:on	5:on	6:off
+
+参考答案：
+1.开自启动软件:2种 /etc/rc.local 或 chkconfig 
+2.如何被chkconfig管理  
+  1)脚本要在/etc/init.d目录并且要有执行权限
+  2)符合chkconfig管理的格式
+  3)添加到chkconfig管理列表中并检查
+  
+
+#1.用户分类 
+UID user  id 用户id  
+GID group id 用户组id
+
+虚拟用户 傀儡 UID:1-499 
+	每个程序、服务运行的时候都需要一个用户和用户组。
+特点：
+     傀儡用户不需要用来登录系统 
+     用户的命令解释器/sbin/nologin
+
+
+#2.用户相关的配置文件 
+	/etc/passwd 用户的信息 
+	/etc/shadow 用户密码信息 
+	/etc/group 用户的 用户组信息 
+	/etc/gshadow 用户组密码信息 
+	
+/etc/passwd 用户的信息 
+
+https://www.processon.com/view/link/5a311039e4b0c105af7b4713
+
+
+#3.与用户相关的目录 
+/etc/skel
+ linux新用户家目录的模板
+
+ useradd oldboy 
+ /etc/skel   ==>  /home/oldboy 
+
+/etc/skel 目录中的内容
+
+.bashrc         相当于是/etc/bashrc 存放用户自己的别名
+.bash_profile   相当于是/etc/profile 存放用户自己的环境变量和别名
+.bash_logout    在用户退出登录的时候执行的。
+
+
+请问如下登录环境故障的原理及解决办法？ 
+-bash-4.1$  
+-bash-4.1$ 
+原因:
+与这个用户有关的 家目录下面的环境变量文件 .bashrc .bash_profile 丢失
+
+第1个里程碑-模拟环境
+[root@oldboyedu01-nb ~]# id alex
+uid=501(alex) gid=501(alex) groups=501(alex),0(root)
+[root@oldboyedu01-nb ~]# su - alex
+[alex@oldboyedu01-nb ~]$ whoami 
+alex
+[alex@oldboyedu01-nb ~]$ \rm -f .*
+
+重新登录
+
+第2个里程碑-解决
+[root@oldboyedu01-nb ~]# su - alex
+-bash-4.1$ cp /etc/skel/.bash*   ~
+重新登录
+
+[root@oldboyedu01-nb ~]# su - alex
+[alex@oldboyedu01-nb ~]$ whoami 
+alex
+
+#4.用户管理的命令
+添加用户 
+useradd 
+      -u 指定用户的uid
+	  -s 指定用户使用shell
+	     /bin/bash(默认)
+		 /sbin/nologin(虚拟用户)
+      -M 不创建家目录
+	  -g 指定用户属于哪个用户组
+	  
+	  添加一个用户alex999指定uid为888 禁止用户登录系统 不创建家目录 
+	  添加一个uid为888的虚拟用户叫alex999
+	  
+[root@oldboyedu01-nb ~]# id alex999
+id: alex999: No such user
+[root@oldboyedu01-nb ~]# useradd  -u 888  -s /sbin/nologin -M alex999
+[root@oldboyedu01-nb ~]# id alex999
+uid=888(alex999) gid=888(alex999) groups=888(alex999)
+[root@oldboyedu01-nb ~]# grep alex999 /etc/passwd
+alex999:x:888:888::/home/alex999:/sbin/nologin
+[root@oldboyedu01-nb ~]# ls -l /home/alex999
+ls: cannot access /home/alex999: No such file or directory
+
+
+passwd 
+--stdin 从管道前面获取密码 非交互式设置密码
+[root@oldboyedu01-nb ~]# echo 123456|passwd --stdin oldboy
+Changing password for user oldboy.
+passwd: all authentication tokens updated successfully.
+
+[root@oldboyedu01-nb ~]# history -c
+[root@oldboyedu01-nb ~]# history 
+    1  history 
+
+"oldboyedu"
++oldboyedu+
+
+keepass
+https://keepass.info/download.html
+
+
+[root@oldboyedu01-nb ~]# touch oldboy.txt
+[root@oldboyedu01-nb ~]# #1.采集指纹
+[root@oldboyedu01-nb ~]# md5sum oldboy.txt
+7e435cd1e5bd7d22fe9072ffd900338f  oldboy.txt
+[root@oldboyedu01-nb ~]# 
+[root@oldboyedu01-nb ~]# #2.把指纹信息保存起来
+[root@oldboyedu01-nb ~]# md5sum oldboy.txt >finger.log
+[root@oldboyedu01-nb ~]# cat finger.log 
+7e435cd1e5bd7d22fe9072ffd900338f  oldboy.txt
+[root@oldboyedu01-nb ~]# echo oldgirl >>oldboy.txt
+[root@oldboyedu01-nb ~]# md5sum oldboy.txt
+5969e6d5a26ce5c4c88232e5b3f37fac  oldboy.txt
+[root@oldboyedu01-nb ~]# #3.对比指纹是否发生变化
+[root@oldboyedu01-nb ~]# #3.对比指纹是否发生变化--验证指纹
+[root@oldboyedu01-nb ~]# 
+[root@oldboyedu01-nb ~]# #3.对比指纹是否发生变化--验证指纹
+[root@oldboyedu01-nb ~]# md5sum -c finger.log 
+oldboy.txt: FAILED
+md5sum: WARNING: 1 of 1 computed checksum did NOT match
+[root@oldboyedu01-nb ~]# #指纹====文件是否变化了
+
+
+
+http://lidao.blog.51cto.com/3388056/1910889
+
+
+
+
+
+
+添加一个虚拟用户用户 mysql 指定用户的uid gid都是999  
+[root@oldboyedu01-nb ~]# useradd -u 999 -s /sbin/nologin  -M  mysql 
+[root@oldboyedu01-nb ~]# id mysql
+uid=999(mysql) gid=999(mysql) groups=999(mysql)
+
+
+
+https://www.processon.com/view/link/59ffcfe6e4b06bed41ccb8d6
+
+last 哪个用户在什么时候 从哪里 远程登录你的系统 用户登录的信息 
+lastlog 显示linux中所有用户最近一次远程登录的信息 
+
+
+如何解决普通用户查看系统的日志？
+1.把文件其他人加上r权限  ========>oldboy oldgirl test hack 谁都可以查看文件的内容
+2.通过给命令加上suid方法 ========>oldboy oldgirl test hack 谁都可以查看文件的内容
+3.sudo方法 让普通用户临时成为root
+
+su与su -区别
+-是su参数 
+-, -l, --login 切换用户的时候更新与用户有关的环境变量
+
+[root@oldboyedu01-nb ~]# su oldboy
+[oldboy@oldboyedu01-nb root]$ pwd
+/root
+[oldboy@oldboyedu01-nb root]$ exit
+[root@oldboyedu01-nb ~]# su - oldboy
+[oldboy@oldboyedu01-nb ~]$ pwd
+/home/oldboy
+
+#查看当前用户有什么黄马褂
+[oldboy@oldboyedu01-nb ~]$ sudo -l
+
+We trust you have received the usual lecture from the local System
+Administrator. It usually boils down to these three things:
+
+    #1) Respect the privacy of others.
+    #2) Think before you type.
+    #3) With great power comes great responsibility.
+
+[sudo] password for oldboy: 
+Sorry, user oldboy may not run sudo on oldboyedu01-nb.
+
+#给oldboy用户配置sudo 
+ls touch 
+
+ visudo
+92行
+oldboy  ALL=(ALL)       /bin/ls, /bin/touch
+
+
+oldboy用户检查
+[oldboy@oldboyedu01-nb ~]$ sudo ls /root/
+-		 echo.txt    hosts	 install.log	     oldboy-20171111.log  oldboy.txt	   services
+anaconda-ks.cfg  finger.log  ifcfg-eth0  install.log.syslog  oldboydir		  oldboy.txt-hard  show.sh
+[oldboy@oldboyedu01-nb ~]$ sudo touch /root/oldboyedu.com
+[oldboy@oldboyedu01-nb ~]$ sudo ls /root/oldboyedu.com
+/root/oldboyedu.com
+[oldboy@oldboyedu01-nb ~]$ sudo ls /root/oldboyedu.com -l
+-rw-r--r-- 1 root root 0 Dec 24 18:04 /root/oldboyedu.com
+
+
+
+
+oldboy  ALL=(ALL)       /bin/ls, /bin/touch
+用户名  你可以在哪台服务器上运行命令=(你可以成为谁)      命令
+
+
+
+授权命令并不需要密码
+oldboy  ALL=(ALL)       NOPASSWD: /bin/ls, /bin/touch
+
+
+授权所有命令并不需要密码
+oldboy  ALL=(ALL)       NOPASSWD: ALL
+
+
+授权oldboy用户/bin目录下面所有的命令
+oldboy  ALL=(ALL)        /bin/*
+
+授权oldboy用户/bin目录下面所有的命令，并排除vi命令
+oldboy  ALL=(ALL)        /bin/*, !/bin/vi 
+[oldboy@oldboyedu01-nb ~]$ sudo -l
+
+User oldboy may run the following commands on this host:
+    (ALL) /bin/*, (ALL) !/bin/vi
+[oldboy@oldboyedu01-nb ~]$ sudo vi /etc/passwd
+Sorry, user oldboy is not allowed to execute '/bin/vi /etc/passwd' as root on oldboyedu01-nb.
+
+小结：
+1.让普通用户临时成为root-sudo 
+2.给某个用户授权几条命令
+3.使用命令的时候可以不需要密码
+4.授权的时候细致到某一个命令
+
+
+
+
+
+[root@oldboyedu01-nb ~]# fdisk -l |grep '/sd[a-c]:'
+Disk /dev/sda: 10.7 GB, 10737418240 bytes
+Disk /dev/sdb: 106 MB, 106954752 bytes
+Disk /dev/sdc: 106 MB, 106954752 bytes
+[root@oldboyedu01-nb ~]# 
+
+
+ 
+   n   add a new partition          创建一个分区
+   d   delete a partition           删除
+   p   print the partition table    显示
+   q   quit without saving changes  退出不保存
+   w   write table to disk and exit 退出并保存
+   
+10M
+Command (m for help): n
+Command action
+   e   extended
+   p   primary partition (1-4)
+p
+Partition number (1-4): 1
+First cylinder (1-102, default 1): 
+Using default value 1
+Last cylinder, +cylinders or +size{K,M,G} (1-102, default 102): +10M    
+
+   Device Boot      Start         End      Blocks   Id  System
+/dev/sdb1               1          11       11248   83  Linux
+
+90M扩展分区
+
+Command (m for help): n
+Command action
+   e   extended
+   p   primary partition (1-4)
+e
+Partition number (1-4): 2
+First cylinder (12-102, default 12): 
+Using default value 12
+Last cylinder, +cylinders or +size{K,M,G} (12-102, default 102): 
+Using default value 102
+
+
+   Device Boot      Start         End      Blocks   Id  System
+/dev/sdb1               1          11       11248   83  Linux
+/dev/sdb2              12         102       93184    5  Extended
+
+#创建一个30M的逻辑分区
+Command (m for help): n
+Command action
+   l   logical (5 or over)
+   p   primary partition (1-4)
+l
+First cylinder (12-102, default 12): 
+Using default value 12
+Last cylinder, +cylinders or +size{K,M,G} (12-102, default 102): +30M
+
+
+
+   Device Boot      Start         End      Blocks   Id  System
+/dev/sdb1               1          11       11248   83  Linux
+/dev/sdb2              12         102       93184    5  Extended
+/dev/sdb5              12          42       31728   83  Linux
+
+
+创建一个100M分区，把他挂载到/mnt上面
+第1个里程碑-创建磁盘分区
+Command (m for help): n
+Command action
+   e   extended
+   p   primary partition (1-4)
+p
+Partition number (1-4): 1
+First cylinder (1-102, default 1): 
+Using default value 1
+Last cylinder, +cylinders or +size{K,M,G} (1-102, default 102): 
+Using default value 102
+
+Command (m for help): p
+
+Disk /dev/sdb: 106 MB, 106954752 bytes
+64 heads, 32 sectors/track, 102 cylinders
+Units = cylinders of 2048 * 512 = 1048576 bytes
+Sector size (logical/physical): 512 bytes / 512 bytes
+I/O size (minimum/optimal): 512 bytes / 512 bytes
+Disk identifier: 0x1e9f2c1e
+
+   Device Boot      Start         End      Blocks   Id  System
+/dev/sdb1               1         102      104432   83  Linux
+
+Command (m for help): w
+The partition table has been altered!
+
+Calling ioctl() to re-read partition table.
+Syncing disks.
+
+第2个里程碑-通知系统/dev/sdb的磁盘分区表变化
+partprobe /dev/sdb
+
+第3个里程碑-格式化创建文件系统
+[root@oldboyedu01-nb ~]# mkfs.ext4  /dev/sdb1 
+mke2fs 1.41.12 (17-May-2010)
+Filesystem label=
+OS type: Linux
+Block size=1024 (log=0)
+Fragment size=1024 (log=0)
+Stride=0 blocks, Stripe width=0 blocks
+26208 inodes, 104432 blocks
+5221 blocks (5.00%) reserved for the super user
+First data block=1
+Maximum filesystem blocks=67371008
+13 block groups
+8192 blocks per group, 8192 fragments per group
+2016 inodes per group
+Superblock backups stored on blocks: 
+	8193, 24577, 40961, 57345, 73729
+
+Writing inode tables: done                            
+Creating journal (4096 blocks): done
+Writing superblocks and filesystem accounting information: done
+
+This filesystem will be automatically checked every 22 mounts or
+180 days, whichever comes first.  Use tune2fs -c or -i to override.
+
+
+第4个里程碑-让磁盘分区不进行自动检查
+[root@oldboyedu01-nb ~]# tune2fs -c 0 -i 0 /dev/sdb1 
+tune2fs 1.41.12 (17-May-2010)
+Setting maximal mount count to -1
+Setting interval between checks to 0 seconds
+
+第5个里程碑-挂载
+[root@oldboyedu01-nb ~]# mount /dev/sdb1  /mnt/
+[root@oldboyedu01-nb ~]# df -h
+Filesystem      Size  Used Avail Use% Mounted on
+/dev/sda3       8.8G  1.9G  6.6G  22% /
+tmpfs           1.9G     0  1.9G   0% /dev/shm
+/dev/sda1       190M   40M  141M  22% /boot
+/dev/sdb1        95M  1.6M   89M   2% /mnt
+
+第6个里程碑-永久挂载
+
+方法1：
+把
+#/bin/mount /dev/sdb1  /mnt/
+这个命令放入到/etc/rc.local 
+
+
+方法2:
+按照/etc/fstab（开机自动挂载）格式书写
+UUID=6b8ba13d-2833-49be-8206-deb002d2d523 /                       ext4    defaults        1 1
+UUID=e01d5cbd-b233-44b9-832d-15225cc4d8ff /boot                   ext4    defaults        1 2
+UUID=7c5f5672-9c30-444c-a273-1350c6a06130 swap                    swap    defaults        0 0
+tmpfs                   /dev/shm                tmpfs   defaults        0 0
+devpts                  /dev/pts                devpts  gid=5,mode=620  0 0
+sysfs                   /sys                    sysfs   defaults        0 0
+proc                    /proc                   proc    defaults        0 0
+
+第1列                   
+设备名字                挂载点/目录             文件系统类型  挂载参数  是否进行备份  是否进行磁盘检查
+#/dev/sdb1               /mnt                    ext4          defaults  0             0
+
+
+
+
+#parted 
+
+查看分区信息
+print 
+创建分区表
+mklabel  gpt  #msdos(mbr)
+创建分区 
+mkpart   primary  0  10M 
+mkpart   primary  10M  20M 
+mkpart   primary  20M  90M 
+删除
+rm 
+
+退出
+quit 
+
+(parted) mklabel gpt                                                      
+(parted) p                                                                
+Model: VMware, VMware Virtual S (scsi)
+Disk /dev/sdc: 107MB
+Sector size (logical/physical): 512B/512B
+Partition Table: gpt
+
+Number  Start  End  Size  File system  Name  Flags
+
+
+(parted) mkpart primary 0 10M
+Warning: The resulting partition is not properly aligned for best performance.
+Ignore/Cancel? I  
+
+(parted) p                                                                
+Model: VMware, VMware Virtual S (scsi)
+Disk /dev/sdc: 107MB
+Sector size (logical/physical): 512B/512B
+Partition Table: gpt
+
+Number  Start   End     Size    File system  Name     Flags
+ 1      17.4kB  10.0MB  9983kB               primary
+ 2      10.5MB  19.9MB  9437kB               primary
+ 3      19.9MB  90.2MB  70.3MB               primary
+
+
+企业案例：java环境内存不够导致swap
+
+增加swap大小
+
+创建一个文件100M，把这个文件作为swap
+
+#1.创建一个100M的文件
+[root@oldboyedu01-nb ~]# dd if=/dev/zero of=/tmp/100m bs=1M count=100
+100+0 records in
+100+0 records out
+104857600 bytes (105 MB) copied, 0.517254 s, 203 MB/s
+
+dd if=/dev/zero of=/tmp/100m bs=1M count=100
+   
+[root@oldboyedu01-nb ~]# ls -lh /tmp/100m 
+-rw-r--r-- 1 root root 100M Dec 26 22:59 /tmp/100m
+
+#2.让这个文件成为swap
+[root@oldboyedu01-nb ~]# mkswap  /tmp/100m 
+mkswap: /tmp/100m: warning: don't erase bootbits sectors
+        on whole disk. Use -f to force.
+Setting up swapspace version 1, size = 102396 KiB
+no label, UUID=fb96fbcc-dd71-4099-b999-06532332ea12
+
+[root@oldboyedu01-nb ~]# file /tmp/100m 
+/tmp/100m: Linux/i386 swap file (new style) 1 (4K pages) size 25599 pages
+
+#3.增加系统的swap
+swapon /tmp/100m
+
+[root@oldboyedu01-nb ~]# free -h
+             total       used       free     shared    buffers     cached
+Mem:          3.7G       268M       3.5G       240K        10M       147M
+-/+ buffers/cache:       110M       3.6G
+Swap:         867M         0B       867M
+
+显示系统中 swap的组成
+[root@oldboyedu01-nb ~]# swapon -s 
+Filename				Type		Size	Used	Priority
+/dev/sda2                               partition	786428	0	-1
+/tmp/100m                               file		102396	0	-2
+
+
+#4.永久增加swap
+
+方法1 /etc/rc.local 
+/sbin/swapon /tmp/100m 
+
+方法2 /etc/fstab 
+/tmp/100m swap                    swap    defaults        0 0
+
+
+
+openSUSE linux的默认文件系统ReiserFS 文件系统。
+IBM的AIX使用的jfs日志文件系统。
+
+Centos7采用XFS文件系统
+Centos6采用ext4文件系统
+Centos5采用ext3文件系统
+
+mkfs.ext4 
+mkfs.ext3
+
+使用系统默认的文件系统即可。
+
+
+
+	ReiserFS大量小文件业务首选ReiserFS（100K以内）, 单独安装。
+	XFS有的门户的数据库MySQL业务会选择xfs。
+	ext4 视频下载，流媒体，数据库，小文件业务也OK，可以用默认的。
+	ext2 没有日志，蓝汛的cache业务，CDN网站加速服务的。
+
+/var/log/messages
+/var/log/secure
+
+
+
+作业:
+
+批量添加3个用户stu01,stu02....stu03,并设置8位11111111(禁止使用for,while等循环) 
+批量添加10个用户stu01,stu02....stu10,并设置8位随机密码(禁止使用for,while等循环) 
+安装并总结htop iotop iftop 使用
+htop  #增强版本的top命令
+iotop #显示系统中每个进程使用的磁盘io
+iftop #显示系统网络流量 
+
+
+
+
+
+
+

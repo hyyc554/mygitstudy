@@ -1,0 +1,77 @@
+第一周作业内容：
+
+1、你用过的服务器型号有哪些？配置如何？         10分
+2、程序、进程和守护进程的区别                   10分
+3、提升用户体验的网站解决方案                   10分
+4、buffer与cache区别？                          5分
+5、什么是GNU,GNL?                               5分
+6、Linux常见发行版本及使用场景                  5分   
+7、简述CentOS与RedHat区别                       5分                             
+8、什么是ip地址，端口号                         10分
+9、远程连接排错过程                             40分
+82F32252RW108554V  5WL82101F94435008
+
+什么是GNU, GPL? 
+说出GNU和GPL的含义
+说出GNU里面的主要软件 gawk gcc bash emacs 
+
+第二周作业内容
+1、已知文件test.txt内容 
+oldboy
+test
+lidao
+请给出输出test.txt文件内容时，不包含oldboy字符串的命令（至少两种方法） 10分
+
+
+
+
+2、给rm命令设置一个别名，运行rm命令的时候提示command not found（请写出配置步骤） 15分
+
+
+3、显示/etc/services文件的第20到第30行（至少2种方法） 10分
+
+
+4、把/oldboy目录下面所有以.log结尾的文件中oldboy替换为oldgirl（至少2种方法）15分
+
+5、如何关闭iptables
+
+6、在Linux中显示中文乱码如何解决？
+
+7、解释下下面网卡文件每一行的含义
+HWADDR=00:0c:29:1e:67:61
+ONBOOT=yes
+BOOTPROTO=none
+IPADDR=10.0.0.200
+NETMASK=255.255.255.0
+GATEWAY=10.0.0.2
+DNS1=223.5.5.5
+DNS2=223.6.6.6
+8.简述Linux系统无法上网如何排查?
+
+9.说出下面几个文件的作用
+/etc/hosts 
+/etc/fstab
+/var/log/messages
+/var/log/secure
+
+10.简单描述Linux下面安装软件的几种方法
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

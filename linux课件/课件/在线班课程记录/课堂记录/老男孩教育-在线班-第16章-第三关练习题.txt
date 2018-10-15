@@ -1,0 +1,668 @@
+﻿=============================================================================================
+# 老男孩教育：                                                                            #
+# www.oldboyedu.com                                                                       #
+# 邮件：miaokm@oldboyedu.com(189 1048 1057)                                               #
+# 地址：北京市昌平区顺沙路8号院汇德商厦4F                                                 #
+# 资源老师   手机电话：		    QQ号码        资源老师： 手机电话：		    QQ号码        #
+# 飞雪		 135 5261 2571		80042789      小雨		 186 0046 2391      390320151     #
+# 歪歪		 189 1171 8229		70271111      丹丹		 158 1059 0206      41117397      #
+# 冰冰		 150 1078 5220		41117483												  #
+=============================================================================================
+
+第三关练习题 
+1.正则 取出网卡ip地址 取出权限 
+2.date 显示时间 设置 
+3.系统时间乱了 怎么恢复 时间同步 
+无法上网
+4.linux下面快捷键
+5.一些命令
+
+
+通配符--文件 文件名特殊符号
+* 表示匹配所有
+{} 表示生成序列
+
+>  覆盖输出重定向
+>> 追加输出重定向
+2> 错误输出重定向
+2>> 错误追加输出重定向
+<   输入重定向
+<<  追加输入重定向
+
+. 表示当前目录
+.. 表示上级目录
+\ 表示转义
+
+$   取变量里面的内容 
+$() `` 先执行里面的命令 把结果留下来（显示到屏幕上面）
+!   find awk 里面表示非 
+    !awk  查找出最近一条包含awk的命令 并执行  history |grep awk
+'
+"
+
+
+
+正则表达式 
+^     以什么开头
+$     以什么结尾
+|     或者
+^$    空行
+.     任意一个字符
+.*    所有
+[abc]   我要找a或b或c 相当于是一个整体
+[^abc]  不是a或不是b或不是c 排除了a或b或c的其他的东西 
+()    整体 反向引用（先保护起来，然后使用）
+
+
+*     表示前一个字符连续出现0次或1次以上  	          >=0 
++     表示前一个字符连续出现1次以上       	          >=1 
+{n,m} 表示前一个字符最多连续出现m次，至少连续出现n次  >=n <=m
+?                                                     0 1
+
+
+
+
+
+
+
+
+
+取出网卡ip地址 
+
+取出/etc/hosts的权限644或0644
+
+取出网卡的ip地址和10.0.0.255
+[root@oldboyedu-39-nb ~]# #取出网卡的ip地址和10.0.0.255
+[root@oldboyedu-39-nb ~]# ifconfig eth0 
+eth0      Link encap:Ethernet  HWaddr 00:0C:29:AA:0B:E9  
+          inet addr:10.0.0.200  Bcast:10.0.0.255  Mask:255.255.255.0
+          inet6 addr: fe80::20c:29ff:feaa:be9/64 Scope:Link
+          UP BROADCAST RUNNING MULTICAST  MTU:1500  Metric:1
+          RX packets:73274 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:66690 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:1000 
+          RX bytes:14916540 (14.2 MiB)  TX bytes:32260836 (30.7 MiB)
+
+[root@oldboyedu-39-nb ~]# ifconfig eth0 |sed -n '2p' 
+          inet addr:10.0.0.200  Bcast:10.0.0.255  Mask:255.255.255.0
+[root@oldboyedu-39-nb ~]# ifconfig eth0 |sed -n '2p' |sed -r 's#^.*dr:(.*)  Bc.*t:(.*)  M.*$#\1#g'
+10.0.0.200
+[root@oldboyedu-39-nb ~]# ifconfig eth0 |sed -n '2p' |sed -r 's#^.*dr:(.*)  Bc.*t:(.*)  M.*$#\2#g'
+10.0.0.255
+[root@oldboyedu-39-nb ~]# ifconfig eth0 |sed -n '2p' |sed -r 's#^.*dr:(.*)  Bc.*t:(.*)  M.*$#\1\2#g'
+10.0.0.20010.0.0.255
+[root@oldboyedu-39-nb ~]# ifconfig eth0 |sed -n '2p' |sed -r 's#^.*dr:(.*)  Bc.*t:(.*)  M.*$#\1 \2#g'
+10.0.0.200 10.0.0.255
+
+
+
+4组组长-何海  
+[root@oldboyedu-39 my-data]# ifconfig eth0 | awk 'NR==2' | egrep   "([0-9]{1,3}.?){4}" -o | head -2 
+
+[root@oldboyedu-39-nb ~]# ifconfig eth0 | awk 'NR==2' | egrep -o  "([0-9]{1,3}.?){4}" |head -2
+10.0.0.200 
+10.0.0.255 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+####################第一题
+取出网卡的ip地址 
+eth0 
+ifconfig eth0 
+
+第一步定位
+[root@oldboyedu-39-nb ~]# ifconfig eth0 |sed -n '2p'
+          inet addr:10.0.0.200  Bcast:10.0.0.255  Mask:255.255.255.0
+[root@oldboyedu-39-nb ~]# ifconfig eth0 |awk 'NR==2'
+          inet addr:10.0.0.200  Bcast:10.0.0.255  Mask:255.255.255.0
+
+第二步取出ip地址
+
+
+#@#@@@@@方法一
+ifconfig eth0 |sed -n '2p'
+
+[root@oldboyedu-39-nb ~]# ifconfig eth0 |sed -n '2p'
+          inet addr:10.0.0.200  Bcast:10.0.0.255  Mask:255.255.255.0
+[root@oldboyedu-39-nb ~]# ifconfig eth0 |sed -n '2p'|sed 's#^.*dr:##g'
+10.0.0.200  Bcast:10.0.0.255  Mask:255.255.255.0
+[root@oldboyedu-39-nb ~]# ifconfig eth0 |sed -n '2p'|sed 's#^.*dr:##g'|sed 's#Bc.*$##g'
+10.0.0.200  
+
+#@@@@@@@方法二-sed 反向引用（先保护起来，然后使用）
+
+#####第一个里程碑-反向引用（先保护起来，然后使用）
+
+2组-李嘉豪  
+[root@oldboydeu data]# echo 123456|sed -r 's#..(..)..#\1#g'
+34
+9组-周武  
+[root@oldboyedu-39 20170118]# echo 123456 |sed -r 's#..(..)..#\1#g'
+34
+[root@oldboyedu-39 20170118]# 
+8组组长-黄建龙  
+echo 123456 | sed -nr 's#..(.*)..#\1#gp'
+
+
+[root@oldboyedu-39-nb ~]# echo 123456
+123456
+[root@oldboyedu-39-nb ~]# echo 123456|sed 's#..(..)..#\1#g'
+sed: -e expression #1, char 15: invalid reference \1 on `s' command's RHS
+[root@oldboyedu-39-nb ~]# echo 123456|sed -r 's#..(..)..#\1#g'
+34
+
+
+#####第二个里程碑-通过反向引用取出ip地址
+[root@oldboyedu-39-nb ~]# ifconfig eth0
+eth0      Link encap:Ethernet  HWaddr 00:0C:29:AA:0B:E9  
+          inet addr:10.0.0.200  Bcast:10.0.0.255  Mask:255.255.255.0
+          inet6 addr: fe80::20c:29ff:feaa:be9/64 Scope:Link
+          UP BROADCAST RUNNING MULTICAST  MTU:1500  Metric:1
+          RX packets:70675 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:64369 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:1000 
+          RX bytes:14668487 (13.9 MiB)  TX bytes:32083048 (30.5 MiB)
+
+[root@oldboyedu-39-nb ~]# ifconfig eth0|sed -n '2p'
+          inet addr:10.0.0.200  Bcast:10.0.0.255  Mask:255.255.255.0
+[root@oldboyedu-39-nb ~]# ifconfig eth0|sed -n '2p'|sed -r 's#^.*dr:##g'
+10.0.0.200  Bcast:10.0.0.255  Mask:255.255.255.0
+[root@oldboyedu-39-nb ~]# ifconfig eth0|sed -n '2p'|sed -r 's#^.*dr:(.*)Bc.*$#\1#g'
+10.0.0.200  
+
+#@@@@@@方法三 awk方法
+[root@oldboyedu-39-nb ~]# ifconfig eth0|awk 'NR==2'
+          inet addr:10.0.0.200  Bcast:10.0.0.255  Mask:255.255.255.0
+[root@oldboyedu-39-nb ~]# ifconfig eth0|awk 'NR==2'|awk -F "[ :]" '{print $13}'
+10.0.0.200
+[root@oldboyedu-39-nb ~]# ifconfig eth0|awk 'NR==2'|awk -F "[ :]+" '{print $4}'
+10.0.0.200
+
+
+######重新认识下 + 连续出现
+[root@oldboyedu-39-nb ~]# echo "##########1@@@@@@@@@@2"
+##########1@@@@@@@@@@2
+[root@oldboyedu-39-nb ~]# echo "##########1@@@@@@@@@@2" |grep "[#@]"
+##########1@@@@@@@@@@2
+[root@oldboyedu-39-nb ~]# echo "##########1@@@@@@@@@@2" |grep "[#@]" -o
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+@
+@
+@
+@
+@
+@
+@
+@
+@
+@
+[root@oldboyedu-39-nb ~]# echo "##########1@@@@@@@@@@2" |egrep "[#@]+" 
+##########1@@@@@@@@@@2
+[root@oldboyedu-39-nb ~]# echo "##########1@@@@@@@@@@2" |egrep "[#@]+" -o
+##########
+@@@@@@@@@@
+[root@oldboyedu-39-nb ~]# 
+[root@oldboyedu-39-nb ~]# echo "##@@@@@@###@@@@#####1@@@###@@@@@@@2" |egrep "[#@]+" 
+##@@@@@@###@@@@#####1@@@###@@@@@@@2
+[root@oldboyedu-39-nb ~]# echo "##@@@@@@########1@@@###@@@@@@@2" |egrep "[#@]+" 
+##@@@@@@########1@@@###@@@@@@@2
+[root@oldboyedu-39-nb ~]# echo "##@@@@@@########1@@@###@@@@@@@2" |egrep "[#@]+" -o
+##@@@@@@########
+@@@###@@@@@@@
+[root@oldboyedu-39-nb ~]# ######[] 正则表达式会认为中括号里面的内容都是一样的 abc
+[root@oldboyedu-39-nb ~]# ####1.在我的筐里面 
+[root@oldboyedu-39-nb ~]# ####2.不在我的筐里面 
+[root@oldboyedu-39-nb ~]# 
+[root@oldboyedu-39-nb ~]# 
+[root@oldboyedu-39-nb ~]# echo "##########1@@@@@@@@@@2" |awk -F "[#@]+"  '{print $2}'
+1
+
+########取出ip地址和 255.255.255.0
+[root@oldboyedu-39-nb ~]# ifconfig eth0 |awk 'NR==2'|awk -F "[ :]+"  '{print $4,$NF}'
+10.0.0.200 255.255.255.0
+
+#@@@@@@方法四-cut 
+
+##先把冒号替换为空格 取第13列
+[root@oldboyedu-39-nb ~]# ifconfig eth0 |awk 'NR==2'|sed 's#:# #g'
+          inet addr 10.0.0.200  Bcast 10.0.0.255  Mask 255.255.255.0
+[root@oldboyedu-39-nb ~]# ifconfig eth0 |awk 'NR==2'|sed 's#:# #g'|cut -d " " -f13
+10.0.0.200
+
+
+##先通过:分割，然后通过空格分割
+[root@oldboyedu-39-nb ~]# ifconfig eth0 |awk 'NR==2'|cut -d ":" -f2
+10.0.0.200  Bcast
+[root@oldboyedu-39-nb ~]# ifconfig eth0 |awk 'NR==2'|cut -d ":" -f2|cut -d " " -f1
+10.0.0.200
+
+
+
+取ip地址
+1.sed把前面去掉 去掉后面
+2.sed反向引用
+3.awk方法 -F  支持扩展正则表达式
+4.cut
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+#####第二题
+#取出/etc/hosts的权限644或0644.
+[root@oldboyedu-39-nb ~]# stat /etc/hosts 
+  File: `/etc/hosts'
+  Size: 216       	Blocks: 8          IO Block: 4096   regular file
+Device: 803h/2051d	Inode: 260126      Links: 2
+Access: (0644/-rw-r--r--)  Uid: (    0/    root)   Gid: (    0/    root)
+Access: 2017-07-30 00:02:05.983001919 +0800
+Modify: 2017-05-20 22:57:33.530934887 +0800
+Change: 2017-05-20 22:57:33.533934704 +0800
+
+
+
+班长-李阳 
+[root@oldboyedu-39 ~]# stat /etc/hosts | sed -nr '4s#^.* \((.*)/-.*$#\1#g'p
+0644
+3组组长-温涛  
+[root@oldboyedu-39 ~]# stat /etc/hosts|sed -nr '/^A.* \(/s#^.*\(0(.*)/-.*$#\1#gp'
+644
+
+
+
+
+####方法一 -去掉开头与结尾 留下权限部分
+[root@oldboyedu-39-nb ~]# stat /etc/hosts
+  File: `/etc/hosts'
+  Size: 216       	Blocks: 8          IO Block: 4096   regular file
+Device: 803h/2051d	Inode: 260126      Links: 2
+Access: (0644/-rw-r--r--)  Uid: (    0/    root)   Gid: (    0/    root)
+Access: 2017-07-30 00:02:05.983001919 +0800
+Modify: 2017-05-20 22:57:33.530934887 +0800
+Change: 2017-05-20 22:57:33.533934704 +0800
+[root@oldboyedu-39-nb ~]# stat /etc/hosts|awk 'NR==4'
+Access: (0644/-rw-r--r--)  Uid: (    0/    root)   Gid: (    0/    root)
+[root@oldboyedu-39-nb ~]# stat /etc/hosts|awk 'NR==4'|sed 's#^.*(0##g'
+644/-rw-r--r--)  Uid: (    0/    root)   Gid: (    0/    root)
+[root@oldboyedu-39-nb ~]# stat /etc/hosts|awk 'NR==4'|sed 's#^.*(0##g'|sed 's#/.*$##g'
+644
+
+
+###方法二 反向引用 
+
+[root@oldboyedu-39-nb ~]# stat /etc/hosts
+  File: `/etc/hosts'
+  Size: 216       	Blocks: 8          IO Block: 4096   regular file
+Device: 803h/2051d	Inode: 260126      Links: 2
+Access: (0644/-rw-r--r--)  Uid: (    0/    root)   Gid: (    0/    root)
+Access: 2017-07-30 00:02:05.983001919 +0800
+Modify: 2017-05-20 22:57:33.530934887 +0800
+Change: 2017-05-20 22:57:33.533934704 +0800
+[root@oldboyedu-39-nb ~]# stat /etc/hosts|awk 'NR==4'
+Access: (0644/-rw-r--r--)  Uid: (    0/    root)   Gid: (    0/    root)
+[root@oldboyedu-39-nb ~]# stat /etc/hosts|awk 'NR==4'|sed -r 's#^.*(0##g'
+sed: -e expression #1, char 10: Unmatched ( or \(
+[root@oldboyedu-39-nb ~]# #sed命令提示  不匹配的 不成对的 ( 
+[root@oldboyedu-39-nb ~]# stat /etc/hosts|awk 'NR==4'|sed -r 's#^.*\(0##g'
+644/-rw-r--r--)  Uid: (    0/    root)   Gid: (    0/    root)
+[root@oldboyedu-39-nb ~]# stat /etc/hosts|awk 'NR==4'|sed -r 's#^.*\(0(.*)/##g'
+    root)
+[root@oldboyedu-39-nb ~]# stat /etc/hosts|awk 'NR==4'|sed -r 's#^.*\(0(.*)/-##g'
+rw-r--r--)  Uid: (    0/    root)   Gid: (    0/    root)
+
+[root@oldboyedu-39-nb ~]# stat /etc/hosts|awk 'NR==4'|sed -r 's#^.*\(0(.*)/-.*$#\1#g'
+644
+
+###方法三 awk 
+[root@oldboyedu-39-nb ~]# stat /etc/hosts 
+  File: `/etc/hosts'
+  Size: 216       	Blocks: 8          IO Block: 4096   regular file
+Device: 803h/2051d	Inode: 260126      Links: 2
+Access: (0644/-rw-r--r--)  Uid: (    0/    root)   Gid: (    0/    root)
+Access: 2017-07-30 00:02:05.983001919 +0800
+Modify: 2017-05-20 22:57:33.530934887 +0800
+Change: 2017-05-20 22:57:33.533934704 +0800
+[root@oldboyedu-39-nb ~]# stat /etc/hosts |awk 'NR==4'
+Access: (0644/-rw-r--r--)  Uid: (    0/    root)   Gid: (    0/    root)
+[root@oldboyedu-39-nb ~]# stat /etc/hosts |awk 'NR==4'|awk -F "[0/]" '{print $2}'
+644
+
+###方法四 awk
+[root@oldboyedu-39-nb ~]# stat /etc/hosts |awk 'NR==4'|awk -F "[0/]" '{print $2}'
+644
+[root@oldboyedu-39-nb ~]# stat /etc/hosts | awk -F "[0/]" '先找到第四行然后找第二列'
+awk: 先找到第四行然后找第二列
+awk: ^ invalid char '?in expression
+[root@oldboyedu-39-nb ~]# stat /etc/hosts | awk -F "[0/]" 'NR==4{print $2}'
+644
+[root@oldboyedu-39-nb ~]# #找谁干啥
+[root@oldboyedu-39-nb ~]# #awk '找谁{干啥}'  xxxx
+[root@oldboyedu-39-nb ~]# #awk '条件{干啥}'  xxxx
+[root@oldboyedu-39-nb ~]# ifconfig eth0 |awk 'NR==2'|awk -F "[ :]+" '{print $4}'
+10.0.0.200
+
+
+取出/etc/hosts 
+1.sed 去掉前面 去掉后面 
+2.sed反向引用 
+3.awk方法
+4.命令的结果里面有你想要的东西----可能会有现成参数
+# stat -c%a /etc/hosts
+644
+
+
+[root@oldboyedu-39-nb ~]# ls -l /etc/hosts
+-rw-r--r--. 2 root root 216 May 20 22:57 /etc/hosts
+[root@oldboyedu-39-nb ~]# ls -l /etc/hosts|cut -c 2-10
+rw-r--r--
+[root@oldboyedu-39-nb ~]# ls -l /etc/hosts|cut -c 2-10|tr "rwx-" "4210"
+420400400
+[root@oldboyedu-39-nb ~]# echo abc |tr "abc" "123"
+123
+[root@oldboyedu-39-nb ~]# echo abcba |tr "abc" "123"
+12321
+[root@oldboyedu-39-nb ~]# ifc
+ifcfg     ifconfig  
+[root@oldboyedu-39-nb ~]# ifconfig eth0 |awk 'NR==2'
+          inet addr:10.0.0.200  Bcast:10.0.0.255  Mask:255.255.255.0
+[root@oldboyedu-39-nb ~]# ifconfig eth0 |awk 'NR==2'|tr ":" " "
+          inet addr 10.0.0.200  Bcast 10.0.0.255  Mask 255.255.255.0
+
+
+		  
+##########第四题
+请给出默认情况eth0网卡配置文件的路径及客户端DNS的路径。		  
+#@@@@网卡的路径 
+/etc/sysconfig/network-scripts/ifcfg-eth0
+
+#@@@@DNS的配置文件 
+/etc/resolv.conf 
+/etc/sysconfig/network-scripts/ifcfg-eth0
+		  
+		  
+##########第五题 
+查找当前目录下所有文件，并把文件中的www.etiantian.org字符串替换成www.oldboyedu.com。	  
+假设当前目录是/oldboy 
+
+find /oldboy  -type f 
+###@@@@@1.
+find /oldboy  -type f |xargs sed 's#www.etiantian.org#www.oldboyedu.com#g'
+测试没问题后 加上 sed -i的参数
+
+###@@@@@2.
+sed 's#www.etiantian.org#www.oldboyedu.com#g'  $(find /oldboy  -type f)
+
+###@@@@@3.
+find /oldboy  -type f -exec sed 's#www.etiantian.org#www.oldboyedu.com#g'    {}  \;
+
+企业案例：企业网站中病毒
+从发现到解决的过程：
+1、运营人员、网站用户发现问题，网站有弹窗广告。
+2、运营人员报给开发人员，开发联系运维人员。开发和运维共同解决。
+3、开发发现的问题原因就是所有站点目录被嵌入了一段JS代码。
+4、运维人员解决问题：
+a)	备份原始出问题的原始文件。
+b)	历史备份覆盖。
+c)	find+sed替换。
+5、详细查看日志，寻找问题发生来源。
+6、提供亡羊补牢解决方案
+
+
+####第9题
+问题:请问在一个命令上加什么参数可以实现下面命令的内容在同一行输出。
+       echo "oldboy";echo "oldboy" 
+oldboy
+[root@oldboyedu-39-nb ~]# echo -n "oldboy";echo "oldboy"
+oldboyoldboy
+[root@oldboyedu-39-nb ~]# ##显示内容的时候 不输出行尾的回车
+[root@oldboyedu-39-nb ~]# echo oldboy
+oldboy
+[root@oldboyedu-39-nb ~]# echo -n oldboy
+oldboy[root@oldboyedu-39-nb ~]# 
+[root@oldboyedu-39-nb ~]# 
+[root@oldboyedu-39-nb ~]# echo "oldboy\noldboy"
+oldboy\noldboy
+[root@oldboyedu-39-nb ~]# echo -e "oldboy\noldboy"
+oldboy
+oldboy
+[root@oldboyedu-39-nb ~]# echo -e "oldboy\noldboy\ta"
+oldboy
+oldboy	a
+[root@oldboyedu-39-nb ~]# echo -e "a\tb"
+a	b
+
+####第10题  
+2.10 问题：请给出如下格式的date命令 
+例：11-02-26。
+再给出实现按周输出 
+比如：周六输出为6，
+
+请分别给出命令。
+
+按照要求显示日期 11-02-26   2017-05-20 
+
+[root@oldboyedu-39-nb ~]# date +%F        ##*****
+2017-07-30
+[root@oldboyedu-39-nb ~]# #年-月-日
+[root@oldboyedu-39-nb ~]# date +%y
+17
+[root@oldboyedu-39-nb ~]# date +%Y
+2017
+[root@oldboyedu-39-nb ~]# date +%Y-%m
+2017-07
+[root@oldboyedu-39-nb ~]# date +%Y-%m-%d
+2017-07-30
+
+[root@oldboyedu-39-nb ~]# date +%y-%m-%d
+17-07-30
+
+[root@oldboyedu-39-nb ~]# date +%y-%m-%d
+17-07-30
+[root@oldboyedu-39-nb ~]# date +%w
+0
+[root@oldboyedu-39-nb ~]# date +%F
+2017-07-30
+[root@oldboyedu-39-nb ~]# date
+Sun Jul 30 16:20:23 CST 2017
+
+####显示日期 格式 :2017-07-30_0  年-月-日_周几 
+
+
+#####第12题
+2.12 问题：扩展问题：打印三天前的日期,格式如：2011-02-26
+
+2017-07-30    
+
+2017-07-27
+
+[root@oldboyedu-39-nb ~]# date -d "-3day"
+Thu Jul 27 16:32:09 CST 2017
+[root@oldboyedu-39-nb ~]# date -d "3day"
+Wed Aug  2 16:32:19 CST 2017
+
+
+[root@oldboyedu-39-nb ~]# date -d "-3day"
+Thu Jul 27 16:32:09 CST 2017
+[root@oldboyedu-39-nb ~]# date -d "3day"
+Wed Aug  2 16:32:19 CST 2017
+[root@oldboyedu-39-nb ~]# date -d "-3day" +%F
+2017-07-27
+[root@oldboyedu-39-nb ~]# date -d "-3year" +%F
+2014-07-30
+[root@oldboyedu-39-nb ~]# date -d "-300year" +%F
+1717-07-30
+[root@oldboyedu-39-nb ~]# ##day 
+[root@oldboyedu-39-nb ~]# #year month day hour min sec 
+
+####显示十天之前的日期 格式 :2017-07-30_0  年-月-日_周几  
+
+[root@oldboyedu-39-nb ~]# ####显示十天之前的日期 格式 :2017-07-30_0  年-月-日_周几  
+[root@oldboyedu-39-nb ~]# date +%F_%w -d "-10day"
+2017-07-20_4
+
+
+###自动同步系统时间  自动修改系统时间
+[root@oldboyedu-39-nb ~]# ntpdate pool.ntp.org
+ 3 Aug 12:09:21 ntpdate[48350]: step time server 203.135.184.123 offset -2001189773.588598 sec
+[root@oldboyedu-39-nb ~]# date
+Thu Aug  3 12:09:51 CST 2017
+[root@oldboyedu-39-nb ~]# ntpdate ntp1.aliyun.com
+ 3 Aug 12:10:21 ntpdate[48356]: adjust time server 182.92.12.11 offset -0.000744 sec
+
+
+###问题1 
+[root@oldboyedu-39 ~]# ntpdate pool.ntp.org 
+
+Exiting, name server cannot be used: Temporary failure in name resolution (-3) 
+域名解析服务器（DNS)不能使用:   域名解析失败
+3 Aug 12:10:02 ntpdate[3345]: name server cannot be used: Temporary failure in name resolution (-3)
+
+####1.ping www.baidu.com   ##报错 域名-----没办法变化为ip地址  
+####2.ping 223.5.5.5       ##排查是否真的是dns的问题
+####3.如果是dns的问题，修改网卡的配置文件 加上
+DNS1=223.5.5.5  
+DNS2=223.6.6.6
+
+[root@oldboyedu-39-nb ~]# cat /etc/sysconfig/network-scripts/ifcfg-eth0 
+DEVICE=eth0
+HWADDR=00:0c:29:aa:0b:e9
+TYPE=Ethernet
+UUID=f7515424-a426-4e24-852a-8abc4cfc07f8
+ONBOOT=yes
+NM_CONTROLLED=yes
+BOOTPROTO=none
+IPADDR=10.0.0.200
+NETMASK=255.255.255.0
+GATEWAY=10.0.0.2
+USERCTL=no
+PEERDNS=yes
+IPV6INIT=no
+DNS1=223.5.5.5
+DNS2=223.6.6.6
+####4.生效 
+/etc/init.d/network restart 
+
+ 老男孩教育每日一题-第75天-linux无法上网或联网怎么办？
+http://lidao.blog.51cto.com/3388056/1940340
+
+
+
+###问题2
+[root@oldboyedu-39 ~]# ntpdate pool,ntp.org 
+
+Error resolving pool,ntp.org : Name or service not known (-2)
+22 May 04:06:56 ntpdate[116067]: Can't find host pool,ntp.org 
+
+: Name or service not known (-2)22 May 04:06:56 ntpdate[116067]: no servers can be used, exitin
+
+###问题3
+[root@dangjian ~]# ntpdate pool.ntp.orp
+Error resolving pool.ntp.orp: Name or service not known (-2)
+ 1 Aug 19:02:07 ntpdate[5677]: Can't find host pool.ntp.orp: Name or service not known (-2)
+ 1 Aug 19:02:07 ntpdate[5677]: no servers can be used, exiting
+[root@dangjian ~]# [root@dangjian ~]# date -d "+10day" +%F_%w
+-bash: [root@dangjian: command not found
+[root@dangjian ~]# 2017-08-11_5
+-bash: 2017-08-11_5: command not found
+
+
+
+
+
+[root@oldboyedu-39 data]# ifconfig eth0|sed -n '2s#:# #gp'|awk '{print $3" "$5" "$NF}'
+老师 这个为什么$3就是IP地址了
+[root@chaocheng ~]# ifconfig eth0 |awk 'NR==2'|awk -F " " '{print $1}'
+inet
+这个为什么不切割最前面的空格
+
+[root@oldboyedu-39-nb ~]# ifconfig eth0 |awk 'NR==2'
+          inet addr:10.0.0.200  Bcast:10.0.0.255  Mask:255.255.255.0
+[root@oldboyedu-39-nb ~]# ifconfig eth0 |awk 'NR==2'|awk '{print $1}'
+inet
+[root@oldboyedu-39-nb ~]# 
+[root@oldboyedu-39-nb ~]# ifconfig eth0 |awk 'NR==2'|awk -F "[ :]+" '{print $1}'
+[root@oldboyedu-39-nb ~]# ifconfig eth0 |awk 'NR==2'|awk -F "[ :]+" '{print $2}'
+inet
+
+
+
+
+[root@lainanhai-39 ~]# ifconfig eth0 |awk 'NR==2'|awk -F"[ :]+"  '{print $4 $6 $8}' 
+10.0.0.20010.0.0.255255.255.255.0 
+
+都连一起拉 咋分开
+
+
+
+
+问题： [root@oldboyedu-Misong_VM ~]# date +%F %w
+date: extra operand `%w'
+Try `date --help' for more information.
+我如果想显示空格的话会报错，这个咋办？
+
+
+
+
+
+ 5组-马林  
+[root@malin ~]# ls -l /etc/hosts |cut -c 2-10|tr "rwx-" "4210"|awk -F '' '{print $1+$2+$3""$4+$5+$6""$7+$8+$9""}'
+644
+
+
+
+
+
+
+
+总结  
+1.取出网卡ip地址  文件权限
+sed反向引用  awk cut 
+2.遇到故障处理过程
+3.date按照要求显示日期
+4.linux无法上网了怎么解决  
+name resolution 
+
+预习：
+1.小题 正则
+2.linux快捷方式
+3.如何修改PATH环境变量
+4.linux权限
+

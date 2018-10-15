@@ -1,0 +1,389 @@
+=============================================================================================
+# 老男孩教育：                                                                            #
+# www.oldboyedu.com                                                                       #
+# 邮件：miaokm@oldboyedu.com(189 1048 1057)                                               #
+# 地址：北京市昌平区顺沙路8号院汇德商厦4F                                                 #
+# 资源老师   手机电话：		    QQ号码        资源老师： 手机电话：		    QQ号码        #
+# 飞雪		 135 5261 2571		80042789      小雨		 186 0046 2391      390320151     #
+# 歪歪		 189 1171 8229		70271111      丹丹		 158 1059 0206      41117397      #
+# 冰冰		 150 1078 5220		41117483												  #
+=============================================================================================
+
+如何关闭iptables?
+1.临时关闭 
+/etc/init.d/iptables stop  
+2.永久 
+chkconfig iptables off 
+3.检查 
+/etc/init.d/iptables status  
+chkconfig |grep ipt
+
+找出/oldboy目录下面以.txt结尾的文件并把里面的old 替换位 young 
+[root@oldboyedu-39 ~]# find /oldboy -type f -name "*.txt"|xargs sed 's#old#young#g'
+younglady                                               
+[root@oldboyedu-39 ~]# find /oldboy -type f -name "*.txt"|xargs sed -i 's#old#young#g' 
+[root@oldboyedu-39 ~]# find /oldboy -type f -name "*.txt"|xargs cat
+younglady
+
+
+大一-ok
+大二-挂科1
+大三-挂了5科
+大三下学期的时候-降级
+大四同时学习大三（补） 大四（论文）
+大四的时"候顺"利的升级回来，顺利毕业
+
+
+网络版---自己 看视频学习
+
+网络版与面授班区别
+1.氛围
+2.交流 与 讨论  （说出来）
+
+1.不断的加QQ群  主动给别人解答问题 
+2.每日一题--让大家认识你
+3.逼着自己 QQ群视频/YY分享（直播）-------录制成视频-360云 百度云 优酷 土豆 （让大家认识你）-----愿意与你交流
+4.小白-----分享 讲解-----别人会认为你是大牛------不愿意再变回小白-----不断的 更快的学习 
+
+
+1.2 原理：
+1.	别人做到了，我凭什么做不到？
+2.	分享====>上瘾
+3.	有动力==>有压力===>逼迫自己不断的学，分享。
+4.	简单的事情重复做就是高手，继续重复下去就是专家
+5.	核心:教(别人教你，把别人教会)
+
+
+
+####Linux中文显示设置（如何防止显示中文乱码）
+预备的知识
+字符集---字符集就是一套文字符号及其编码
+
+李导----010100010100
+
+
+
+
+
+
+
+####linux里面显示中文 乱码
+你linux系统使用字符集与xshell软件的字符集不同。
+echo $LANG 
+
+###1.排查 
+#####1）检查linux系统的字符集
+echo $LANG 
+
+#####2）查看xshell使用的字符集
+
+###2.解决
+
+#修改系统的字符集
+#####第一个里程碑-查看系统当前使用的字符集（语言）
+[root@oldboyedu-39 ~]# #LANG
+[root@oldboyedu-39 ~]# echo $LANG
+en_US.UTF-8
+####第二个里程碑-临时修改系统的字符集（语言）
+[root@oldboyedu-39 ~]# LANG=zh_CN.UTF-8
+[root@oldboyedu-39 ~]# ###LANG PS1  linux环境变量（在linux任何一个角落中都可以使用）
+[root@oldboyedu-39 ~]# 
+[root@oldboyedu-39 ~]# export LANG=zh_CN.UTF-8
+[root@oldboyedu-39 ~]# 
+[root@oldboyedu-39 ~]# #修改环境变量的时候 前面加上 export 
+[root@oldboyedu-39 ~]# echo $LANG
+zh_CN.UTF-8
+
+####第三个里程碑-永久修改系统的字符集（语言）
+[root@oldboyedu-39 ~]# cat /etc/sysconfig/i18n 
+LANG="en_US.UTF-8"
+SYSFONT="latarcyrheb-sun16"
+[root@oldboyedu-39 ~]# cp  /etc/sysconfig/i18n /etc/sysconfig/i18n.bak
+[root@oldboyedu-39 ~]# sed  -i 's#en_US#zh_CN#g'  /etc/sysconfig/i18n
+[root@oldboyedu-39 ~]# cat /etc/sysconfig/i18n
+LANG="zh_CN.UTF-8"
+SYSFONT="latarcyrheb-sun16"
+[root@oldboyedu-39 ~]# ##生效
+[root@oldboyedu-39 ~]# source /etc/profile
+[root@oldboyedu-39 ~]# echo $LANG
+zh_CN.UTF-8
+
+
+
+
+（5）ux下面设备(磁盘)不挂载是看不到入口的，没有窗口没门的监狱，如果要设备被访问就必须有一个入口，这个入口就是挂载点，挂载点实质就是目录。
+
+
+
+linux下面  所有的设备（磁盘 光盘） 不挂载 不能使用。
+把磁盘 光盘 挂载到 树上（目录）  就相当于是 给这个光盘 开了一个入口
+
+我想在linux里面使用 光盘  
+
+光盘  在我们linux里面   叫什么？
+
+[root@oldboyedu-39 ~]# ls -l /dev/cdrom 
+lrwxrwxrwx 1 root root 3 Jul 15 03:06 /dev/cdrom -> sr0
+
+linux你要使用一个设备（磁盘 光盘），一定要给他开一个洞口 入口（挂载）
+linux下面 没有挂载的设备  没有办法使用 。
+
+目录的特点：
+1.一切从根开始
+2.linux下面的设备 你要给他开一个入口（挂载） 才能使用
+
+
+?	相对路径：相对于当前路径（位置 目录）下的路径 
+[root@moban /]# pwd
+/
+[root@moban /]# cd root
+
+?	绝对路径:从根为起始点的路径
+[root@moban ~]# cd /root
+/etc/init.d/iptables stop
+
+
+
+/etc/init.d/
+
+/etc/profile 
+/etc/sysconfig/i18n 
+
+一切从根开始
+一切皆文件
+
+
+DEVICE=eth0               				  #<==网卡的名称eth0  eth1  eth2  eth3
+HWADDR=00:0c:29:ba:8e:8f  				  #<==HardWare(硬件) address(地址)    Software(软件)             			
+										  #<==网卡的MAC地址(网卡的身份证号码)
+TYPE=Ethernet             				  #<==以太网。
+UUID=1636dbaa-cc88-418d-820c-a06c956dbf77 #<==唯一标识 磁盘的标识 ===>blkid
+
+*****ONBOOT=yes   #<==重启网卡或者服务器之后控制网卡是不是自动启动
+
+#chkconfig  -----管理系统里面开机自启动软件 
+
+NM_CONTROLLED=yes
+BOOTPROTO=none   ****** bootproto  boot protocal 网卡启动的时候 如何获取到ip地址
+
+#<==你获取ip地址的方法或途径,其中，proto取下列值之一：
+
+#none 或 static静态分配地址； 手动指定的ip地址。
+#dhcp, 自动获取ip地址，
+IPADDR=10.0.0.200      #<==addr是IP地址。10.0.0.0/24
+NETMASK=255.255.255.0  #<==子网掩码，划分网络位和主机位。     通过这个来控制你这个局域网中 最多有多少台机器
+DNS1=10.0.0.2          *****#<==DNS1
+DNS2=223.5.5.5    
+
+#网址 域名  www.baidu.com   实际上网络中使用的是 ip地址
+#域名/网址 ---------> 对应的ip地址    DNS 域名解析服务
+#<==DNS把baidu.com变成了baidu服务器IP。DNS就是域名和IP的解析工具。
+
+
+GATEWAY=10.0.0.2 #<==默认的出口，网关地址，路由器的地址。
+
+
+网卡配置文件中的下面内容的含义 
+ONBOOT BOOTPROTO DNS 
+
+对比一下  setup命令  和 /etc/sysconfig/network-scripts/ifcfg-eth0 
+
+####/etc/resolv.conf  主要用来配置 设置 DNS
+
+##修改网卡的配置1.dns
+
+cat >>/etc/sysconfig/network-scripts/ifcfg-eth0<<EOF
+DNS1=223.5.5.5
+DNS2=223.6.6.6
+EOF
+
+##让修改的配置生效--重启网卡 
+#关闭网卡 然后再开启网卡
+#ifdown eth0  && ifup eth0 
+
+#重启所有网卡 
+/etc/init.d/network restart
+
+##检查结果 
+
+[root@oldboyedu-39 ~]# cat /etc/sysconfig/network-scripts/ifcfg-eth0
+DEVICE=eth0
+HWADDR=00:0c:29:aa:0b:e9
+TYPE=Ethernet
+UUID=f7515424-a426-4e24-852a-8abc4cfc07f8
+ONBOOT=yes
+NM_CONTROLLED=yes
+BOOTPROTO=none
+IPADDR=10.0.0.200
+NETMASK=255.255.255.0
+GATEWAY=10.0.0.2
+USERCTL=no
+PEERDNS=yes
+IPV6INIT=no
+DNS1=223.5.5.5
+DNS2=223.6.6.6
+[root@oldboyedu-39 ~]# cat /etc/resolv.conf 
+nameserver 223.5.5.5
+nameserver 223.6.6.6
+
+
+在linux中如何修改DNS
+1.网卡配置文件 
+DNS1 
+DNS2 
+2.在/etc/resolv.conf 
+
+网卡配置的dns优先于 /etc/resolv.conf 
+只修改网卡里面的DNS配置即可 DNS1 DNS2 ， 
+/etc/init.d/network restart 
+
+
+######   /etc/sysconfig/network   linux下面修改主机名文件 
+
+####如何修改linux下面的主机名 
+
+
+
+##1.临时修改主机名-查看主机名
+[root@oldboyedu-39 ~]# hostname 
+oldboyedu-39
+[root@oldboyedu-39 ~]# ##2.临时修改---修改主机名
+[root@oldboyedu-39 ~]# hostname oldboyedu-39-nb
+[root@oldboyedu-39 ~]# hostname 
+oldboyedu-39-niubility
+##3.检查 是否更改了主机名  
+
+
+
+
+
+##重新登录  重新连接
+Connecting to 10.0.0.200:22...
+Connection established.
+To escape to local shell, press 'Ctrl+Alt+]'.
+
+Last login: Sat Jul 15 06:58:39 2017 from 10.0.0.1
+[root@oldboyedu-39-nb ~]# 
+
+###4.永久修改主机名--重启服务器之后生效
+[root@oldboyedu-39-nb ~]# cat /etc/sysconfig/network
+NETWORKING=yes
+HOSTNAME=oldboyedu-39
+[root@oldboyedu-39-nb ~]# sed 's#oldboyedu-39#oldboyedu-39-nb#g' /etc/sysconfig/network
+NETWORKING=yes
+HOSTNAME=oldboyedu-39-nb
+[root@oldboyedu-39-nb ~]# sed -i 's#oldboyedu-39#oldboyedu-39-nb#g' /etc/sysconfig/network
+[root@oldboyedu-39-nb ~]# cat /etc/sysconfig/network
+NETWORKING=yes
+HOSTNAME=oldboyedu-39-nb
+
+修改主机名临时生效：重启服务器之后 临时修改的主机名 就失效了。
+永久生效  重启服务器之后生效
+
+
+
+
+
+
+
+
+
+
+
+你什么都没有  && 是个女的就行 
+你是男生   &&  你喜欢女生
+你是高富帅 &&  你喜欢女生
+
+
+
+
+
+
+
+cat >>/etc/sysconfig/newwork-scripts/ifcfg-eth0<<EOF
+DNS1=223.5.5.5 
+DNS2=223.6.6.6 
+EOF
+
+
+
+
+#######解决 no such file or directory问题过程#
+
+[root@oldboyedu-39 ~]# cat >>/etc/sysconfig/newwork-scripts/ifcfg-eth0<<EOF
+> DNS1=223.5.5.5 
+> 
+> DNS2=223.6.6.6 
+> 
+> EOF
+-bash: /etc/sysconfig/newwork-scripts/ifcfg-eth0: No such file or directory
+[root@oldboyedu-39 ~]# ls /etc/sysconfig/newwork-scripts/ifcfg-eth0
+ls: cannot access /etc/sysconfig/newwork-scripts/ifcfg-eth0: No such file or directory
+[root@oldboyedu-39 ~]# ls /etc/sysconfig/newwork-scripts/
+ls: cannot access /etc/sysconfig/newwork-scripts/: No such file or directory
+[root@oldboyedu-39 ~]# ls /etc/sysconfig/
+acpid       i18n              kdump            prelink        smartmontools
+atd         i18n.bak          kernel           quota_nld      sshd
+auditd      init              keyboard         raid-check     sysstat
+authconfig  ip6tables         modules          readahead      sysstat.ioconf
+cbq         ip6tables-config  netconsole       readonly-root  system-config-firewall
+clock       ip6tables.old     network          rngd           system-config-firewall.old
+console     iptables          networking       rsyslog        udev
+cpuspeed    iptables-config   network-scripts  sandbox
+crond       iptables.old      ntpd             saslauthd
+grub        irqbalance        ntpdate          selinux
+
+
+
+
+
+
+
+作业 ：
+1.总结核心知识点 
+提升用户的体验 
+GNU GPL 
+磁盘分区方法
+远程连接故障排查
+别名给rm配置个别名
+linux下输入net的时候  我就想显示 eth0网卡配置文件的内容
+你是用的linux什么版本？
+添加用户切换用户
+如何关闭selinux iptables 
+显示中文乱码解决过程
+linux目录的特点 
+网卡的配置文件:ONBOOT  BOOTPROTO DNS 
+DNS的配置 
+如何修改主机名
+
+
+2.命令总结     
+find(至少2种方法)
+find + |xargs ls -l
+ls -l  $(find )
+一定要有自己的例子
+[root@oldboyedu-39-nb ~]# ls -l /tmp/
+total 12
+drwxr-xr-x. 3 root root 4096 Jul 14 20:42 a
+drwxr-xr-x. 2 root root 4096 Jul 14 18:23 data
+-rw-r--r--. 1 root root   46 Jul 14 18:19 oldboy.txt
+-rw-------. 1 root root    0 Jul 14 10:54 yum.log
+[root@oldboyedu-39-nb ~]# ls -ld /tmp/
+drwxrwxrwt. 5 root root 4096 Jul 15 06:47 /tmp/
+3.练习题 第一关入学测试题 总结
+
+
+核心：保证几个月之后回来你能看得懂。
+
+预习：
+1.目录结构
+
+
+
+
+
+
+
+
+
+

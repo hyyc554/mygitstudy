@@ -1,0 +1,372 @@
+﻿=============================================================================================
+# 老男孩教育：                                                                            #
+# www.oldboyedu.com                                                                       #
+# 邮件：miaokm@oldboyedu.com(189 1048 1057)                                               #
+# 地址：北京市昌平区顺沙路8号院汇德商厦4F                                                 #
+# 资源老师   手机电话：		    QQ号码        资源老师： 手机电话：		    QQ号码        #
+# 飞雪		 135 5261 2571		80042789      小雨		 186 0046 2391      390320151     #
+# 歪歪		 189 1171 8229		70271111      丹丹		 158 1059 0206      41117397      #
+# 冰冰		 150 1078 5220		41117483												  #
+=============================================================================================
+
+
+1.分享 
+2.积累
+
+什么叫经验？
+1.经历
+2.阅历
+3.迅速的解决问题
+
+
+经验------积累 （坚持）
+1.解决问题的能力
+  不断的帮助小伙伴
+  别人发出的问题--解决 --记录下来  变成你自己的经验
+  
+2.做过多少项目
+
+
+
+很难坚持----
+       给你要做的事情 赋予非常大的意义
+       和别人打赌
+	   让你要做的事情 让全世界知道
+
+
+####indode  
+
+
+?	Inode:存放的是文件/目录属性信息，没有文件名但是，inode里面唯独不包含文件名本身。（文件的名字不是文件的属性）	  
+block的位置
+
+
+
+ 
+Block:实际存放数据的位置/空间	   
+	   
+inode的小结：
+?	怎么来的
+?	啥意思
+?	有啥特色******
+?	怎么用/看******
+
+[root@oldboyedu-39-nb ~]# ls -i 
+405055 anaconda-ks.cfg       390195 data   390149 install.log         390257 –p
+405056 anaconda-screenshots  390209 hosts  390150 install.log.syslog
+[root@oldboyedu-39-nb ~]# ls -lhi /etc/hosts
+260126 -rw-r--r--. 2 root root 189 May 20 09:45 /etc/hosts
+
+
+[root@oldboyedu-39-nb ~]# ##df -i  显示磁盘一共有多少个inode  使用了多少
+[root@oldboyedu-39-nb ~]# df -i
+Filesystem     Inodes IUsed  IFree IUse% Mounted on
+/dev/sda3      593344 57034 536310   10% /
+tmpfs          238282     1 238281    1% /dev/shm
+/dev/sda1       51200    39  51161    1% /boot
+
+1.2.7 有关Block的知识小结：
+根据block来知道 文件大小  磁盘使用情况 
+
+[root@oldboyedu-39-nb ~]# ls -lh /etc/hosts  /etc/services 
+-rw-r--r--. 2 root root  189 May 20 09:45 /etc/hosts
+-rw-r--r--. 1 root root 626K Mar 22 05:56 /etc/services
+[root@oldboyedu-39-nb ~]# ls -l /etc/hosts  /etc/services 
+-rw-r--r--. 2 root root    189 May 20 09:45 /etc/hosts
+-rw-r--r--. 1 root root 641020 Mar 22 05:56 /etc/services
+[root@oldboyedu-39-nb ~]# 
+[root@oldboyedu-39-nb ~]# 
+[root@oldboyedu-39-nb ~]# df -h  ###block的使用情况 
+Filesystem      Size  Used Avail Use% Mounted on
+/dev/sda3       8.8G  1.6G  6.8G  19% /
+tmpfs           931M     0  931M   0% /dev/shm
+/dev/sda1       190M   40M  141M  22% /boot
+
+
+
+【企业案例】磁盘空间满了，no space left on device（磁盘空间不足）
+
+1.500G   我向里面放入600G的数据 ----磁盘空间满了  block满了  df -h 
+2.df -h 磁盘空间还剩余很多，但是还是报错 no space left on device  inode用光了。
+
+####创建测试环境 
+
+mkdir -p /app/logs  
+dd if=/dev/zero of=/dev/sdc bs=8K  count=10
+ls -l /dev/sdc
+mkfs.ext4 /dev/sdc
+
+
+mount -o loop /dev/sdc /app/logs
+
+
+[root@oldboyedu-39-nb ~]# df -h
+Filesystem      Size  Used Avail Use% Mounted on
+/dev/sda3       8.8G  1.6G  6.8G  19% /
+tmpfs           931M     0  931M   0% /dev/shm
+/dev/sda1       190M   40M  141M  22% /boot
+/dev/sdc         73K   14K   55K  21% /app/logs
+
+
+######磁盘空间满了之 block满了 
+[root@oldboyedu-39-nb ~]# df -h
+Filesystem      Size  Used Avail Use% Mounted on
+/dev/sda3       8.8G  1.6G  6.8G  19% /
+tmpfs           931M     0  931M   0% /dev/shm
+/dev/sda1       190M   40M  141M  22% /boot
+/dev/sdc         73K   14K   55K  21% /app/logs
+[root@oldboyedu-39-nb ~]# cd /app/logs/
+[root@oldboyedu-39-nb logs]# ls -lh /bin/ls
+-rwxr-xr-x. 1 root root 115K Mar 23 02:52 /bin/ls
+[root@oldboyedu-39-nb logs]# cp /bin/ls /app/logs/
+cp: writing `/app/logs/ls': No space left on device
+[root@oldboyedu-39-nb logs]# cp /bin/awk /app/logs/
+cp: writing `/app/logs/awk': No space left on device
+[root@oldboyedu-39-nb logs]# df -h
+Filesystem      Size  Used Avail Use% Mounted on
+/dev/sda3       8.8G  1.6G  6.8G  19% /
+tmpfs           931M     0  931M   0% /dev/shm
+/dev/sda1       190M   40M  141M  22% /boot
+/dev/sdc         73K   70K     0 100% /app/logs
+[root@oldboyedu-39-nb logs]# cd /app/logs/
+[root@oldboyedu-39-nb logs]# ls -lh
+total 68K
+-rwxr-xr-x 1 root root   0 May 20 12:39 awk
+drwx------ 2 root root 12K May 20 12:36 lost+found
+-rwxr-xr-x 1 root root 56K May 20 12:39 ls
+[root@oldboyedu-39-nb logs]# \rm -f ls 
+[root@oldboyedu-39-nb logs]# df -h
+Filesystem      Size  Used Avail Use% Mounted on
+/dev/sda3       8.8G  1.6G  6.8G  19% /
+tmpfs           931M     0  931M   0% /dev/shm
+/dev/sda1       190M   40M  141M  22% /boot
+/dev/sdc         73K   14K   55K  21% /app/logs
+
+
+
+######磁盘空间满了之 inode用光了
+[root@oldboyedu-39-nb logs]# pwd
+/app/logs
+[root@oldboyedu-39-nb logs]# touch {1..6}.txt
+touch: cannot touch `6.txt': No space left on device
+[root@oldboyedu-39-nb logs]# df -h
+Filesystem      Size  Used Avail Use% Mounted on
+/dev/sda3       8.8G  1.6G  6.8G  19% /
+tmpfs           931M     0  931M   0% /dev/shm
+/dev/sda1       190M   40M  141M  22% /boot
+/dev/sdc         73K   14K   55K  21% /app/logs
+[root@oldboyedu-39-nb logs]# touch oldboy.txt
+touch: cannot touch `oldboy.txt': No space left on device
+[root@oldboyedu-39-nb logs]# df -i
+Filesystem     Inodes IUsed  IFree IUse% Mounted on
+/dev/sda3      593344 57034 536310   10% /
+tmpfs          238282     1 238281    1% /dev/shm
+/dev/sda1       51200    39  51161    1% /boot
+/dev/sdc           16    16      0  100% /app/logs
+
+[root@oldboyedu-39-nb logs]# ls -l
+total 12
+-rw-r--r-- 1 root root     0 May 20 12:43 1.txt
+-rw-r--r-- 1 root root     0 May 20 12:43 2.txt
+-rw-r--r-- 1 root root     0 May 20 12:43 3.txt
+-rw-r--r-- 1 root root     0 May 20 12:43 4.txt
+-rw-r--r-- 1 root root     0 May 20 12:43 5.txt
+drwx------ 2 root root 12288 May 20 12:36 lost+found
+[root@oldboyedu-39-nb logs]# \rm -f *.txt
+[root@oldboyedu-39-nb logs]# df -i
+Filesystem     Inodes IUsed  IFree IUse% Mounted on
+/dev/sda3      593344 57034 536310   10% /
+tmpfs          238282     1 238281    1% /dev/shm
+/dev/sda1       51200    39  51161    1% /boot
+/dev/sdc           16    11      5   69% /app/logs
+
+
+ 企业案例：如果向磁盘写入数据提示如下错误：No space left on device（磁盘空间不足），通过df -h查看磁盘空间，发现没满，请问可能原因是什么？
+
+
+企业场景什么情况下会导致这个问题发生？
+定时任务
+
+
+ 磁盘空间满了:
+情况一：block-500G磁盘存放400G+200G视频 放不下了。
+情况二：inode-大量的小文件
+
+
+##文件类型及文件扩展名
+扩展名 
+oldboy.txt 
+oldboy.sh 
+test.sh 
+
+你懂的.avi 
+fbi-warning.jpg 
+
+.txt .sh  .avi .jpg 扩展名
+
+windows---通过扩展名区分文件的类型 .txt .avi   
+linux-----扩展名----给我们人类区分 让我们人类知道这个文件的类型。 易读
+
+
+普通文件 - （file）
+(纯)文本文件（ASCII）
+二进制文件（binary）
+数据格式文件（data）
+
+
+
+[root@oldboyedu-39-nb tmp]# ls -l /etc/hosts /tmp/etc.tar.gz  /bin/ls 
+-rwxr-xr-x. 1 root root  117048 Mar 23 02:52 /bin/ls
+-rw-r--r--. 2 root root     189 May 20 09:45 /etc/hosts
+-rw-r--r--  1 root root 9733974 May 20 02:51 /tmp/etc.tar.gz
+[root@oldboyedu-39-nb tmp]# file /etc/hosts 
+/etc/hosts: ASCII text
+[root@oldboyedu-39-nb tmp]# file /tmp/etc.tar.gz 
+/tmp/etc.tar.gz: gzip compressed data, from Unix, last modified: Sat May 20 02:51:31 2017
+[root@oldboyedu-39-nb tmp]# #compressed 压缩的文件 
+[root@oldboyedu-39-nb tmp]# 
+[root@oldboyedu-39-nb tmp]# file /bin/ls 
+/bin/ls: ELF 64-bit LSB executable, x86-64, version 1 (SYSV), dynamically linked (uses shared libs), for GNU/Linux 2.6.18, stripped
+[root@oldboyedu-39-nb tmp]# #executable    可以执行的 命令 
+
+
+
+
+#####linux权限 
+r  read   		 读  
+w  write  		 写 修改 
+x  execute       执行 运行 (命令 脚本[命令集合 命令大礼包])
+-                没有权限
+linux权限分为三个部分：所有者 属组  其他人
+
+rwx        r--    r--             bijiben
+我们自己   家人   陌生人隔壁老王
+所有者     属组   其他人 
+
+r  read   	4	 读  
+w  write  	2	 写 修改 
+x  execute  1    执行 运行 (命令 脚本[命令集合 命令大礼包])
+-           0    没有权限
+
+260126 -rw-r--r--. 2 root root  189 May 20 09:45 /etc/hosts
+       -420400400
+	    6  4  4  
+		644 
+       -rwxr-xr-x
+	   
+394422 -rwxr-xr-x. 1 root root 115K Mar 23 02:52 /bin/ls
+       -421401401 
+       -7  5  5 
+	   755 
+
+#####软连接与硬链接 
+
+软连接与硬链接的区别
+
+####【硬链接】
+######特点:
+
+在同一个分区/文件系统中inode号码相同是硬链接。
+
+######如何创建硬链接
+ln 
+
+[root@oldboyedu-39-nb tmp]# pwd
+/tmp
+[root@oldboyedu-39-nb tmp]# echo oldboyedu.com >oldboy.txt
+[root@oldboyedu-39-nb tmp]# cat oldboy.txt
+oldboyedu.com
+[root@oldboyedu-39-nb tmp]# ls -l oldboy.txt
+-rw-r--r-- 1 root root 14 May 20 14:01 oldboy.txt
+[root@oldboyedu-39-nb tmp]# ln oldboy.txt  oldboy.txt-hard
+[root@oldboyedu-39-nb tmp]# ls -l oldboy.txt*
+-rw-r--r-- 2 root root 14 May 20 14:01 oldboy.txt
+-rw-r--r-- 2 root root 14 May 20 14:01 oldboy.txt-hard
+[root@oldboyedu-39-nb tmp]# ls -l oldboy.txt
+-rw-r--r-- 2 root root 14 May 20 14:01 oldboy.txt
+
+ 100M 
+
+
+100M 
+
+
+
+######linux下面删除一个文件的条件: ******
+1.这个文件的硬链接数量为0    没有入口 
+rm 
+
+
+#####软链接（Soft Link）也称为符号链接(symlink)
+
+###相当于windows快捷方式
+
+###软连接
+1.省事
+2.存放的是源文件的位置
+3.文件类型 
+
+###如何创建软连接
+ln -s 
+
+[root@oldboyedu-39-nb tmp]# ln -s oldboy.txt oldboy.txt-soft
+[root@oldboyedu-39-nb tmp]# ls -l oldboy.txt oldboy.txt-soft 
+-rw-r--r-- 2 root root 21 May 20 14:12 oldboy.txt
+lrwxrwxrwx 1 root root 10 May 20 14:23 oldboy.txt-soft -> oldboy.txt
+
+
+描述linux下软链接和硬链接的区别******
+1)	如何创建：
+2)	含义：
+3)	特点：
+4)	怎么没的（源文件，软链接，硬链接与删除）
+
+
+
+第二关练习题 
+创建一个目录oldboydir为何这个目录的硬链接数是2
+创建一个目录oldboydir/test 为何oldboydir目录的硬链接位3
+
+文件删除原理（linux删除一个文件的条件）
+
+用户
+
+时间
+
+
+本周内容
+1.目录结构-必知必会文件和目录
+2.第二关练习题 过一段时间 自己能看懂即可。
+3.课程回顾扩展 
+  1.根据练习题 考试题 拿出来写出了  打出来
+  2.说 讨论
+  3.讲解 讲明白
+4.linux文件属性
+inode和block  
+	怎么来的
+	啥意思
+	特点
+磁盘空间不足企业案例 
+	blcok满了 df -h 
+	inode满了 
+初识linux权限 
+	rwx含义 
+	rwx对应数字 
+	linux权限分为3个部分 
+软连接与硬链接的区别 
+
+5.命令总结 
+6.考试题练习题总结
+  
+
+
+
+
+
+
+
+
+
+
+
+	   

@@ -1,0 +1,478 @@
+﻿=============================================================================================
+# 老男孩教育：                                                                            #
+# www.oldboyedu.com                                                                       #
+# 邮件：miaokm@oldboyedu.com(189 1048 1057)                                               #
+# 地址：北京市昌平区顺沙路8号院汇德商厦4F                                                 #
+# 资源老师   手机电话：		    QQ号码        资源老师： 手机电话：		    QQ号码        #
+# 飞雪		 135 5261 2571		80042789      小雨		 186 0046 2391      390320151     #
+# 歪歪		 189 1171 8229		70271111      丹丹		 158 1059 0206      41117397      #
+# 冰冰		 150 1078 5220		41117483												  #
+=============================================================================================
+
+回顾:
+
+[oldboy@oldboyedu-39-nb ~]$ touch /root/oldboy.txt   /etc/alex.txt
+touch: cannot touch `/root/oldboy.txt': Permission denied
+touch: cannot touch `/etc/alex.txt': Permission denied
+
+[oldboy@oldboyedu-39-nb ~]$ touch /root/oldboy.txt   /etc/alex.txt
+touch: cannot touch `/root/oldboy.txt': Permission denied
+touch: cannot touch `/etc/alex.txt': Permission denied
+[oldboy@oldboyedu-39-nb ~]$ ls -ld /root/
+dr-xr-x---. 5 root root 4096 Aug  8 19:14 /root/
+[oldboy@oldboyedu-39-nb ~]$ ls /root/
+ls: cannot open directory /root/: Permission denied
+
+
+
+[oldboy@oldboyedu-39-nb ~]$ cat /etc/shadow
+cat: /etc/shadow: Permission denied
+
+[oldboy@oldboyedu-39-nb ~]$ cat /etc/shadow
+cat: /etc/shadow: Permission denied
+[oldboy@oldboyedu-39-nb ~]$ ls -l /etc/shadow
+---------- 1 root root 934 Aug  3 20:33 /etc/shadow
+
+
+
+
+
+
+周日的晚上12点，把自己的名字显示到/tmp/oldboy.txt 
+
+###print name  
+00 00 * * 00 
+
+#print name
+00 */12 * * */7 /bin/echo zhuguangming >>/tmp/oldboy.txt
+
+[root@oldboyedu-39-nb ~]# #周日的晚上12点，把自己的名字显示到/tmp/oldboy.txt 
+[root@oldboyedu-39-nb ~]# ####1.命令
+[root@oldboyedu-39-nb ~]# echo "oldboy" >>/tmp/oldboy.txt
+[root@oldboyedu-39-nb ~]# 
+[root@oldboyedu-39-nb ~]# /bin/echo "oldboy" >>/tmp/oldboy.txt
+[root@oldboyedu-39-nb ~]# tail /tmp/oldboy.txt
+zhuguangming
+oldboy
+oldboy
+[root@oldboyedu-39-nb ~]# ####2.定时任务----测试
+[root@oldboyedu-39-nb ~]# crontab -l |tail -2 
+#print name by lidao  xxxx 
+* * * * * /bin/echo "oldboy" >>/tmp/oldboy.txt
+
+
+[root@oldboyedu-39-nb ~]# tail  /var/log/cron 
+Aug  9 09:00:01 oldboyedu-39-nb CROND[51305]: (root) CMD (/bin/echo "oldboy" >>/tmp/oldboy.txt)
+Aug  9 09:00:01 oldboyedu-39-nb CROND[51306]: (root) CMD (/usr/sbin/ntpdate ntp1.aliyun.com )
+Aug  9 09:00:01 oldboyedu-39-nb CROND[51307]: (root) CMD (/usr/lib64/sa/sa1 1 1)
+[root@oldboyedu-39-nb ~]# 
+[root@oldboyedu-39-nb ~]# tail /tmp/oldboy.txt
+zhuguangming
+oldboy
+oldboy
+oldboy
+
+[root@oldboyedu-39-nb ~]# ###3.修改定时任务-改为规定的时间
+[root@oldboyedu-39-nb ~]# crontab -l|tail -2 
+#print name by lidao  xxxx 
+00 00  * * 00 /bin/echo "oldboy" >>/tmp/oldboy.txt
+
+每周一到周五的 凌晨三点到五点的整点和半点 运行 CMD
+
+周一到周五的 凌晨三点到五点的整点和半点 运行 CMD
+
+分     时      日 月 周
+00,30  03-05   *  *  01-05  CMD  
+
+
+
+
+
+
+
+
+定时任务 
+
+
+##使用sh运行脚本 
+[root@oldboyedu-39-nb ~]# mkdir -p  /server/scripts
+[root@oldboyedu-39-nb ~]# echo "pwd" >/server/scripts/pwd.sh
+[root@oldboyedu-39-nb ~]# cat /server/scripts/pwd.sh
+pwd
+[root@oldboyedu-39-nb ~]# /server/scripts/pwd.sh
+-bash: /server/scripts/pwd.sh: Permission denied
+[root@oldboyedu-39-nb ~]# ll /server/scripts/pwd.sh
+-rw-r--r-- 1 root root 4 Aug  9 09:20 /server/scripts/pwd.sh
+[root@oldboyedu-39-nb ~]# sh /server/scripts/pwd.sh 
+/root
+
+
+##定时任务中的命令 或脚本 定向到空 或追加到文件中
+
+###第一个里程碑-什么是定向到空    
+[root@oldboyedu-39-nb ~]# echo hello 
+hello
+[root@oldboyedu-39-nb ~]# echo hello >/dev/null 
+[root@oldboyedu-39-nb ~]# echo hello >/dev/null 2>/dev/null 
+[root@oldboyedu-39-nb ~]# cho hello >/dev/null 2>/dev/null 
+[root@oldboyedu-39-nb ~]# cho hello >/dev/null 2>/dev/null 
+[root@oldboyedu-39-nb ~]# cho hello >/dev/null 2>&1
+
+###第二个里程碑-什么是追加到文件中
+[root@oldboyedu-39-nb ~]# cho hello >>/tmp/oldboy.txt 2>&1
+[root@oldboyedu-39-nb ~]# cat /tmp/oldboy.txt
+zhuguangming
+oldboy
+oldboy
+oldboy
+oldboy
+-bash: cho: command not found
+
+
+eg:
+运行脚本sh /server/scripts/pwd.sh 定向到空  如何写？
+
+###第三个里程碑-定时任务中 运行命令或脚本定向到空或文件 原因？
+
+
+1.不断的提示 ---你有一个新邮件
+You have new mail in /var/spool/mail/root
+
+2.没有任何的提示------inode满了
+
+
+
+【企业案例】如果定时任务规则结尾不加>/dev/null 2>&1或者追加到文件中>>/tmp/oldboy 2>&1，很容易导致硬盘inode空间被占满，从而系统服务不正常。
+
+定时任务中没有定向到空或文件。如果运行命令或脚本，系统会给你提示（通过发邮件的方式）
+
+1。工作中发邮件的软件 一般是关闭的。 postfix(centos 6) sendmail(centos 5)
+憋住了。  会把邮件存放在临时的目录。
+[root@oldboyedu-39-nb ~]# /etc/init.d/postfix stop 
+Shutting down postfix:                                     [  OK  ]
+You have new mail in /var/spool/mail/root
+[root@oldboyedu-39-nb ~]# chkconfig postfix off 
+
+[root@oldboyedu-39-nb ~]# ls  /var/spool/postfix/maildrop/ |wc -l
+1881
+[root@oldboyedu-39-nb ~]# ls  /var/spool/postfix/maildrop/ |wc -l
+2003
+
+2.（了解）没定向到空，邮件服务开启了。 就会不断收到 邮件。
+/var/spool/mail/root
+
+05.定时任务中-命令或脚本结果(正确及错误)定向到黑洞(/dev/null)或追加到文件中 
+	【企业案例】如果定时任务规则结尾不加>/dev/null 2>&1或者追加到文件中>>/tmp/oldboy 2>&1，很容易导致硬盘inode空间被占满，从而系统服务不正常。 
+	###定时任务中 命令或脚本的结果 没有定向到空或文件中
+	#1.邮件的软件没有开启------大量小文件堆积在/var/spool/postfix/maildrop/ ---inode满了  
+	#2.邮件软件开启了---------定时任务会不断的给root用户发邮件 
+	#you have new mail in /var/spool/mail/root  
+
+
+#sync time by lidao 2017
+#*/5 * * * * /usr/sbin/ntpdate ntp1.aliyun.com >/dev/null 2>&1
+#print name by lidao 2017
+#* * * * *  /bin/echo oldboy >>/oldboy/oldboy.txt 2>&1
+
+
+#1.执行了命令或脚本 不想要看到过程 结果  >/dev/null 2>&1
+#2.                 你想记录下结果 或过程  >>/oldboy/oldboy.txt 2>&1
+
+
+
+#每分钟把/etc/  目录打包 /tmp下面  
+###1.命令
+  oot@oldboyedu-39-nb ~]# tar zcf /tmp/etc.tar.gz  /etc/ 
+tar: Removing leading `/' from member names
+tar: Removing leading `/' from hard link targets
+[root@oldboyedu-39-nb ~]# cd / && tar zcf /tmp/etc.tar.gz  etc
+[root@oldboyedu-39-nb /]# 
+###2.放入脚本中
+[root@oldboyedu-39-nb /]# cat /server/scripts/etc.sh
+cd / && tar zcf /tmp/etc.tar.gz  etc
+####3.测试脚本 
+[root@oldboyedu-39-nb /]# /bin/sh  /server/scripts/etc.sh 
+[root@oldboyedu-39-nb /]# ls -lrt /tmp/
+total 9644
+lrwxrwxrwx  1 root root      10 May 20 14:23 oldboy.txt-soft -> oldboy.txt
+drwxr-xr-x. 8 root root    4096 Aug  3 14:43 oldboy_bak2017-08-03
+drwxr-x-w-  3 root root    4096 Aug  3 21:25 a
+-rw-r--r--  1 root root      71 Aug  9 09:29 oldboy.txt
+-rw-r--r--  1 root root 9861361 Aug  9 10:21 etc.tar.gz
+[root@oldboyedu-39-nb /]# date 
+Wed Aug  9 10:22:33 CST 2017
+[root@oldboyedu-39-nb /]# /bin/sh  /server/scripts/etc.sh 
+[root@oldboyedu-39-nb /]# ls -lrt /tmp/
+total 9644
+lrwxrwxrwx  1 root root      10 May 20 14:23 oldboy.txt-soft -> oldboy.txt
+drwxr-xr-x. 8 root root    4096 Aug  3 14:43 oldboy_bak2017-08-03
+drwxr-x-w-  3 root root    4096 Aug  3 21:25 a
+-rw-r--r--  1 root root      71 Aug  9 09:29 oldboy.txt
+-rw-r--r--  1 root root 9861361 Aug  9 10:22 etc.tar.gz
+#####4.书写定时任务
+[root@oldboyedu-39-nb /]# crontab -l|tail -2 
+#backup etc by lidao xxxx 
+* * * * * /bin/sh  /server/scripts/etc.sh >/dev/null 2>&1
+[root@oldboyedu-39-nb /]# tail -2 /var/log/cron
+Aug  9 10:25:01 oldboyedu-39-nb CROND[57913]: (root) CMD (/bin/sh  /server/scripts/etc.sh >/dev/null 2>&1)
+Aug  9 10:25:01 oldboyedu-39-nb CROND[57914]: (root) CMD (/usr/sbin/ntpdate ntp1.aliyun.com >/dev/null 2>&1)
+[root@oldboyedu-39-nb /]# ll -rt /tmp/ 
+total 9644
+lrwxrwxrwx  1 root root      10 May 20 14:23 oldboy.txt-soft -> oldboy.txt
+drwxr-xr-x. 8 root root    4096 Aug  3 14:43 oldboy_bak2017-08-03
+drwxr-x-w-  3 root root    4096 Aug  3 21:25 a
+-rw-r--r--  1 root root      71 Aug  9 09:29 oldboy.txt
+-rw-r--r--  1 root root 9861361 Aug  9 10:25 etc.tar.gz
+
+
+
+
+* * * * * /bin/tar zcf /tmp/etc-$(date +\%M).tar.gz /etc >/dec/null 2>&1
+* * * * * /bin/sh /server/scripts/dar1.sh                >/dev/xull/ 2>&1 
+                   
+* * * * * tar zcf /root/etc-$(date +%F-%H:%M).tar.gz /etc >/dev/null 2>&1
+
+
+
+>/dec/null  2>&1
+>/dev/xull  2>&1 
+>/dev/null  2>&1 
+
+
+每分钟显示当前的日期以2017-05-20_小时-分钟 追加到 /tmp/time.log 
+
+
+#print time 2017-05-20_小时-分钟 by sunkai 2017
+* * * * * /bin/echo $(date +%F_%H-%M)>>/tmp/time.log >/dev/null 2>&1
+
+[root@oldboyedu-39-nb /]# #每分钟显示当前的日期以2017-05-20_小时-分钟 追加到 /tmp/time.log 
+[root@oldboyedu-39-nb /]# ####第一个里程碑-什么命令
+[root@oldboyedu-39-nb /]# date
+Wed Aug  9 10:43:59 CST 2017
+[root@oldboyedu-39-nb /]# date +%F_%H-%M
+2017-08-09_10-44
+[root@oldboyedu-39-nb /]# date +%F_%H-%M >>/tmp/time.log 2>&1
+[root@oldboyedu-39-nb /]# cat /tmp/time.log 
+2017-08-09_10-46
+[root@oldboyedu-39-nb /]# /bin/date +%F_%H-%M >>/tmp/time.log 2>&1
+[root@oldboyedu-39-nb /]# cat /tmp/time.log 
+2017-08-09_10-46
+2017-08-09_10-46
+[root@oldboyedu-39-nb /]# ###第二个里程碑-书写定时任务
+[root@oldboyedu-39-nb /]# crontab -l |tail -2 
+#print time 
+* * * * * /bin/date +\%F_\%H-\%M >>/tmp/time.log 2>&1
+
+##也可以把/bin/date +%F_%H-%M 放入到脚本中 
+
+ ######第三个里程碑-检查
+[root@oldboyedu-39-nb /]# cat /tmp/time.log 
+2017-08-09_10-46
+2017-08-09_10-46
+2017-08-09_10-52
+2017-08-09_10-53
+
+####每分钟显示系统的ip地址 追加到一个文件中 
+
+
+
+
+
+
+
+每分钟 
+*   * * * *
+*/1 * * * *
+
+###第四关-练习题
+
+2.每隔2 个小时将/etc/services 文件打包备份到/tmp 下（最好每次备份成不同的备份包）。 
+解答： 
+###每隔2 个小时将/etc/services 文件打包备份到/tmp 下（最好每次备份成不同的备份包）
+######第1个里程碑-用什么命令
+[root@oldboyedu-39-nb /]# tar zcf /tmp/serivces.tar.gz  /etc/services 
+tar: Removing leading `/' from member names
+[root@oldboyedu-39-nb /]# #tar zcf /tmp/serivces-2017-05-20.tar.gz  /etc/services 
+[root@oldboyedu-39-nb /]# date +%F
+2017-08-09
+[root@oldboyedu-39-nb /]# date +%F_%H
+  17-08-09_11
+[root@oldboyedu-39-nb /]# #tar zcf /tmp/serivces-$(date +%F_%H).tar.gz  /etc/services 
+[root@oldboyedu-39-nb /]# tar zcf /tmp/serivces-$(date +%F_%H).tar.gz  /etc/services 
+tar: Removing leading `/' from member names
+[root@oldboyedu-39-nb /]# ls -lrt /tmp/
+total 9912
+lrwxrwxrwx  1 root root      10 May 20 14:23 oldboy.txt-soft -> oldboy.txt
+drwxr-xr-x. 8 root root    4096 Aug  3 14:43 oldboy_bak2017-08-03
+drwxr-x-w-  3 root root    4096 Aug  3 21:25 a
+-rw-r--r--  1 root root      71 Aug  9 09:29 oldboy.txt
+-rw-r--r--  1 root root 9861361 Aug  9 10:48 etc.tar.gz
+-rw-r--r--  1 root root     595 Aug  9 11:22 time.log
+-rw-r--r--  1 root root  127314 Aug  9 11:51 serivces.tar.gz
+-rw-r--r--  1 root root    5870 Aug  9 11:54 ip.log
+-rw-r--r--  1 root root  127314 Aug  9 11:54 serivces-2017-08-09_11.tar.gz
+######第2个里程碑-写一个脚本
+[root@oldboyedu-39-nb /]# cat /server/scripts/bak-ser.sh
+cd / &&  tar zcf /tmp/serivces-$(date +%F_%H).tar.gz  etc/services 
+#####第3个里程碑-测试
+[root@oldboyedu-39-nb /]# /bin/sh  /server/scripts/bak-ser.sh 
+[root@oldboyedu-39-nb /]# ll -rt /tmp/
+total 9912
+lrwxrwxrwx  1 root root      10 May 20 14:23 oldboy.txt-soft -> oldboy.txt
+drwxr-xr-x. 8 root root    4096 Aug  3 14:43 oldboy_bak2017-08-03
+drwxr-x-w-  3 root root    4096 Aug  3 21:25 a
+-rw-r--r--  1 root root      71 Aug  9 09:29 oldboy.txt
+-rw-r--r--  1 root root 9861361 Aug  9 10:48 etc.tar.gz
+-rw-r--r--  1 root root     595 Aug  9 11:22 time.log
+-rw-r--r--  1 root root  127314 Aug  9 11:51 serivces.tar.gz
+-rw-r--r--  1 root root  127314 Aug  9 11:56 serivces-2017-08-09_11.tar.gz
+-rw-r--r--  1 root root    6047 Aug  9 11:57 ip.log
+[root@oldboyedu-39-nb /]# date 
+Wed Aug  9 11:57:38 CST 2017
+######第4个里程碑-书写定时任务
+[root@oldboyedu-39-nb /]# 
+[root@oldboyedu-39-nb /]# crontab -l |tail -2
+#backup services 
+* * * * * /bin/sh  /server/scripts/bak-ser.sh >/dev/null 2>&1
+######第5个里程碑-进行检查 
+[root@oldboyedu-39-nb /]# tail /var/log/cron
+Aug  9 12:01:01 oldboyedu-39-nb CROND[58495]: (root) CMD (/bin/sh  /server/scripts/bak-ser.sh >/dev/null 2>&1)
+[root@oldboyedu-39-nb /]# ll -rt /tmp/
+total 10040
+lrwxrwxrwx  1 root root      10 May 20 14:23 oldboy.txt-soft -> oldboy.txt
+drwxr-xr-x. 8 root root    4096 Aug  3 14:43 oldboy_bak2017-08-03
+drwxr-x-w-  3 root root    4096 Aug  3 21:25 a
+-rw-r--r--  1 root root      71 Aug  9 09:29 oldboy.txt
+-rw-r--r--  1 root root 9861361 Aug  9 10:48 etc.tar.gz
+-rw-r--r--  1 root root     595 Aug  9 11:22 time.log
+-rw-r--r--  1 root root  127314 Aug  9 11:51 serivces.tar.gz
+-rw-r--r--  1 root root  127314 Aug  9 11:56 serivces-2017-08-09_11.tar.gz
+-rw-r--r--  1 root root    6224 Aug  9 12:00 ip.log
+-rw-r--r--  1 root root  127314 Aug  9 12:01 serivces-2017-08-09_12.tar.gz
+######第6个里程碑-修改定时任务运行时间
+#backup services
+00 */2 * * * /bin/sh  /server/scripts/bak-ser.sh >/dev/null 2>&1
+
+
+
+
+
+
+
+
+
+
+
+
+### linux 命令行下面运行命令的时候 
+[root@oldboyedu-39-nb ~]# echo $PATH
+/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin:/root/bin
+
+### 定时任务运行脚本的时候 PATH
+/usr/bin:/bin
+
+ifconfig 
+
+
+
+
+
+
+2组组长-李谦 
+00 */2 * * * cd / && /bin/tar zcf /tmp/conf_$(date +\%F).tar.gz etc/services
+
+2组组长-李谦 
+00 */2 * * * cd / && /bin/tar zcf /tmp/conf_$(date +\%T).tar.gz etc/services
+
+
+
+
+
+
+
+
+
+3.每天晚上12 点，打包站点目录/var/www/html备份到/data  目录下（最好每次备份按时间 生成不同的备份包） 
+解答： 
+#####1.命令
+[root@oldboyedu-39-nb /]# mkdir -p /var/www/html /data 
+[root@oldboyedu-39-nb /]# 
+[root@oldboyedu-39-nb /]# tar zcf /data/html.tar.gz /var/www/html/
+tar: Removing leading `/' from member names
+[root@oldboyedu-39-nb /]# tar zcf /data/html-$(date +%F).tar.gz /var/www/html/
+tar: Removing leading `/' from member names
+#####2.写入脚本中。
+[root@oldboyedu-39-nb /]# sh  /server/scripts/bak-html.sh 
+tar: Removing leading `/' from member names
+[root@oldboyedu-39-nb /]# sh  /server/scripts/bak-html.sh >/dev/null 2>&1
+[root@oldboyedu-39-nb /]# ls -lrt /data
+total 544
+drwxr-xr-x  2 root root   4096 May 20 05:51 oldboyedu
+-rw-r--r--  1 root root     45 May 20 06:29 test.txt
+-rw-r--r--  1 root root     24 May 20 06:35 txt.txt
+-rw-r--r--. 1 root root      0 Jul 14 19:28 oldboy.txt
+-rw-r--r--. 1 root root      0 Jul 14 19:28 lidao.txt
+-rw-r--r--. 1 root root      0 Jul 14 19:28 alex.txt
+-rw-r--r--. 1 root root    292 Jul 14 22:31 ett.txt
+-rw-r--r--  1 root root 102407 Jul 30 00:11 1.sh
+-rw-r--r--  1 root root 102407 Jul 30 00:11 2.sh
+-rw-r--r--  1 root root 102407 Jul 30 00:11 3.sh
+-rw-r--r--  1 root root 102407 Jul 30 00:11 4.sh
+-rw-r--r--  1 root root 102407 Jul 30 00:11 5.sh
+-rw-r--r--  1 root root    117 Aug  9 12:19 html.tar.gz
+-rw-r--r--  1 root root    117 Aug  9 12:20 html-2017-08-09.tar.gz
+######3.写入定时任务
+[root@oldboyedu-39-nb /]# crontab -l|tail -2
+#backup html 
+* * * * * /bin/sh  /server/scripts/bak-html.sh >/dev/null 2>&1
+[root@oldboyedu-39-nb /]# \rm -f /data/*.tar.gz
+[root@oldboyedu-39-nb /]# ll /data
+total 536
+-rw-r--r--  1 root root 102407 Jul 30 00:11 1.sh
+-rw-r--r--  1 root root 102407 Jul 30 00:11 2.sh
+-rw-r--r--  1 root root 102407 Jul 30 00:11 3.sh
+-rw-r--r--  1 root root 102407 Jul 30 00:11 4.sh
+-rw-r--r--  1 root root 102407 Jul 30 00:11 5.sh
+-rw-r--r--. 1 root root      0 Jul 14 19:28 alex.txt
+-rw-r--r--. 1 root root    292 Jul 14 22:31 ett.txt
+-rw-r--r--. 1 root root      0 Jul 14 19:28 lidao.txt
+drwxr-xr-x  2 root root   4096 May 20 05:51 oldboyedu
+-rw-r--r--. 1 root root      0 Jul 14 19:28 oldboy.txt
+-rw-r--r--  1 root root     45 May 20 06:29 test.txt
+-rw-r--r--  1 root root     24 May 20 06:35 txt.txt
+[root@oldboyedu-39-nb /]# ll /data
+total 540
+-rw-r--r--  1 root root 102407 Jul 30 00:11 1.sh
+-rw-r--r--  1 root root 102407 Jul 30 00:11 2.sh
+-rw-r--r--  1 root root 102407 Jul 30 00:11 3.sh
+-rw-r--r--  1 root root 102407 Jul 30 00:11 4.sh
+-rw-r--r--  1 root root 102407 Jul 30 00:11 5.sh
+-rw-r--r--. 1 root root      0 Jul 14 19:28 alex.txt
+-rw-r--r--. 1 root root    292 Jul 14 22:31 ett.txt
+-rw-r--r--  1 root root    117 Aug  9 12:23 html-2017-08-09.tar.gz
+-rw-r--r--. 1 root root      0 Jul 14 19:28 lidao.txt
+drwxr-xr-x  2 root root   4096 May 20 05:51 oldboyedu
+-rw-r--r--. 1 root root      0 Jul 14 19:28 oldboy.txt
+-rw-r--r--  1 root root     45 May 20 06:29 test.txt
+-rw-r--r--  1 root root     24 May 20 06:35 txt.txt
+#####4.修改定时任务的时间
+[root@oldboyedu-39-nb /]# crontab -l|tail -2
+#backup html 
+00 00 *  * * /bin/sh  /server/scripts/bak-html.sh >/dev/null 2>&1
+
+
+练习题
+ 每天晚上12 点，打包站点目录/var/www/html备份到/data  目录下（最好每次备份按时间 生成不同的备份包） 
+ 每隔2 个小时将/etc/services 文件打包备份到/tmp 下（最好每次备份成不同的备份包）。 
+ 每天晚上12点备份 /var/spool/cron/root  /etc/hosts /etc/rc.local  备份到/backup目录。
+ 每周 六、日 上午9:00 和下午14：00  来老男孩这里学习(执行程序/server/script/oldboy.sh 
+
+
+预习：
+第四关练习题 
+用户管理
+
+
+
+
+

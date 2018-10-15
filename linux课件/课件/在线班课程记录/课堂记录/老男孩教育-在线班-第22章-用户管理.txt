@@ -1,0 +1,388 @@
+﻿=============================================================================================
+# 老男孩教育：                                                                            #
+# www.oldboyedu.com                                                                       #
+# 邮件：miaokm@oldboyedu.com(189 1048 1057)                                               #
+# 地址：北京市昌平区顺沙路8号院汇德商厦4F                                                 #
+# 资源老师   手机电话：		    QQ号码        资源老师： 手机电话：		    QQ号码        #
+# 飞雪		 135 5261 2571		80042789      小雨		 186 0046 2391      390320151     #
+# 歪歪		 189 1171 8229		70271111      丹丹		 158 1059 0206      41117397      #
+# 冰冰		 150 1078 5220		41117483												  #
+=============================================================================================
+
+用户管理 
+1.各种命令 
+2.与用户有关的文件和目录 
+3.如何让普通用户也可以当一回皇帝 
+4.行为审计（记录下用户的操作）
+
+###@@1.用户分类
+	root     皇帝 		UID:0 
+	虚拟用户 傀儡 		UID:1-499 
+		     1.每个程序、服务运行的时候都需要一个用户 
+		     2.傀儡用户不需要用来登录系统 
+[root@oldboyedu-39-nb ~]# grep nobody /etc/passwd
+nobody:x:99:99:Nobody:/:/sbin/nologin
+[root@oldboyedu-39-nb ~]# su - nobody
+This account is currently not available.
+
+网站运行起来： root？  www？
+		 
+			 
+	普通用户            UID:500+ 
+
+###@@2.与用户有关的文件 
+/etc/passwd               ###存放用户的信息            *******
+/etc/shadow               ###存放用户密码信息
+/etc/group                ###存放用户组的信息
+/etc/gshadow              ###存放用户组密码信息
+
+
+[root@oldboyedu-39-nb ~]# ls -l /etc/passwd /etc/shadow /etc/group /etc/gshadow
+-rw-r--r-- 1 root root  655 Aug 11 08:49 /etc/group
+---------- 1 root root  533 Aug 11 08:49 /etc/gshadow
+-rw-r--r-- 1 root root 1288 Aug 11 08:49 /etc/passwd
+---------- 1 root root  962 Aug 11 08:49 /etc/shadow
+
+[root@oldboyedu-39-nb ~]# head -2 /etc/passwd
+root:x:0:0:root:/root:/bin/bash
+bin:x:1:1:bin:/bin:/sbin/nologin
+www:x:504:504::/home/www:/bin/bash
+lidao:x:505:505::/home/lidao:/bin/bash
+
+
+第1列   :第2列 :第3列    :第4列    :第5列         :第6列       :第7列
+用户名字:密码  :用户的UID:用户的GID:用户的说明信息:用户的家目录:用户使用的shell/命令解释器
+
+第2列:密码 
+UID 用户的身份证号码
+
+第7列 shell 
+/bin/bash        ###用户可以正常使用
+/sbin/nologin    ###让这个用户称为了傀儡用户 虚拟用户
+
+[root@oldboyedu-39-nb ~]# ls -l /bin/sh /bin/bash
+-rwxr-xr-x. 1 root root 942200 Mar 23 08:15 /bin/bash
+lrwxrwxrwx. 1 root root      4 Jul 14 11:01 /bin/sh -> bash
+
+
+###@@@3.与用户相关的目录和文件 
+	/etc/skel 
+	1.所有新用户 老家的模板 
+	2./etc/skel 目录中有什么 我们新添加一个用户 的家目录中就有什么 
+	
+企业故障案例：切换到alex用户之后 
+-bash-4.1$ 
+-bash-4.1$ 
+	
+###模拟环境 
+su - alex
+\rm -f .bash*
+重新登录alex用户 
+
+###原因与解决方法
+-bash-4.1$ #与用户有关的环境变量的配置文件 没了
+-bash-4.1$ #解决方法：
+-bash-4.1$ #从/etc/skel 中复制一下即可
+
+###解决	
+-bash-4.1$ cp /etc/skel/.bash* ~
+
+###检查
+-bash-4.1$ logout
+[root@oldboyedu-39-nb ~]# su - alex
+[alex@oldboyedu-39-nb ~]$ 	
+	
+请问如下登录环境故障的原理及解决办法？ 
+-bash-4.1$  
+-bash-4.1$ 
+	原因:这个用户的家目录下面的环境变量文件被删除了  
+	~/.bashrc ~/.bash_profile 
+	第1个里程碑-切换到有故障的用户
+	第2个里程碑-故障原因-用户环境变量有关的文件 
+	.bashrc .bash_profile 
+	第3个里程碑-/etc/skel 里面存放着  模板
+	第4个里程碑-/etc/skel/.bash* 复制到当前用户
+	第5个里程碑-重新登录  该用户alex 
+
+
+	.* 极度危险 
+		以点开头的文件或目 
+		. (当前目录) 
+		..(当前目录的上一级目录) 
+		表示以点开头的文件或目录 隐藏 
+		.bash* 
+
+
+###@@4.用户相关的命令
+
+###useradd命令 
+添加一个用户lidao指定uid为888 禁止用户登录系统 不创建家目录
+#添加一个傀儡用户lidao 并指定这个用户的uid为888
+[root@oldboyedu-39-nb ~]# #添加一个用户lidao指定uid为888 禁止用户登录系统 不创建家目录
+[root@oldboyedu-39-nb ~]# useradd -u 888 -s /sbin/nologin -M  lidao888
+[root@oldboyedu-39-nb ~]# id lidao888
+uid=888(lidao888) gid=888(lidao888) groups=888(lidao888)
+[root@oldboyedu-39-nb ~]# grep lidao888 /etc/passwd
+lidao888:x:888:888::/home/lidao888:/sbin/nologin
+[root@oldboyedu-39-nb ~]# ls /home/lidao888
+ls: cannot access /home/lidao888: No such file or directory
+[root@oldboyedu-39-nb ~]# 
+
+
+
+
+[root@oldboyedu-39-nb ~]# grep lidao888 /etc/passwd
+lidao888:x:888:888::/home/lidao888:/sbin/nologin
+[root@oldboyedu-39-nb ~]# usermod -s /bin/bash  lidao888
+[root@oldboyedu-39-nb ~]# grep lidao888 /etc/passwd
+lidao888:x:888:888::/home/lidao888:/bin/bash
+[root@oldboyedu-39-nb ~]# usermod -s /sbin/nologin  lidao888
+[root@oldboyedu-39-nb ~]# grep lidao888 /etc/passwd
+lidao888:x:888:888::/home/lidao888:/sbin/nologin
+
+
+##passwd命令 
+[root@oldboyedu-39-nb ~]# echo 123456|passwd --stdin oldboy
+Changing password for user oldboy.
+passwd: all authentication tokens updated successfully.
+[root@oldboyedu-39-nb ~]# history -c 
+
+~/.bash_history   存放着用户之前使用过的命令记录 
+
+
+
+
+
+
+课后题目 :
+如果root用户的密码忘记了怎么办？
+
+批量添加3个用户stu01,stu02,stu03,并设置密码为123456(禁止使用for,while等循环) 
+[root@oldboyedu-39-nb ~]# echo stu{1..10}
+stu1 stu2 stu3 stu4 stu5 stu6 stu7 stu8 stu9 stu10
+[root@oldboyedu-39-nb ~]# echo stu{01..10}
+stu01 stu02 stu03 stu04 stu05 stu06 stu07 stu08 stu09 stu10
+[root@oldboyedu-39-nb ~]# echo stu{01..3}
+stu01 stu02 stu03
+
+批量添加10个用户stu01,stu02,stu03,并设置8位随机密码(禁止使用for,while等循环) 
+
+
+添加一个虚拟用户用户 mysql 指定用户的uid gid都是999 
+ 
+useradd -u 999   -s /sbin/nologin -M  mysql 
+
+###@@5用户查询命令
+
+id 查看用户的信息
+	一个用户是否存在 
+	查询用户的uid gid  
+	属于哪个用户组
+w 显示系统中已经远程登录的用户 干啥 
+  1.显示谁登录了系统 在干啥
+  2.系统负载
+  3.一个用户是远程登录？  以某一个用户的身份连接到你的系统 ！！！！不是切换用户
+  
+
+  
+last 哪个用户在什么时候 从哪里 远程登录你的系统 用户登录的信息 
+lastlog 显示linux中所有用户最近一次远程登录的信息 
+
+
+
+###@@@6.sudo 
+你是普通用户，你当临时当回皇帝。
+
+0.让oldboy直接称为root
+su - 
+
+su -  与su 的区别
+
+su -   是su命令的一个参数 
+   - 表示切换用户的时候 更新用户的一些环境变量。
+
+   ###不使用 su - 
+[root@oldboyedu-39-nb ~]# su oldboy
+[oldboy@oldboyedu-39-nb root]$ pwd
+/root
+[oldboy@oldboyedu-39-nb root]$ env |grep -i root 
+PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin:/root/bin
+MAIL=/var/spool/mail/root
+PWD=/root
+[oldboy@oldboyedu-39-nb root]$ exit
+   ###使用su - 
+[root@oldboyedu-39-nb ~]# su - oldboy
+[oldboy@oldboyedu-39-nb ~]$ pwd
+/home/oldboy
+[oldboy@oldboyedu-39-nb ~]$ env |grep -i root
+[oldboy@oldboyedu-39-nb ~]$ env |grep -i oldboy
+HOSTNAME=oldboyedu-39-nb
+USER=oldboy
+MAIL=/var/spool/mail/oldboy
+PATH=/usr/local/bin:/bin:/usr/bin:/usr/local/sbin:/usr/sbin:/sbin:/home/oldboy/bin
+PWD=/home/oldboy
+HOME=/home/oldboy
+LOGNAME=oldboy
+
+
+
+1.修改文件或命令的权限 
+2.给tail 命令加上suid
+3.sudo 给oldboy一把尚方宝剑   ******
+
+
+
+###sudo的使用 怎么用 
+sudo -l 查看当前用户的上方宝剑 
+
+[oldboy@oldboyedu-39-nb ~]$ sudo -l
+
+We trust you have received the usual lecture from the local System
+Administrator. It usually boils down to these three things:
+
+    #1) Respect the privacy of others.
+    #2) Think before you type.
+    #3) With great power comes great responsibility.
+
+[sudo] password for oldboy: 
+Sorry, user oldboy may not run sudo on oldboyedu-39-nb.
+
+
+
+visudo 给用户授予尚方宝剑 
+	crontab -e (root) ==== vi /var/spool/cron/root 
+		语法检查 
+	visudo ==== vim /etc/sudoers 
+
+	
+	
+	授权多个命令 
+		oldboy ALL=(ALL) /bin/ls, /bin/rm, /usr/sbin/useradd  
+		
+		oldboy  ALL=(ALL)       /bin/ls, /bin/touch
+		
+[oldboy@oldboyedu-39-nb ~]$ sudo -l
+[sudo] password for oldboy: 
+Matching Defaults entries for oldboy on this host:
+    !visiblepw, always_set_home, env_reset, env_keep="COLORS DISPLAY HOSTNAME HISTSIZE
+    INPUTRC KDEDIR LS_COLORS", env_keep+="MAIL PS1 PS2 QTDIR USERNAME LANG LC_ADDRESS
+    LC_CTYPE", env_keep+="LC_COLLATE LC_IDENTIFICATION LC_MEASUREMENT LC_MESSAGES",
+    env_keep+="LC_MONETARY LC_NAME LC_NUMERIC LC_PAPER LC_TELEPHONE", env_keep+="LC_TIME
+    LC_ALL LANGUAGE LINGUAS _XKB_CHARSET XAUTHORITY",
+    secure_path=/sbin\:/bin\:/usr/sbin\:/usr/bin
+
+User oldboy may run the following commands on this host:
+    (ALL) /bin/ls, (ALL) /bin/touch
+[oldboy@oldboyedu-39-nb ~]$ ls -l /root/
+ls: cannot open directory /root/: Permission denied
+[oldboy@oldboyedu-39-nb ~]$ sudo ls -l /root/
+total 7728
+-rw-r--r--  1 root root       0 Aug  3 13:10 access-2017-05-20.log
+-rw-r--r--  1 root root       0 Aug  3 13:10 access-2017-05-21.log
+-rw-r--r--  1 root root       0 Aug  3 13:10 access-2017-05-22.log
+-rw-r--r--  1 root root       0 Aug  3 13:12 access-2017-08-03.log
+
+###sudo的使用过程
+####1.给某一个用户授予 sudo 
+  root用户下 使用
+  visudo 命令 
+  crontab -e =====  vim /var/spool/cron/root
+  visudo  ========  vim /etc/sudoers 
+  授予oldboy用户 可以以root的身份运行ls, touch mkdir 
+  oldboy ALL=(ALL)  /bin/ls, /bin/touch, /bin/mkdir 
+####2.使用
+sudo  ls /root 
+
+  授权所有命令 
+  oldboy  ALL=(ALL)       ALL
+  
+  授权所有命令并且不用密码 
+  	oldboy ALL=(ALL) NOPASSWD: ALL  
+  	###oldboy是运维人员的用户 就是你在使用 
+  	###自己用的时候 我不想输入密码（sudo) 
+
+
+sudo小结：
+1.授予给普通用户的尚方宝剑 临时称为root
+2.授予多个命令
+oldboy ALL=(ALL)  /bin/ls, /bin/touch, /bin/mkdir 
+3.授予全部命令并且不需要密码
+oldboy ALL=(ALL) NOPASSWD: ALL  
+
+
+
+总结 ：
+1.权限 rwx 对于文件 目录 
+2.touch rm  ls cat vim 报错  permission denied 
+3.怎么通过控制权限让你的网站安全
+4.umask的作用和计算默认权限
+5.给文件上锁头 chattr +a +i 
+6.书写定时任务的流程
+7.定时任务使用中常见的坑-9句箴言
+8.第四关练习题-定时任务练习题+正则表达式+vim/vi
+9 .用户管理-添加-删除-修改用户密码
+10.查看用户信息
+11.切换到某个用户提示-bash-4.1$ 如何解决
+12.sudo的使用
+命令总结 
+考试题+练习题总结
+
+预习：
+磁盘
+sed
+shell 
+awk
+
+
+
+
+
+
+
+
+
+
+
+
+
+问题
+
+-bash-4.1$ cp /etc/skel/.bash* ~
+cp: cannot create regular file `/home/hcx/.bash_logout': Permission denied
+cp: cannot create regular file `/home/hcx/.bash_profile': Permission denied
+cp: cannot create regular file `/home/hcx/.bashrc': Permission denied
+-bash-4.1$ touch oldboy.txt
+touch: cannot touch `oldboy.txt': Permission denied
+-bash-4.1$ pwd
+/home/hcx
+-bash-4.1$ ls -ld /home/hcx/
+drwxr-xr-x 2 root root 4096 Aug 11 00:43 /home/hcx/
+-bash-4.1$ chown -R hcx.hcx /home/hcx/
+chown: changing ownership of `/home/hcx/': Operation not permitted
+-bash-4.1$ logout
+[root@oldboyedu-39 ~]# chown -R hcx.hcx /home/hcx/
+[root@oldboyedu-39 ~]# su - hcx
+
+-bash-4.1$ touch oldboy.txt
+-bash-4.1$ cp /etc/skel/.bash* ~
+-bash-4.1$ logout
+[root@oldboyedu-39 ~]# su - hcx
+[hcx@oldboyedu-39 ~]$
+
+问题 UID 888 is not unique 已经有一个用户的uid是888了。
+
+[root@oldboyedu-39 ~]# useradd  -u 888 -s /sbin/nologin -M yang
+useradd: UID 888 is not unique
+
+
+
+问题
+[root@lainanhai-39 ~]# su - lidao888
+su: warning: cannot change directory to /home/lidao888: No such file or directory
+su: /sdin/nologin: No such file or directory
+
+[root@lainanhai-39 ~]# useradd   -u 666 -s /sdin/nologin -M lidao888
+
+
+
+

@@ -1,0 +1,216 @@
+=============================================================================================
+# 老男孩教育：                                                                            #
+# www.oldboyedu.com                                                                       #
+# 邮件：miaokm@oldboyedu.com(189 1048 1057)                                               #
+# 地址：北京市昌平区顺沙路8号院汇德商厦4F                                                 #
+# 资源老师   手机电话：		    QQ号码        资源老师： 手机电话：		    QQ号码        #
+# 飞雪		 135 5261 2571		80042789      小雨		 186 0046 2391      390320151     #
+# 歪歪		 189 1171 8229		70271111      丹丹		 158 1059 0206      41117397      #
+# 冰冰		 150 1078 5220		41117483												  #
+=============================================================================================
+
+
+######   /etc/hosts  把主机名解析为ip地址     ip地址与主机名（域名）对应关系
+搭建测试环境的时候使用 
+###/etc/hosts格式 
+10.0.0.200   www.taobao.com   
+
+
+
+##了解########################################
+
+#119.75.216.20  www.baidu.com
+10.0.0.200      www.baidu.com 
+
+www.taobao.com (域名)    -----   9.9.9.9 （官网） ip地址    (DNS)
+
+更新网站
+1.所有人不能访问了  报错 
+2.我更新
+
+1.搭建一个测试的环境    我也要使用www.taobao.com 这个域名 
+1)测试批量下单  1000w  100w  同时购买 苹果电脑 外星人笔记本   
+2)测试的时候一定要用 www.taobao.com  这个域名 但是 我们想让他解析到 10.0.0.200 
+hosts解析
+
+
+2.在测试环境里面进行测试  测试ok 
+3.更新
+##############################################
+
+
+######/etc/fstab   file system table 文件系统列表   在开机启动的时候  磁盘分区与目录的挂载关系 
+#开机的时候  把哪个磁盘挂载到哪个目录的 列表
+[root@oldboyedu-39-nb ~]# cat /etc/fstab 
+/dev/sda3               /                       ext4    defaults        1 1 
+
+#第一列====磁盘分区 设备 
+#第二列====目录（挂载点）
+
+#####/etc/rc.local   文件中放着开机需要启动的命令或脚本（命令的集合）。
+
+#####/etc/inittab    init 启动 初始化  table(表) linux运行级别的配置文件  **
+
+运行级别------linux的不同的状态
+
+#第一个里程碑-0-6 运行级别的含义
+#第二个里程碑-如何修改
+##1.临时切换
+init 5
+##2.查看当前的运行级别
+[root@oldboyedu-39-nb ~]# runlevel 
+3 5
+ #3 					5
+ #上一次使用的运行级别  当前的运行级别
+##3.永久修改
+[root@oldboyedu-39-nb ~]# grep "id:" /etc/inittab 
+id:3:initdefault:
+[root@oldboyedu-39-nb ~]# 
+
+
+0  ##关机（不要把运行级别设置为0）
+1  ##单用户模式 root密码忘了  跑机房或远程控制卡（默认没有网络）
+2  ##多用户模式 但是没有NFS（网络文件系统）
+3  ##完全多用户模式  命令模式（工作中默认）
+4  ##没有使用
+5  ##图形界面模式 桌面模式 X11
+6  ##重启（不要把运行级别设置为6）
+
+
+1.0-6运行级别含义
+2.如何修改 临时 永久 
+3.如何查看
+
+#####/etc/init.d 目录下面 软件管理的命令 
+
+[root@oldboyedu-39-nb ~]# #iptables
+[root@oldboyedu-39-nb ~]# /etc/init.d/iptables stop 
+[root@oldboyedu-39-nb ~]# 
+[root@oldboyedu-39-nb ~]# #network 所有网卡 
+[root@oldboyedu-39-nb ~]# /etc/init.d/network status 
+Configured devices:
+lo eth0
+Currently active devices:
+lo eth0
+
+
+####/etc/profile  系统的别名  系统的环境变量 
+
+环境变量
+1.大写 LANG PS1
+2.在哪里都生效 在哪里都可以用 
+
+LANG ====== /etc/sysconfig/i18n  
+PATH 
+
+####/etc/bashrc 系统的别名
+
+######全国的法律 
+/etc/profile   ******
+/etc/bashrc 
+
+######自己的家规 当前用户生效
+~/.bashrc 
+~/.bash_profile 
+
+####linux 以.开头的文件或目录 是隐藏
+ls -a 
+
+
+##~  当前用户的家目录
+
+/etc/init.d 
+/etc/profile
+/etc/bashrc
+
+####/etc/motd 用户登录之后显示的内容
+
+###/usr/local 编译安装的默认安装位置
+
+linux下面安装软件的几种方法 
+
+1.yum  yellow dog(黄狗) 软件管家
+从网上下载 然自动替你安装  （外卖  缺少东西外卖给你解决）
+
+2.rpm  命令安装软件        （超市 购买速冻水饺  自己加工 缺少的东西自己解决 ）
+rpm软件包 需要自己下载   
+
+3.编译安装                 （自己做饭  买菜切菜  炒菜 上菜)
+./configure(买菜切菜)   make(炒菜)   make install (上菜) 
+
+
+
+#/var/log 目录  系统日志   系统的记录 
+
+#/var/log/message 系统的普通的日志 
+
+#/var/log/secure  记录的用户的登录信息
+
+Jul 15 10:07:29 oldboyedu-39 sshd[3893]: Failed password for root from 10.0.0.1 port 50507 ssh2
+
+###linux里面查看日志 head 《tail》  《grep》 
+
+#/var/spool/cron/root   定时任务的配置文件 
+
+/proc/cpuinfo cpu信息
+/proc/meminfo 内存信息 
+/proc/loadavg 平均负载  1分钟  5分钟 15分钟
+/proc/mounts  系统的挂载信息 
+
+/dev/sda3 / 	ext4    rw,relatime,barrier=1,data=ordered 0 0
+/dev/sr0  /mnt  iso9660 ro,relatime 					   0 0
+
+
+
+
+
+###################
+#######总结########
+###################
+
+
+/etc/sysconfig/network-scripts/ifcfg-eth0		  第一块网卡的配置文件 IPADDR ONBOOT   BOOTPROTO 	DNS1 DNS2		
+/etc/resolv.conf 								  DNS配置文件
+/etc/hosts                                        主机名解析位ip地址的文件      ip地址与主机名的对应关系
+10.0.0.200  www.baidu.com   www.jd.com 
+/etc/sysconfig/network                            永久修改主机名
+/etc/fstab                                        linux 开机的时候自动挂载列表  在开机的时候 哪个磁盘挂载到哪个目录 
+/etc/rc.local                                     开机的时候自动运行的软件  命令  脚本   
+/etc/inittab                                      系统的运行级别的配置文件
+/etc/init.d       							      系统管理的命令
+
+
+/etc/profile                                      系统的环境变量  别名（ rm cp mv ） /root/.bashrc      
+/etc/bashrc           						      别名 
+/usr/local            							  编译安装的时候默认的安装位置 
+/var/log/message                                  系统普通的日志
+/var/log/secure       							  用户登录信息 什么时候 从哪里登录的  是否成功
+/var/spool/cron/root                              定时任务的配置文件
+/proc/cpuinfo                                     cpu信息 
+/proc/meminfo									  内存信息
+/proc/loadavg                                     负载信息 系统的繁忙程度
+/proc/mounts       								  系统挂载信息 
+
+
+###
+第二关练习题 
+sed 
+awk 
+压缩
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
